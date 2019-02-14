@@ -1,76 +1,80 @@
-initialize = function() {
-    bx = width/2;
-    by = (y1+y2)/2;
-    update();
-}
+// module aliases
+var Engine = Matter.Engine,
+    Render = Matter.Render,
+    World = Matter.World,
+    Bodies = Matter.Bodies;
 
-update = function() {
-    var angle = Math.atan((y2 - y1)/width);
-    by = (y1+y2)/2;
-    bx -= angle;
-    render();
-}
+// create an engine
+var engine = Engine.create();
 
-render = function() {
-    ctx.clearRect(0, 0, width, height);
+// create a renderer
+var render = Render.create({
+    canvas: document.getElementById('canvas'),
+    options: {
+        width: 400,
+        height: 800,
+    },
+    engine: engine
+});
 
-    // Paddle
-    ctx.beginPath();
-    ctx.moveTo(0, height-y1);
-    ctx.lineTo(width, height-y2);
-    ctx.closePath();
-    ctx.strokeStyle = 'blue';
-    ctx.lineWidth = 10;
-    ctx.stroke();
+// create two boxes and a ground
+var ball = Bodies.circle(200, 200, 20, 80);
+var paddle = Bodies.rectangle(200, 700, 500, 30, { isStatic: true });
+var ground = Bodies.rectangle(200, 800, 400, 20, { isStatic: true });
+var wall1 = Bodies.rectangle(0, 400, 1, 800, { isStatic: true });
+var wall2 = Bodies.rectangle(400, 400, 1, 800, { isStatic: true });
 
-    // Ball
-    ctx.beginPath();
-    ctx.ellipse(bx, height-by, 20, 20, 0, 0, 2 * Math.PI);
-    ctx.closePath();
-    ctx.strokeStyle = 'silver';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-}
+// add all of the bodies to the world
+World.add(engine.world, [ball, paddle, ground, wall1, wall2]);
 
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-var width = canvas.width;
-var height = canvas.height;
-// Paddle:
-var y1 = 10;
-var y2 = 10;
-// Ball:
-var bx = 0;
-var by = 0;
-initialize();
-update();
+// run the engine
+Engine.run(engine);
 
+// run the renderer
+Render.run(render);
+
+var angle = 0;
+var angleDelta = 0.1;
+var maxAngle = 10;
 document.addEventListener('keydown', function(event) {
     switch (event.keyCode)
     {
         case 74: // j = right down
-            y2--;
-            update();
+            //Matter.Body.set(paddle, "position", {x: 200, y: 300});
+            if (Math.abs(angle) >= maxAngle)
+                break;
+            angle -= angleDelta;
+            Matter.Body.set(paddle, "angle", angle);
             break;
         case 75: // k = right up
-            y2++;
-            update();
+            if (Math.abs(angle) >= maxAngle)
+                break;
+            angle += angleDelta;
+            Matter.Body.set(paddle, "angle", angle);
             break;
         case 85: // u = alternative right up
-            y2++;
-            update();
+            if (Math.abs(angle) >= maxAngle)
+                break;
+            angle += angleDelta;
+            Matter.Body.set(paddle, "angle", angle);
             break;
         case 83: // s = left down
-            y1--;
-            update();
+            if (Math.abs(angle) >= maxAngle)
+                break;
+            angle += angleDelta;
+            Matter.Body.set(paddle, "angle", angle);
             break;
         case 68: // d = left up
-            y1++;
-            update();
+            if (Math.abs(angle) >= maxAngle)
+                break;
+            angle -= angleDelta;
+            Matter.Body.set(paddle, "angle", angle);
             break;
         case 87: // w = alternative left up
-            y1++;
-            update();
+            if (Math.abs(angle) >= maxAngle)
+                break;
+            angle -= angleDelta;
+            Matter.Body.set(paddle, "angle", angle);
             break;
     }
 });
