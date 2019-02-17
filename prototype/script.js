@@ -4,7 +4,7 @@ const sceneHeight = 800;
 const paddleWidth = sceneWidth * 1.2;
 const paddleStart = 750;
 const wallWidth = 50;
-const moveDelta = 3;
+const moveDelta = 4;
 const maxYDelta = 150;
 const frictionAtHole = 0.01;
 const friction = 0.001; // default is 0.1
@@ -33,7 +33,9 @@ var render = Render.create({
     engine: engine
 });
 
-var ball = Bodies.circle(sceneWidth/2, paddleStart - 50, 15, 80);
+var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 15, 80);
+var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 3, 80  );//, { render: ballOuter.render });
+var ball = Body.create({parts: [ballOuter, ballInner]});
 var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 10, { isStatic: true });
 var ground = Bodies.rectangle(sceneWidth/2, sceneHeight, sceneWidth, 20, { isStatic: true });
 var wall1 = Bodies.rectangle(-wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
@@ -66,7 +68,13 @@ Render.run(render);
 var y1 = paddleStart;
 var y2 = paddleStart;
 var leftUp = false, leftDown = false, rightUp = false, rightDown = false;
-var potentialEndBody = undefined;
+
+var restart = function() {
+    y1 = paddleStart;
+    y2 = paddleStart;
+    Body.set(paddle, { "angle": 0, "position": {x: sceneWidth/2, y: paddleStart}});
+    Body.set(ball, { "position": {x: sceneWidth/2, y: paddleStart - 50}});
+}
 
 var move = function(d1, d2) {
     var newy1 = y1 - d1;
@@ -85,18 +93,6 @@ var move = function(d1, d2) {
 
 Events.on(engine, "beforeUpdate", function(event) {
     var d1 = 0, d2 = 0;
-    // Check end-game condition
-    if (potentialEndBody !== undefined) {
-        var rd = potentialEndBody.circleRadius - ball.circleRadius;
-        if (Math.abs(ball.position.x - potentialEndBody.position.x) < rd
-        && Math.abs(ball.position.y - potentialEndBody.position.y) < rd) {
-            if (potentialEndBody.label === victoryLabel) {
-                console.log("😸");
-            } else if (potentialEndBody.label === defeatLabel) {
-                console.log("💥");
-            }
-        }
-    }
     // Handle pressed keys
     if (leftUp && !leftDown) {
         d1 = moveDelta;
@@ -122,39 +118,43 @@ Events.on(engine, 'collisionStart', function(event) {
     // When we collide with the center of the hole, we adjust friction of the ball
     for (var i = 0, j = pairs.length; i != j; ++i) {
         var pair = pairs[i];
-        // So far, the ball is consistently bodyA
+        if (pair.bodyA !== ballInner) {
+            // We're only interested in collisions of the inner part.
+            // So far, the ball is consistently the bodyA
+            continue;
+        }
         if (pair.bodyB === sensorNearVictory) {
-            potentialEndBody = pair.bodyB;
+            ball.friction = frictionAtHole;
         }
         else if (pair.bodyB === sensorVictory) {
-            ball.friction = frictionAtHole;
+            console.log("Victory");
+            restart();
         }
         else if (pair.bodyB === sensorNearX) {
-            potentialEndBody = pair.bodyB;
+            ball.friction = frictionAtHole;
         }
         else if (pair.bodyB === sensorX) {
-            ball.friction = frictionAtHole;
+            console.log("Loss");
+            restart();
         }
     }
 });
 
 Events.on(engine, 'collisionEnd', function(event) {
     var pairs = event.pairs;
-    
+
     for (var i = 0, j = pairs.length; i != j; ++i) {
         var pair = pairs[i];
 
         if (pair.bodyB === sensorNearVictory) {
-            potentialEndBody = undefined;
+            ball.friction = friction;
         }
         else if (pair.bodyB === sensorVictory) {
-            ball.friction = friction;
         }
         else if (pair.bodyB === sensorNearX) {
-            potentialEndBody = undefined;
+            ball.friction = friction;
         }
         else if (pair.bodyB === sensorX) {
-            ball.friction = friction;
         }
     }
 });
