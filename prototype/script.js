@@ -8,8 +8,9 @@ const moveDelta = 4;
 const maxYDelta = 150;
 const frictionAtHole = 0.01;
 const friction = 0.001; // default is 0.1
-const victoryLabel = "victory";
-const defeatLabel = "defeat";
+const victoryTag = "win";
+const lossTag = "loss";
+const frictionTag = "friction";
 
 // module aliases
 var Engine = Matter.Engine,
@@ -40,24 +41,28 @@ var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 10, { isSt
 var ground = Bodies.rectangle(sceneWidth/2, sceneHeight, sceneWidth, 20, { isStatic: true });
 var wall1 = Bodies.rectangle(-wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
 var wall2 = Bodies.rectangle(sceneWidth + wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
+World.add(engine.world, [ball, paddle, ground, wall1, wall2]);
 
-var sensorVictory = Bodies.circle(200, 300, 2, { isSensor: true, isStatic: true });
-var sensorNearVictory = Bodies.circle(200, 300, 17, { isSensor: true, isStatic: true, label: victoryLabel });
+var victorySpots = [[200, 200], [100, 100], [300, 100]];
+for (var i = 0; i < victorySpots.length; i++) {
+    var spot = victorySpots[i];
+    var sensorVictory = Bodies.circle(spot[0], spot[1], 3, { isSensor: true, isStatic: true, label: victoryTag });
+    var sensorNearVictory = Bodies.circle(spot[0], spot[1], 17, { isSensor: true, isStatic: true, label: frictionTag });
+    World.add(engine.world, [sensorVictory, sensorNearVictory]);
+}
 
-var sensorX = Bodies.circle(400, 300, 5, { isSensor: true, isStatic: true });
-var sensorNearX = Bodies.circle(400, 300, 20, { isSensor: true, isStatic: true, label: defeatLabel });
+var lossSpots = [[59,518], [143,558], [268,533], [443,493], [517,575], [557,429], [460,350], [254,396], [192,350], [91,396], [55,240], [106,140], [160,182], [315,193], [372,117], [485,172], [562,89], [66,30]];
+for (var i = 0; i < lossSpots.length; i++) {
+    var spot = lossSpots[i];
+    var sensorX = Bodies.circle(spot[0], spot[1], 7, { isSensor: true, isStatic: true, label: lossTag });
+    var sensorNearX = Bodies.circle(spot[0], spot[1], 20, { isSensor: true, isStatic: true, label: frictionTag });
+    World.add(engine.world, [sensorX, sensorNearX]);
+}
 
 ball.friction = friction;
 ball.density = 0.05; // default is 0.001
 paddle.friction = friction;
 engine.world.gravity.scale = 0.005; // default is 0.001
-
-// add all of the bodies to the world
-World.add(engine.world, [
-    ball,
-    paddle,
-    ground, wall1, wall2,
-    sensorVictory, sensorNearVictory, sensorX, sensorNearX]);
 
 // run the engine
 Engine.run(engine);
@@ -68,6 +73,13 @@ Render.run(render);
 var y1 = paddleStart;
 var y2 = paddleStart;
 var leftUp = false, leftDown = false, rightUp = false, rightDown = false;
+var wins = 0;
+var losses = 0;
+
+var updateUi = function() {
+    document.getElementById("winsText").innerText = wins;
+    document.getElementById("lossesText").innerText = losses;
+}
 
 var restart = function() {
     y1 = paddleStart;
@@ -123,18 +135,17 @@ Events.on(engine, 'collisionStart', function(event) {
             // So far, the ball is consistently the bodyA
             continue;
         }
-        if (pair.bodyB === sensorNearVictory) {
+        if (pair.bodyB.label === frictionTag) {
             ball.friction = frictionAtHole;
         }
-        else if (pair.bodyB === sensorVictory) {
-            console.log("Victory");
+        else if (pair.bodyB.label === victoryTag) {
+            wins++;
+            updateUi();
             restart();
         }
-        else if (pair.bodyB === sensorNearX) {
-            ball.friction = frictionAtHole;
-        }
-        else if (pair.bodyB === sensorX) {
-            console.log("Loss");
+        else if (pair.bodyB.label === lossTag) {
+            losses++;
+            updateUi();
             restart();
         }
     }
@@ -146,15 +157,8 @@ Events.on(engine, 'collisionEnd', function(event) {
     for (var i = 0, j = pairs.length; i != j; ++i) {
         var pair = pairs[i];
 
-        if (pair.bodyB === sensorNearVictory) {
+        if (pair.bodyB.label === frictionTag) {
             ball.friction = friction;
-        }
-        else if (pair.bodyB === sensorVictory) {
-        }
-        else if (pair.bodyB === sensorNearX) {
-            ball.friction = friction;
-        }
-        else if (pair.bodyB === sensorX) {
         }
     }
 });
@@ -205,4 +209,11 @@ document.addEventListener('keyup', function(event) {
             leftUp = false;
             break;
     }
+});
+
+// World building:
+var clicked = [];
+document.getElementById("canvas").addEventListener('mousedown', function(event) {
+    clicked.push([event.clientX - 8, event.clientY - 8]);
+    console.log("[[" + clicked.join("], [") + "]]" );
 });
