@@ -168,10 +168,16 @@ document.addEventListener('keydown', function(event) {
         case 74: // j = right down
             rightDown = true;
             break;
+        case 40: // arrow down = right down
+            rightDown = true;
+            break;
         case 75: // k = right up
             rightUp = true;
             break;
         case 85: // u = alternative right up
+            rightUp = true;
+            break;
+        case 38: // arrow up = right up
             rightUp = true;
             break;
         case 83: // s = left down
@@ -192,10 +198,16 @@ document.addEventListener('keyup', function(event) {
         case 74: // j = right down
             rightDown = false;
             break;
+        case 40: // arrow down = right down
+            rightDown = false;
+            break;
         case 75: // k = right up
             rightUp = false;
             break;
         case 85: // u = alternative right up
+            rightUp = false;
+            break;
+        case 38: // arrow up = right up
             rightUp = false;
             break;
         case 83: // s = left down
