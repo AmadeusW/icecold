@@ -1,11 +1,11 @@
-canvas {
-
-}
-
 body { 
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0;
+    background: #222;
+
+    color: #ddcc77;
 }
 
 section {

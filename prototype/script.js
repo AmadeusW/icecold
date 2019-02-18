@@ -4,12 +4,20 @@ const sceneHeight = 800;
 const paddleWidth = sceneWidth * 1.2;
 const paddleStart = 750;
 const wallWidth = 50;
-const moveDelta = 3;
+const moveDelta = 4;
 const maxYDelta = 150;
 const friction = 0;
 const victoryTag = "win";
 const lossTag = "loss";
 const nearTag = "near";
+
+// Looks
+const victoryFillInactive = '#020';
+const victoryStrokeInactive = '#030';
+const victoryFill = '#050';
+const victoryStroke = '#3b3';
+const lossFill = '#200';
+const lossStroke = '#300';
 
 // module aliases
 var Engine = Matter.Engine,
@@ -32,6 +40,7 @@ var render = Render.create({
         wireframes: false,
         //showVelocity: true,
         //showCollisions: true,
+        background: '#333'
     },
     engine: engine
 });
@@ -39,13 +48,17 @@ Matter.Resolver._restingThresh = 0.1;
 
 var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 12, {
     render: {
-        strokeStyle: '#333',
-        fillStyle: '#666',
+        strokeStyle: '#aaa',
+        fillStyle: '#999',
     }});
 var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 2);
 var ball = Body.create({parts: [ballInner, ballOuter], frictionAir: 0, friction: friction, restitution: 0.2 });
 
-var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 15, { isStatic: true, friction: 0 });
+var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 15, { isStatic: true, friction: 0,
+    render: {
+        strokeStyle: '#658',
+        fillStyle: '#555',
+    }});
 
 var ground = Bodies.rectangle(sceneWidth/2, sceneHeight, sceneWidth, 20, { isStatic: true });
 var wall1 = Bodies.rectangle(-wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
@@ -67,10 +80,12 @@ var background = Bodies.rectangle(0, 0, sceneWidth, sceneHeight, {
     });
 
 var victorySpots = [[303,567], [472,547], [123,506], [383,453], [219,373], [453,286], [297,244], [127,197], [379,132], [222,91]];
+var sensors = [];
 for (var i = 0; i < victorySpots.length; i++) {
     var spot = victorySpots[i];
     var sensorVictory = Bodies.circle(spot[0], spot[1], 4, { isSensor: true, isStatic: true, label: victoryTag });
-    var sensorNearVictory = Bodies.circle(spot[0], spot[1], 14, { isSensor: true, isStatic: true, label: nearTag, render: {fillStyle: '#228822', strokeStyle: '#66cc66'} });
+    var sensorNearVictory = Bodies.circle(spot[0], spot[1], 14, { isSensor: true, isStatic: true, label: nearTag, render: {fillStyle: victoryFillInactive, strokeStyle: victoryStrokeInactive} });
+    sensors[i] = sensorNearVictory;
     World.add(engine.world, [sensorVictory, sensorNearVictory]);
 }
 
@@ -78,11 +93,11 @@ var lossSpots = [[497,605], [533,544], [549,511], [547,463], [491,503], [426,520
 for (var i = 0; i < lossSpots.length; i++) {
     var spot = lossSpots[i];
     var sensorX = Bodies.circle(spot[0], spot[1], 6, { isSensor: true, isStatic: true, label: lossTag });
-    var sensorNearX = Bodies.circle(spot[0], spot[1], 16, { isSensor: true, isStatic: true, label: nearTag, render: {fillStyle: '#882222', strokeStyle: '#cc6666'}  });
+    var sensorNearX = Bodies.circle(spot[0], spot[1], 16, { isSensor: true, isStatic: true, label: nearTag, render: {fillStyle: lossFill, strokeStyle: lossStroke}  });
     World.add(engine.world, [sensorX, sensorNearX]);
 }
 
-World.add(engine.world, [ball, paddle, ground, wall1, wall2]);
+World.add(engine.world, [paddle, ball, ground, wall1, wall2]);
 
 ball.density = 0.05; // default is 0.001
 engine.world.gravity.scale = 0.003; // default is 0.001
@@ -102,6 +117,12 @@ var balls = 9;
 var updateUi = function() {
     document.getElementById("winsText").innerText = wins;
     document.getElementById("ballsText").innerText = balls;
+    if (sensors[wins - 2] !== undefined) {
+        sensors[wins - 2].render.fillStyle = victoryFillInactive;
+        sensors[wins - 2].render.strokeStyle = victoryStrokeInactive;
+    }
+    sensors[wins - 1].render.fillStyle = victoryFill;
+    sensors[wins - 1].render.strokeStyle = victoryStroke;
 }
 
 var restart = function() {
@@ -161,31 +182,28 @@ Events.on(engine, 'collisionStart', function(event) {
             // So far, the ball is consistently the bodyA
             continue;
         }
-        if (pair.bodyB.label === nearTag) {
-        }
         else if (pair.bodyB.label === victoryTag) {
-            wins++;
-            updateUi();
-            restart();
+            win();
         }
         else if (pair.bodyB.label === lossTag) {
-            balls--;
-            updateUi();
-            restart();
+            lose();
         }
     }
 });
 
-Events.on(engine, 'collisionEnd', function(event) {
-    var pairs = event.pairs;
+var win = function() {
+    wins++;
+    updateUi();
+    restart();
+}
 
-    for (var i = 0, j = pairs.length; i != j; ++i) {
-        var pair = pairs[i];
-
-        if (pair.bodyB.label === nearTag) {
-        }
+var lose = function() {
+    balls--;
+    updateUi();
+    if (balls > 0) {
+        restart();
     }
-});
+}
 
 document.addEventListener('keydown', function(event) {
     switch (event.keyCode)
