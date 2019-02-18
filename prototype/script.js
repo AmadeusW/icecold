@@ -35,13 +35,17 @@ var render = Render.create({
     },
     engine: engine
 });
-//Matter.Resolver._restingThresh = 0.1;
+Matter.Resolver._restingThresh = 0.1;
 
-var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 12);
+var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 12, {
+    render: {
+        strokeStyle: '#333',
+        fillStyle: '#666',
+    }});
 var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 2);
-var ball = Body.create({parts: [ballOuter, ballInner], frictionAir: 0, friction: friction, restitution: 0.2 });
+var ball = Body.create({parts: [ballInner, ballOuter], frictionAir: 0, friction: friction, restitution: 0.2 });
 
-var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 10, { isStatic: true, friction: 0 });
+var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 15, { isStatic: true, friction: 0 });
 
 var ground = Bodies.rectangle(sceneWidth/2, sceneHeight, sceneWidth, 20, { isStatic: true });
 var wall1 = Bodies.rectangle(-wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
@@ -62,8 +66,6 @@ var background = Bodies.rectangle(0, 0, sceneWidth, sceneHeight, {
     }
     });
 
-World.add(engine.world, [background, ball, paddle, ground, wall1, wall2]);
-
 var victorySpots = [[303,567], [472,547], [123,506], [383,453], [219,373], [453,286], [297,244], [127,197], [379,132], [222,91]];
 for (var i = 0; i < victorySpots.length; i++) {
     var spot = victorySpots[i];
@@ -80,6 +82,8 @@ for (var i = 0; i < lossSpots.length; i++) {
     World.add(engine.world, [sensorX, sensorNearX]);
 }
 
+World.add(engine.world, [ball, paddle, ground, wall1, wall2]);
+
 ball.density = 0.05; // default is 0.001
 engine.world.gravity.scale = 0.003; // default is 0.001
 
@@ -92,12 +96,12 @@ Render.run(render);
 var y1 = paddleStart;
 var y2 = paddleStart;
 var leftUp = false, leftDown = false, rightUp = false, rightDown = false;
-var wins = 0;
-var losses = 0;
+var wins = 1;
+var balls = 9;
 
 var updateUi = function() {
     document.getElementById("winsText").innerText = wins;
-    document.getElementById("lossesText").innerText = losses;
+    document.getElementById("ballsText").innerText = balls;
 }
 
 var restart = function() {
@@ -165,7 +169,7 @@ Events.on(engine, 'collisionStart', function(event) {
             restart();
         }
         else if (pair.bodyB.label === lossTag) {
-            losses++;
+            balls--;
             updateUi();
             restart();
         }
@@ -242,6 +246,10 @@ document.addEventListener('keyup', function(event) {
             break;
     }
 });
+
+// Start:
+updateUi();
+restart();
 
 // World building:
 var clicked = [];

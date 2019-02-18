@@ -1,3 +1,19 @@
 canvas {
-    margin: 0 auto;
+
+}
+
+body { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+p {
+    margin: 0 2em;
 }
