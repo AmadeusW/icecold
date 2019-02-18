@@ -4,7 +4,7 @@ const sceneHeight = 800;
 const paddleWidth = sceneWidth * 1.2;
 const paddleStart = 750;
 const wallWidth = 50;
-const moveDelta = 4;
+const moveDelta = 3;
 const maxYDelta = 150;
 const friction = 0;
 const victoryTag = "win";
@@ -29,41 +29,59 @@ var render = Render.create({
     options: {
         width: sceneWidth,
         height: sceneHeight,
-        //wireframes: false,
-        showVelocity: true,
-        showCollisions: true,
+        wireframes: false,
+        //showVelocity: true,
+        //showCollisions: true,
     },
     engine: engine
 });
 //Matter.Resolver._restingThresh = 0.1;
 
-var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 15);
-var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 3);
+var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 12);
+var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 2);
 var ball = Body.create({parts: [ballOuter, ballInner], frictionAir: 0, friction: friction, restitution: 0.2 });
+
 var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 10, { isStatic: true, friction: 0 });
+
 var ground = Bodies.rectangle(sceneWidth/2, sceneHeight, sceneWidth, 20, { isStatic: true });
 var wall1 = Bodies.rectangle(-wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
 var wall2 = Bodies.rectangle(sceneWidth + wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
-World.add(engine.world, [ball, paddle, ground, wall1, wall2]);
 
-var victorySpots = [[200, 200], [100, 100], [300, 100]];
+var background = Bodies.rectangle(0, 0, sceneWidth, sceneHeight, {
+    isSensor: true,
+    isStatic: true,
+    render: {
+        strokeStyle: '#ffffff',
+        sprite: {
+            texture: './holes.jpg',
+            xOffset: -0.5,
+            yOffset: -0.5,
+            xScale: 0.2923,
+            yScale: 0.2649,
+        }
+    }
+    });
+
+World.add(engine.world, [background, ball, paddle, ground, wall1, wall2]);
+
+var victorySpots = [[303,567], [472,547], [123,506], [383,453], [219,373], [453,286], [297,244], [127,197], [379,132], [222,91]];
 for (var i = 0; i < victorySpots.length; i++) {
     var spot = victorySpots[i];
-    var sensorVictory = Bodies.circle(spot[0], spot[1], 3, { isSensor: true, isStatic: true, label: victoryTag });
-    var sensorNearVictory = Bodies.circle(spot[0], spot[1], 17, { isSensor: true, isStatic: true, label: nearTag });
+    var sensorVictory = Bodies.circle(spot[0], spot[1], 4, { isSensor: true, isStatic: true, label: victoryTag });
+    var sensorNearVictory = Bodies.circle(spot[0], spot[1], 14, { isSensor: true, isStatic: true, label: nearTag, render: {fillStyle: '#228822', strokeStyle: '#66cc66'} });
     World.add(engine.world, [sensorVictory, sensorNearVictory]);
 }
 
-var lossSpots = [[59,518], [143,558], [268,533], [443,493], [517,575], [557,429], [460,350], [254,396], [192,350], [91,396], [55,240], [106,140], [160,182], [315,193], [372,117], [485,172], [562,89], [66,30]];
+var lossSpots = [[497,605], [533,544], [549,511], [547,463], [491,503], [426,520], [376,504], [371,548], [303,521], [237,545], [179,548], [107,565], [64,523], [40,471], [161,478], [123,428], [171,391], [208,421], [247,443], [304,467], [275,415], [315,373], [349,396], [394,398], [433,452], [493,390], [21,294], [52,337], [80,375], [125,356], [173,334], [207,305], [262,273], [301,312], [334,278], [384,288], [417,317], [449,349], [515,322], [526,285], [544,249], [490,249], [450,220], [376,241], [89,102], [128,143], [81,156], [62,199], [23,217], [81,239], [132,255], [173,239], [226,246], [187,195], [261,210], [294,177], [330,212], [381,185], [415,163], [443,133], [525,119], [413,100], [381,71], [350,104], [319,136], [289,93], [257,119], [226,150], [196,121], [161,90], [190,62], [254,62]];
 for (var i = 0; i < lossSpots.length; i++) {
     var spot = lossSpots[i];
-    var sensorX = Bodies.circle(spot[0], spot[1], 7, { isSensor: true, isStatic: true, label: lossTag });
-    var sensorNearX = Bodies.circle(spot[0], spot[1], 20, { isSensor: true, isStatic: true, label: nearTag });
+    var sensorX = Bodies.circle(spot[0], spot[1], 6, { isSensor: true, isStatic: true, label: lossTag });
+    var sensorNearX = Bodies.circle(spot[0], spot[1], 16, { isSensor: true, isStatic: true, label: nearTag, render: {fillStyle: '#882222', strokeStyle: '#cc6666'}  });
     World.add(engine.world, [sensorX, sensorNearX]);
 }
 
 ball.density = 0.05; // default is 0.001
-engine.world.gravity.scale = 0.004; // default is 0.001
+engine.world.gravity.scale = 0.003; // default is 0.001
 
 // run the engine
 Engine.run(engine);
