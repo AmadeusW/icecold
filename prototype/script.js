@@ -6,11 +6,10 @@ const paddleStart = 750;
 const wallWidth = 50;
 const moveDelta = 4;
 const maxYDelta = 150;
-const frictionAtHole = 0.01;
-const friction = 0.001; // default is 0.1
+const friction = 0;
 const victoryTag = "win";
 const lossTag = "loss";
-const frictionTag = "friction";
+const nearTag = "near";
 
 // module aliases
 var Engine = Matter.Engine,
@@ -30,14 +29,18 @@ var render = Render.create({
     options: {
         width: sceneWidth,
         height: sceneHeight,
+        //wireframes: false,
+        showVelocity: true,
+        showCollisions: true,
     },
     engine: engine
 });
+//Matter.Resolver._restingThresh = 0.1;
 
-var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 15, 80);
-var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 3, 80  );//, { render: ballOuter.render });
-var ball = Body.create({parts: [ballOuter, ballInner]});
-var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 10, { isStatic: true });
+var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 15);
+var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 3);
+var ball = Body.create({parts: [ballOuter, ballInner], frictionAir: 0, friction: friction, restitution: 0.2 });
+var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 10, { isStatic: true, friction: 0 });
 var ground = Bodies.rectangle(sceneWidth/2, sceneHeight, sceneWidth, 20, { isStatic: true });
 var wall1 = Bodies.rectangle(-wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
 var wall2 = Bodies.rectangle(sceneWidth + wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
@@ -47,7 +50,7 @@ var victorySpots = [[200, 200], [100, 100], [300, 100]];
 for (var i = 0; i < victorySpots.length; i++) {
     var spot = victorySpots[i];
     var sensorVictory = Bodies.circle(spot[0], spot[1], 3, { isSensor: true, isStatic: true, label: victoryTag });
-    var sensorNearVictory = Bodies.circle(spot[0], spot[1], 17, { isSensor: true, isStatic: true, label: frictionTag });
+    var sensorNearVictory = Bodies.circle(spot[0], spot[1], 17, { isSensor: true, isStatic: true, label: nearTag });
     World.add(engine.world, [sensorVictory, sensorNearVictory]);
 }
 
@@ -55,14 +58,12 @@ var lossSpots = [[59,518], [143,558], [268,533], [443,493], [517,575], [557,429]
 for (var i = 0; i < lossSpots.length; i++) {
     var spot = lossSpots[i];
     var sensorX = Bodies.circle(spot[0], spot[1], 7, { isSensor: true, isStatic: true, label: lossTag });
-    var sensorNearX = Bodies.circle(spot[0], spot[1], 20, { isSensor: true, isStatic: true, label: frictionTag });
+    var sensorNearX = Bodies.circle(spot[0], spot[1], 20, { isSensor: true, isStatic: true, label: nearTag });
     World.add(engine.world, [sensorX, sensorNearX]);
 }
 
-ball.friction = friction;
 ball.density = 0.05; // default is 0.001
-paddle.friction = friction;
-engine.world.gravity.scale = 0.005; // default is 0.001
+engine.world.gravity.scale = 0.004; // default is 0.001
 
 // run the engine
 Engine.run(engine);
@@ -135,8 +136,7 @@ Events.on(engine, 'collisionStart', function(event) {
             // So far, the ball is consistently the bodyA
             continue;
         }
-        if (pair.bodyB.label === frictionTag) {
-            ball.friction = frictionAtHole;
+        if (pair.bodyB.label === nearTag) {
         }
         else if (pair.bodyB.label === victoryTag) {
             wins++;
@@ -157,8 +157,7 @@ Events.on(engine, 'collisionEnd', function(event) {
     for (var i = 0, j = pairs.length; i != j; ++i) {
         var pair = pairs[i];
 
-        if (pair.bodyB.label === frictionTag) {
-            ball.friction = friction;
+        if (pair.bodyB.label === nearTag) {
         }
     }
 });
