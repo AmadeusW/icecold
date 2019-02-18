@@ -120,6 +120,9 @@ Events.on(engine, "beforeUpdate", function(event) {
         d2 = -moveDelta;
     }
     if (d1 != 0 || d2 != 0) {
+        // Add a random element to make it harder to just go up
+        d1 *= Math.random() * 0.4 + 0.8;
+        d2 *= Math.random() * 0.4 + 0.8;
         move(d1, d2);
     }
 });
