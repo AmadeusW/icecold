@@ -27,6 +27,7 @@ var y2 = paddleStart;
 var leftUp = false, leftDown = false, rightUp = false, rightDown = false;
 var wins = 1;
 var balls = 9;
+var resetting = false;
 
 // module aliases
 var Engine = Matter.Engine,
@@ -131,13 +132,6 @@ var updateUi = function() {
     nearSensors[wins - 1].render.strokeStyle = victoryStroke;
 }
 
-var restart = function() {
-    y1 = paddleStart;
-    y2 = paddleStart;
-    Body.set(paddle, { "angle": 0, "position": {x: sceneWidth/2, y: paddleStart}});
-    Body.set(ball, { "position": {x: sceneWidth/2, y: paddleStart - 50}});
-}
-
 var move = function(d1, d2) {
     var newy1 = y1 - d1;
     var newy2 = y2 - d2;
@@ -153,26 +147,58 @@ var move = function(d1, d2) {
     y2 = newy2;
 }
 
+var restart = function() {
+    hideBall();
+    resetting = true;
+}
+
+var hideBall = function() {
+    Body.setVelocity(ball, {x: 0, y: 0});
+    //Body.setStatic(ball, true);
+}
+var releaseBall = function() {
+    //Body.setStatic(ball, false);
+    Body.setPosition(ball, {x: sceneWidth/2, y: paddleStart - 30});
+}
+
 Events.on(engine, "beforeUpdate", function(event) {
     var d1 = 0, d2 = 0;
-    // Handle pressed keys
-    if (leftUp && !leftDown) {
-        d1 = moveDelta;
+    if (resetting) {
+        if (y1 < paddleStart) {
+            d1 = -moveDelta;
+        }
+        if (y2 < paddleStart) {
+            d2 = -moveDelta;
+        }
+
+        if (y1 >= paddleStart && y2 >= paddleStart) {
+            releaseBall();
+            resetting = false;
+        }
+        else {
+            move(d1, d2);
+        }
     }
-    if (leftDown && !leftUp) {
-        d1 = -moveDelta;
-    }
-    if (rightUp && !rightDown) {
-        d2 = moveDelta;
-    }
-    if (rightDown && !rightUp) {
-        d2 = -moveDelta;
-    }
-    if (d1 != 0 || d2 != 0) {
-        // Add a random element to make it harder to just go up
-        d1 *= Math.random() * 0.4 + 0.8;
-        d2 *= Math.random() * 0.4 + 0.8;
-        move(d1, d2);
+    else {
+        // Handle pressed keys
+        if (leftUp && !leftDown) {
+            d1 = moveDelta;
+        }
+        if (leftDown && !leftUp) {
+            d1 = -moveDelta;
+        }
+        if (rightUp && !rightDown) {
+            d2 = moveDelta;
+        }
+        if (rightDown && !rightUp) {
+            d2 = -moveDelta;
+        }
+        if (d1 != 0 || d2 != 0) {
+            // Add a random element to make it harder to just go up
+            d1 *= Math.random() * 0.4 + 0.8;
+            d2 *= Math.random() * 0.4 + 0.8;
+            move(d1, d2);
+        }        
     }
 });
 
