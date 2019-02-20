@@ -66,7 +66,7 @@ var ball = Body.create({parts: [ballInner, ballOuter], frictionAir: 0, friction:
 
 var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 15, { isStatic: true, friction: 0,
     render: {
-        strokeStyle: '#658',
+        strokeStyle: '#664',
         fillStyle: '#555',
     }});
 
