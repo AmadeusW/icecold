@@ -10,6 +10,8 @@ const friction = 0;
 const victoryTag = "win";
 const lossTag = "loss";
 const nearTag = "near";
+const ballDensity = 0.05; // default is 0.001
+const gravityScale = 0.003; // default is 0.001
 
 // Looks
 const victoryFillInactive = '#020';
@@ -18,6 +20,13 @@ const victoryFill = '#050';
 const victoryStroke = '#3b3';
 const lossFill = '#200';
 const lossStroke = '#300';
+
+// Game state
+var y1 = paddleStart;
+var y2 = paddleStart;
+var leftUp = false, leftDown = false, rightUp = false, rightDown = false;
+var wins = 1;
+var balls = 9;
 
 // module aliases
 var Engine = Matter.Engine,
@@ -101,20 +110,14 @@ for (var i = 0; i < lossSpots.length; i++) {
 
 World.add(engine.world, [paddle, ball, ground, wall1, wall2]);
 
-ball.density = 0.05; // default is 0.001
-engine.world.gravity.scale = 0.003; // default is 0.001
+ball.density = ballDensity;
+engine.world.gravity.scale = gravityScale;
 
 // run the engine
 Engine.run(engine);
 
 // run the renderer
 Render.run(render);
-
-var y1 = paddleStart;
-var y2 = paddleStart;
-var leftUp = false, leftDown = false, rightUp = false, rightDown = false;
-var wins = 1;
-var balls = 9;
 
 var updateUi = function() {
     document.getElementById("winsText").innerText = wins;
