@@ -175,14 +175,11 @@ Events.on(engine, "beforeUpdate", function(event) {
 
 Events.on(engine, 'collisionStart', function(event) {
     var pairs = event.pairs;
-    // Collision has started.
-    // When we collide with the hole, we want to track its reference to validate end-game condition
-    // When we collide with the center of the hole, we adjust friction of the ball
     for (var i = 0, j = pairs.length; i != j; ++i) {
         var pair = pairs[i];
         if (pair.bodyA !== ballInner) {
             // We're only interested in collisions of the inner part.
-            // So far, the ball is consistently the bodyA
+            // So far, in the collisions we care about, the ball is consistently the bodyA.
             continue;
         }
         else if (pair.bodyB.label === victoryTag) {
