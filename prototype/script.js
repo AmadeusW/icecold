@@ -80,12 +80,14 @@ var background = Bodies.rectangle(0, 0, sceneWidth, sceneHeight, {
     });
 
 var victorySpots = [[303,567], [472,547], [123,506], [383,453], [219,373], [453,286], [297,244], [127,197], [379,132], [222,91]];
+var nearSensors = [];
 var sensors = [];
 for (var i = 0; i < victorySpots.length; i++) {
     var spot = victorySpots[i];
     var sensorVictory = Bodies.circle(spot[0], spot[1], 4, { isSensor: true, isStatic: true, label: victoryTag });
     var sensorNearVictory = Bodies.circle(spot[0], spot[1], 14, { isSensor: true, isStatic: true, label: nearTag, render: {fillStyle: victoryFillInactive, strokeStyle: victoryStrokeInactive} });
-    sensors[i] = sensorNearVictory;
+    nearSensors[i] = sensorNearVictory;
+    sensors[i] = sensorVictory;
     World.add(engine.world, [sensorVictory, sensorNearVictory]);
 }
 
@@ -117,12 +119,13 @@ var balls = 9;
 var updateUi = function() {
     document.getElementById("winsText").innerText = wins;
     document.getElementById("ballsText").innerText = balls;
-    if (sensors[wins - 2] !== undefined) {
-        sensors[wins - 2].render.fillStyle = victoryFillInactive;
-        sensors[wins - 2].render.strokeStyle = victoryStrokeInactive;
+    // When this method is called after victory, wins has been already incremented
+    if (nearSensors[wins - 2] !== undefined) {
+        nearSensors[wins - 2].render.fillStyle = victoryFillInactive;
+        nearSensors[wins - 2].render.strokeStyle = victoryStrokeInactive;
     }
-    sensors[wins - 1].render.fillStyle = victoryFill;
-    sensors[wins - 1].render.strokeStyle = victoryStroke;
+    nearSensors[wins - 1].render.fillStyle = victoryFill;
+    nearSensors[wins - 1].render.strokeStyle = victoryStroke;
 }
 
 var restart = function() {
@@ -183,7 +186,10 @@ Events.on(engine, 'collisionStart', function(event) {
             continue;
         }
         else if (pair.bodyB.label === victoryTag) {
-            win();
+            if (pair.bodyB === sensors[wins - 1])
+                win();
+            else
+                lose();
         }
         else if (pair.bodyB.label === lossTag) {
             lose();
