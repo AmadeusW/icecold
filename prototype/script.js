@@ -28,6 +28,7 @@ var leftUp = false, leftDown = false, rightUp = false, rightDown = false;
 var wins = 1;
 var balls = 9;
 var resetting = false;
+var ballHoldingLocation = {};
 
 // module aliases
 var Engine = Matter.Engine,
@@ -62,7 +63,7 @@ var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 12, {
         fillStyle: '#999',
     }});
 var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 2);
-var ball = Body.create({parts: [ballInner, ballOuter], frictionAir: 0, friction: friction, restitution: 0.2 });
+var ball = undefined;//Body.create({parts: [ballInner, ballOuter], frictionAir: 0, friction: friction, restitution: 0.2, density: ballDensity });
 
 var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 15, { isStatic: true, friction: 0,
     render: {
@@ -109,15 +110,9 @@ for (var i = 0; i < lossSpots.length; i++) {
     World.add(engine.world, [sensorX, sensorNearX]);
 }
 
-World.add(engine.world, [paddle, ball, ground, wall1, wall2]);
-
-ball.density = ballDensity;
+World.add(engine.world, [paddle, ground, wall1, wall2]);
 engine.world.gravity.scale = gravityScale;
-
-// run the engine
 Engine.run(engine);
-
-// run the renderer
 Render.run(render);
 
 var updateUi = function() {
@@ -148,17 +143,31 @@ var move = function(d1, d2) {
 }
 
 var restart = function() {
-    hideBall();
     resetting = true;
 }
 
-var hideBall = function() {
-    Body.setVelocity(ball, {x: 0, y: 0});
-    //Body.setStatic(ball, true);
+var fakeBall = undefined;
+var hideBall = function(position) {
+    // Removes inner and outer balls from the ball body
+    Body.setParts(ball, [ball]);
+    World.remove(engine.world, ball);
+
+    fakeBall = Bodies.circle(position.x, position.y, 12, {
+        isStatic: true,
+        render: {
+            strokeStyle: '#999',
+            fillStyle: '#888',
+        }});
+    World.add(engine.world, fakeBall);
 }
 var releaseBall = function() {
-    //Body.setStatic(ball, false);
-    Body.setPosition(ball, {x: sceneWidth/2, y: paddleStart - 30});
+    if (fakeBall !== undefined) {
+        World.remove(engine.world, fakeBall);
+    }
+    Body.setPosition(ballInner, { x: sceneWidth/2, y: paddleStart - 50 });
+    Body.setPosition(ballOuter, { x: sceneWidth/2, y: paddleStart - 50 });
+    ball = Body.create({parts: [ballInner, ballOuter], frictionAir: 0, friction: friction, restitution: 0.2, density: ballDensity });
+    World.add(engine.world, ball);
 }
 
 Events.on(engine, "beforeUpdate", function(event) {
@@ -211,13 +220,16 @@ Events.on(engine, 'collisionStart', function(event) {
             // So far, in the collisions we care about, the ball is consistently the bodyA.
             continue;
         }
-        else if (pair.bodyB.label === victoryTag) {
+
+        if (pair.bodyB.label === victoryTag) {
+            hideBall(pair.bodyB.position);
             if (pair.bodyB === sensors[wins - 1])
                 win();
             else
                 lose();
         }
         else if (pair.bodyB.label === lossTag) {
+            hideBall(pair.bodyB.position);
             lose();
         }
     }
@@ -297,13 +309,13 @@ document.addEventListener('keyup', function(event) {
     }
 });
 
-// Start:
-updateUi();
-restart();
-
 // World building:
 var clicked = [];
 document.getElementById("canvas").addEventListener('mousedown', function(event) {
     clicked.push([event.clientX - 8, event.clientY - 8]);
     console.log("[[" + clicked.join("], [") + "]]" );
 });
+
+// Start:
+updateUi();
+restart();
