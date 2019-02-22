@@ -254,28 +254,28 @@ document.addEventListener('keydown', function(event) {
     {
         case 74: // j = right down
             rightDown = true;
-            break;
+            return false;
         case 40: // arrow down = right down
             rightDown = true;
-            break;
+            return false;
         case 75: // k = right up
             rightUp = true;
-            break;
+            return false;
         case 85: // u = alternative right up
             rightUp = true;
-            break;
+            return false;
         case 38: // arrow up = right up
             rightUp = true;
-            break;
+            return false;
         case 83: // s = left down
             leftDown = true;
-            break;
+            return false;
         case 68: // d = left up
             leftUp = true;
-            break;
+            return false;
         case 87: // w = alternative left up
             leftUp = true;
-            break;
+            return false;
     }
 });
 
@@ -284,28 +284,28 @@ document.addEventListener('keyup', function(event) {
     {
         case 74: // j = right down
             rightDown = false;
-            break;
+            return false;
         case 40: // arrow down = right down
             rightDown = false;
-            break;
+            return false;
         case 75: // k = right up
             rightUp = false;
-            break;
+            return false;
         case 85: // u = alternative right up
             rightUp = false;
-            break;
+            return false;
         case 38: // arrow up = right up
             rightUp = false;
-            break;
+            return false;
         case 83: // s = left down
             leftDown = false;
-            break;
+            return false;
         case 68: // d = left up
             leftUp = false;
-            break;
+            return false;
         case 87: // w = alternative left up
             leftUp = false;
-            break;
+            return false;
     }
 });
 
