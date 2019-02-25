@@ -2,7 +2,7 @@
 
 A virtual rendition of the *Ice Cold Beer* arcade
 
-**[Play now](https://amadeusw.github.io/icecold/prototype)
+[Play now](https://amadeusw.github.io/icecold/prototype)
 
 ## Objective
 
@@ -18,4 +18,4 @@ A virtual rendition of the *Ice Cold Beer* arcade
 
 ## Inspired by
 
-![Ice Cold Beer game](prototype/original photo.jpg)
+!(Ice Cold Beer game)[prototype/original photo.jpg]
