@@ -49,8 +49,6 @@ var render = Render.create({
         width: sceneWidth,
         height: sceneHeight,
         wireframes: false,
-        //showVelocity: true,
-        //showCollisions: true,
         background: '#333'
     },
     engine: engine
@@ -63,7 +61,7 @@ var ballOuter = Bodies.circle(sceneWidth/2, paddleStart - 50, 12, {
         fillStyle: '#999',
     }});
 var ballInner = Bodies.circle(sceneWidth/2, paddleStart - 50, 2);
-var ball = undefined;//Body.create({parts: [ballInner, ballOuter], frictionAir: 0, friction: friction, restitution: 0.2, density: ballDensity });
+var ball = undefined;
 
 var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 15, { isStatic: true, friction: 0,
     render: {
@@ -71,10 +69,12 @@ var paddle = Bodies.rectangle(sceneWidth/2, paddleStart, paddleWidth, 15, { isSt
         fillStyle: '#555',
     }});
 
-var ground = Bodies.rectangle(sceneWidth/2, sceneHeight, sceneWidth, 20, { isStatic: true });
+var ground = Bodies.rectangle(sceneWidth/2, sceneHeight, sceneWidth, 5, { isStatic: true });
 var wall1 = Bodies.rectangle(-wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
 var wall2 = Bodies.rectangle(sceneWidth + wallWidth/2, sceneHeight/2, wallWidth, sceneHeight, { isStatic: true });
+var top = Bodies.rectangle(sceneWidth/2, 100, sceneWidth, 5, { isStatic: true });
 
+/*
 var background = Bodies.rectangle(0, 0, sceneWidth, sceneHeight, {
     isSensor: true,
     isStatic: true,
@@ -89,7 +89,7 @@ var background = Bodies.rectangle(0, 0, sceneWidth, sceneHeight, {
         }
     }
     });
-
+*/
 var victorySpots = [[303,567], [472,547], [123,506], [383,453], [219,373], [453,286], [297,244], [127,197], [379,132], [222,91]];
 var nearSensors = [];
 var sensors = [];
@@ -110,7 +110,7 @@ for (var i = 0; i < lossSpots.length; i++) {
     World.add(engine.world, [sensorX, sensorNearX]);
 }
 
-World.add(engine.world, [paddle, ground, wall1, wall2]);
+World.add(engine.world, [paddle, ground, wall1, wall2, top]);
 engine.world.gravity.scale = gravityScale;
 Engine.run(engine);
 Render.run(render);

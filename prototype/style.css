@@ -1,19 +1,29 @@
 body { 
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
+    flex-direction: row;
+    align-items: flex-start;
+    margin: 2em;
     background: #222;
 
     color: #ddcc77;
+    overflow: hidden;
 }
 
 section {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
+    margin: 0 2em;
 }
 
-p {
-    margin: 0 2em;
+.toggle-area {
+    margin-top: 2em;
+}
+
+.toggle-content {
+    display: none;
+}
+
+.toggle-area input:checked ~ .toggle-content {
+    display: block;
 }
