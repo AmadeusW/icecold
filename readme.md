@@ -15,7 +15,3 @@ A virtual rendition of the *Ice Cold Beer* arcade
 * ↕ W/S • U/J ↕ • *Narrow*
 * ↕ W/S • I/J ↕ • *Narrow*
 * ↕ D/S • K/J ↕ • *VIM*
-
-## Inspired by
-
-!(Ice Cold Beer game)[prototype/original photo.jpg]
