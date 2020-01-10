@@ -54,8 +54,9 @@ module RodConnect() {
             }
             
             union () {
-                translate([ConnectorDepth/2,0,0])
-                    cube([RodDepth, RodThickness, 100], center = true);
+                rotate([0,0,2])
+                    translate([ConnectorDepth/2,0,0])
+                        cube([RodDepth, RodThickness, 100], center = true);
             }
         }
     }    
