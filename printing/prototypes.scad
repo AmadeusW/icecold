@@ -14,10 +14,10 @@ translate([0,-40,0])
     RodConnect();
 
 module RodConnect() {
-    RodThickness = 1.59;
-    RodDepth = 12.7;
+    RodThickness = 2.0;
+    RodDepth = 13.4;
     
-    BearingDiameter = 8;
+    BearingDiameter = 7.9;
     BearingLength = 15;
     
     ConnectorShift = 0.5;
@@ -67,13 +67,12 @@ module Guide() {
     HexThickness = 5.4;
 
     MountOffset = 20;
-    GuideRodDiameter = 3.2;
+    GuideRodDiameter = 5.5;
     GuideRodOffet = 13;
-    ThreadRodDiameter = 6.5;
-    
+    ThreadRodDiameter = 6.7;
     
     BoltDiameter = 4.6;
-    BoltSeparation = 36.6;//25.1*1.5;
+    BoltSeparation = 35.0;
     
     Width = BoltSeparation + BoltDiameter + 4;
 
@@ -108,7 +107,7 @@ module Guide() {
 
 module MotorCoupling() {
     Thickness = 13.425;
-    CouplingDiameter = 17;
+    CouplingDiameter = 15;
         
     HexFlatDiameter = 11.0;
     HexRadius = HexFlatDiameter/(2 * cos(30));
