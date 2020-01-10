@@ -1,7 +1,10 @@
 Gap = 0.2;
 $fn = 72;
 
-translate([0,40,0])
+translate([10,40,0])
+    FrameCoupling();
+
+translate([-10,40,0])
     MotorCoupling();
     
 intersection() {
@@ -138,6 +141,44 @@ module MotorCoupling() {
         
     }
     
+}
+
+module FrameCoupling() {
+    CouplingDiameter = 17;
+    BearingDiameter = 7.9;
+    BearingLength = 10;
+    MiddleThickness = 3;
+    HexThickness = 8;
+
+    HexFlatDiameter = 11.0;
+    HexRadius = HexFlatDiameter/(2 * cos(30));
+    HexOffsetLength = 2;
+
+    rotate([180,0,0])
+    {
+        difference() {
+            union () {
+                cylinder(r=BearingDiameter / 2, h = BearingLength);
+                translate([0,0,BearingLength])
+
+                cylinder(r1=BearingDiameter / 2, r2=CouplingDiameter / 2, h = MiddleThickness);
+
+                translate([0,0,BearingLength+MiddleThickness])
+
+                cylinder(r=CouplingDiameter / 2, h = HexThickness);
+            }
+
+            union () {
+                translate([0,0,BearingLength+MiddleThickness])
+                    cylinder(r=HexFlatDiameter/2 + Gap, h = HexThickness + 2);
+
+                translate([0,0,BearingLength+MiddleThickness+HexOffsetLength])
+                    cylinder(r = HexRadius + Gap, h = HexThickness + 2, $fn = 6);
+
+            }
+
+        }
+    }
 }
 
 // Rod: https://www.homedepot.com/p/Everbilt-1-2-in-x-36-in-Aluminum-Flat-Bar-800217/204604762
