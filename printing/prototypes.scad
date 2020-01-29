@@ -2,10 +2,10 @@ Gap = 0.2;
 $fn = 72;
 
 translate([10,40,0])
-    FrameCoupling();
+    RodToBearingCoupling();
 
 translate([-10,40,0])
-    MotorCoupling();
+    RodToMotorCoupling();
     
 intersection() {
     Guide();
@@ -109,46 +109,61 @@ module Guide() {
        
 }
 
-module MotorCoupling() {
-    Thickness = 13.425;
-    CouplingDiameter = 15;
+module RodToMotorCoupling() {
+    BearingDiameter = 20.0;
+    BearingHeight = 8.0;
         
     HexFlatDiameter = 11.0;
     HexRadius = HexFlatDiameter/(2 * cos(30));
-    HexOffsetLength = 2;
+    HexHeight = 8;
     
-    GearTeeth = 10;
-    GearFlatDiameter = 5.7;
-    GearRadius = GearFlatDiameter / (2 * cos(180/GearTeeth));
-    GearLength = 5;
+    ShaftDiameter = 8.2;
+    SocketThickness = 3.0;
+    ShaftHeight = 35.0;
+
+    GuideHeight = 6.0;
+    GuideDiameter = 2.8;
     
-    difference() {
-        cylinder(r=CouplingDiameter / 2, h = Thickness);
-        
-        union () {
-            translate([0,0,-1])
-                cylinder(r = GearRadius + Gap, h = Thickness + 2, $fn = GearTeeth);
-            translate([0,0,-0.5])
-                cylinder(r1 = GearRadius + Gap+0.5, r2 = GearRadius + Gap,
-                         h = 1, $fn = GearTeeth);
-            
-            translate([0,0,GearLength])
-                cylinder(r=HexFlatDiameter/2 + Gap, h = Thickness + 2);
-            
-            translate([0,0,GearLength+HexOffsetLength])
-                cylinder(r = HexRadius + Gap, h = Thickness + 2, $fn = 6);
-            
+    ShaftRadius = ShaftDiameter / 2;
+    SocketRadius = ShaftRadius + SocketThickness;
+    SocketDiameter = SocketRadius * 2;
+    BearingRadius = BearingDiameter / 2;
+    MiddleHeight = BearingRadius - SocketRadius; // ensure of 45 degrees
+    GuideRadius = GuideDiameter / 2;
+
+    union () {
+        // Part which wraps around the motor
+        difference() {
+            cylinder(r=SocketRadius, h = ShaftHeight);
+
+            translate([0,SocketRadius,GuideHeight])
+                rotate([90,0,0])
+                    cylinder(r=GuideRadius + Gap, h = SocketDiameter);
+
+            translate([0,0,-1]) // Ensure the difference
+                cylinder(r=ShaftRadius + Gap, h = ShaftHeight+1);
         }
+
+        // Connect to the connector
+        translate([0,0,ShaftHeight])
+            cylinder(r1=SocketRadius, r2= BearingRadius, h = MiddleHeight);
         
+        // Fit in the bearing
+        translate([0,0, ShaftHeight + MiddleHeight])
+        difference() {
+            cylinder(r=BearingRadius - Gap, h = BearingHeight);
+
+            translate([0,0,0])
+                cylinder(r = HexRadius + Gap, h = HexHeight + 1, $fn = 6);
+        }
     }
-    
 }
 
-module FrameCoupling() {
-    CouplingDiameter = 17;
-    BearingDiameter = 7.9;
+module RodToBearingCoupling() {
+    CouplingDiameter = 16;
+    BearingDiameter = 7.7;
     BearingLength = 10;
-    MiddleThickness = 3;
+    MiddleThickness = CouplingDiameter - BearingDiameter; // Keep slope at 45 degrees
     HexThickness = 8;
 
     HexFlatDiameter = 11.0;
