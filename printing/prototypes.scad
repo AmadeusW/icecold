@@ -128,34 +128,40 @@ module RodToMotorCoupling() {
     SocketRadius = ShaftRadius + SocketThickness;
     SocketDiameter = SocketRadius * 2;
     BearingRadius = BearingDiameter / 2;
-    MiddleHeight = BearingRadius - SocketRadius; // ensure of 45 degrees
+    MiddleHeight = BearingRadius - SocketRadius; // ensure angle of 45 degrees on the outer wall
     GuideRadius = GuideDiameter / 2;
+    MiddleInnerHeight = ShaftRadius + Gap; // ensure angle of 45 degrees on the inner wall
 
     union () {
         // Part which wraps around the motor
         difference() {
-            cylinder(r=SocketRadius, h = ShaftHeight);
+            cylinder(r=SocketRadius, h = ShaftHeight + MiddleInnerHeight);
 
             translate([0,SocketRadius,GuideHeight])
                 rotate([90,0,0])
                     cylinder(r=GuideRadius + Gap, h = SocketDiameter);
 
-            translate([0,0,-1]) // Ensure the difference
-                cylinder(r=ShaftRadius + Gap, h = ShaftHeight+1);
+            translate([0,0,-1]) // -1 to Ensure the difference
+                union()
+                {
+                    cylinder(r=ShaftRadius + Gap, h = ShaftHeight+1);
+                    translate([0,0,ShaftHeight + 1])
+                        cylinder(r1=ShaftRadius + Gap, r2= 0, h = MiddleInnerHeight);
+                }
         }
 
-        // Connect to the connector
-        translate([0,0,ShaftHeight])
+        // Connect to the other part
+        translate([0,0,ShaftHeight + MiddleInnerHeight])
             cylinder(r1=SocketRadius, r2= BearingRadius  - Gap, h = MiddleHeight);
         
         // Fit in the bearing
-        translate([0,0, ShaftHeight + MiddleHeight])
-        difference() {
-            cylinder(r=BearingRadius - Gap, h = BearingHeight);
+        translate([0,0, ShaftHeight + MiddleInnerHeight + MiddleHeight])
+            difference() {
+                cylinder(r=BearingRadius - Gap, h = BearingHeight);
 
-            translate([0,0,0])
-                cylinder(r = HexRadius + Gap, h = BearingHeight + 1, $fn = 6);
-        }
+                translate([0,0,0])
+                    cylinder(r = HexRadius + Gap, h = BearingHeight + 1, $fn = 6);
+            }
     }
 }
 
