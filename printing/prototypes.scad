@@ -111,7 +111,7 @@ module Guide() {
 
 module RodToMotorCoupling() {
     BearingDiameter = 20.0;
-    BearingHeight = 8.0;
+    BearingHeight = 14.0;
         
     HexFlatDiameter = 11.0;
     HexRadius = HexFlatDiameter/(2 * cos(30));
@@ -146,7 +146,7 @@ module RodToMotorCoupling() {
 
         // Connect to the connector
         translate([0,0,ShaftHeight])
-            cylinder(r1=SocketRadius, r2= BearingRadius, h = MiddleHeight);
+            cylinder(r1=SocketRadius, r2= BearingRadius  - Gap, h = MiddleHeight);
         
         // Fit in the bearing
         translate([0,0, ShaftHeight + MiddleHeight])
@@ -154,7 +154,7 @@ module RodToMotorCoupling() {
             cylinder(r=BearingRadius - Gap, h = BearingHeight);
 
             translate([0,0,0])
-                cylinder(r = HexRadius + Gap, h = HexHeight + 1, $fn = 6);
+                cylinder(r = HexRadius + Gap, h = BearingHeight + 1, $fn = 6);
         }
     }
 }
