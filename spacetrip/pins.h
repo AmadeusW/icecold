@@ -7,8 +7,8 @@
 #define SensorAngle 0
 #define SensorLost 0
 #define SensorScored 0
-#define SensorJoyAUp 0
-#define SensorJoyADown 0
+#define SensorJoyAUp 4
+#define SensorJoyADown 5
 #define SensorJoyBUp 0
 #define SensorJoyBDown 0
 
@@ -19,4 +19,6 @@ void setupPins()
     pinMode(AIN2, OUTPUT);
     pinMode(PWMA, OUTPUT);
     pinMode(STBY, OUTPUT);
+    pinMode(SensorJoyAUp, INPUT);
+    pinMode(SensorJoyADown, INPUT);
 }

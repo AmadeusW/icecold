@@ -5,19 +5,55 @@ void setup()
 {
    setupPins();
    startMotor();
+   Serial.begin(9600); // set up debugging
 }
 
 void loop()
 {
-   brake();
-   delay(1000);
+   readSensors();
+   move();
+}
 
-   move(true);
+bool joyAUp = false;
+bool joyADown = false;
 
-   brake();
-   delay(1000);
+void readSensors()
+{
+   joyAUp = digitalRead(SensorJoyAUp) == HIGH;
+   joyADown = digitalRead(SensorJoyADown) == HIGH;
 
-   move(false);
+   //Serial.print("Up: ");
+   //Serial.print(joyAUpAnalog);
+   //Serial.print(" = ");
+   Serial.print(joyAUp);
+   //Serial.print(", ");
+   //Serial.print("Down: ");
+   //Serial.print(joyADownAnalog);
+   //Serial.print(" = ");
+   Serial.println(joyADown);
+   //Serial.println("---");
+}
+
+void move()
+{
+   if (joyAUp && joyADown)
+   {
+      // Error condition
+      brake();
+   }
+   else if (joyAUp)
+   {
+      move(true);
+   }
+   else if (joyADown)
+   {
+      move(false);
+   }
+   else
+   {
+      brake();
+   }
+   delay(50);
 }
 
 void startMotor()
@@ -45,15 +81,5 @@ void move(bool up)
       digitalWrite(AIN1, LOW);
       digitalWrite(AIN2, HIGH);
    }
-   
-   analogWrite(PWMA, 30);
-   delay(500);
-   analogWrite(PWMA, 40);
-   delay(500);
-   analogWrite(PWMA, 50);
-   delay(500);
-   analogWrite(PWMA, 60);
-   delay(500);
-   analogWrite(PWMA, 70);
-   delay(500);
+   analogWrite(PWMA, 255);
 }
