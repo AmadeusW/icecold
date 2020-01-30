@@ -5,7 +5,8 @@ translate([10,40,0])
     RodToBearingCoupling();
 
 translate([-10,40,0])
-    RodToMotorCoupling();
+    rotate([180, 0, 0])
+        RodToMotorCoupling();
     
 intersection() {
     Guide();
@@ -157,7 +158,32 @@ module RodToMotorCoupling() {
         // Fit in the bearing
         translate([0,0, ShaftHeight + MiddleInnerHeight + MiddleHeight])
             difference() {
-                cylinder(r=BearingRadius - Gap, h = BearingHeight);
+                union() {
+                    cylinder(r=BearingRadius - Gap, h = BearingHeight);
+
+                    // Support for printing
+                    translate([0,0,BearingHeight])
+                        difference()
+                        {
+                            union() {
+                                translate([0,BearingRadius*2,0])
+                                    rotate([90,0,0])
+                                        cylinder(r=1.0, h = BearingRadius * 4);
+                                translate([-BearingRadius,BearingRadius,0])
+                                    rotate([90,0,45])
+                                        cylinder(r=1.0, h = BearingRadius * 3);
+                                translate([-BearingRadius*2,0,0])
+                                    rotate([90,0,90])
+                                        cylinder(r9=1.0, h = BearingRadius * 4);
+                                translate([-BearingRadius,-BearingRadius,0])
+                                    rotate([90,0,135])
+                                        cylinder(r=1.0, h = BearingRadius * 3);
+                            }
+                            // Make the supports flat
+                            translate([0, 0, 0.5])
+                                cube([BearingRadius*5, BearingRadius*5, 1], center = true);
+                        }
+                }
 
                 translate([0,0,0])
                     cylinder(r = HexRadius + Gap, h = BearingHeight + 1, $fn = 6);
