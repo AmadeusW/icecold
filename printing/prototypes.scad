@@ -167,7 +167,7 @@ module RodToMotorCoupling() {
 
 module RodToBearingCoupling() {
     CouplingDiameter = 10;
-    BearingDiameter = 7.7;
+    BearingDiameter = 7.5;
     BearingHeight = 10;
     MiddleThickness = CouplingDiameter - BearingDiameter; // Keep slope at 45 degrees
     RodHeight = 5;
