@@ -166,39 +166,40 @@ module RodToMotorCoupling() {
 }
 
 module RodToBearingCoupling() {
-    CouplingDiameter = 16;
+    CouplingDiameter = 10;
     BearingDiameter = 7.7;
-    BearingLength = 10;
+    BearingHeight = 10;
     MiddleThickness = CouplingDiameter - BearingDiameter; // Keep slope at 45 degrees
-    HexThickness = 8;
-
-    HexFlatDiameter = 11.0;
-    HexRadius = HexFlatDiameter/(2 * cos(30));
-    HexOffsetLength = 2;
+    RodHeight = 5;
+    ConeHeight = 2;
+    RodDiameter = 4;
+    RimHeight = 1;
+    RimDiameter = 5;
 
     rotate([180,0,0])
     {
         difference() {
             union () {
-                cylinder(r=BearingDiameter / 2, h = BearingLength);
-                translate([0,0,BearingLength])
+                cylinder(r=BearingDiameter / 2, h = BearingHeight);
+                translate([0,0,BearingHeight])
 
                 cylinder(r1=BearingDiameter / 2, r2=CouplingDiameter / 2, h = MiddleThickness);
 
-                translate([0,0,BearingLength+MiddleThickness])
+                translate([0,0,BearingHeight+MiddleThickness])
 
-                cylinder(r=CouplingDiameter / 2, h = HexThickness);
+                cylinder(r=CouplingDiameter / 2, h = RodHeight);
             }
-
+            translate([0, 0, -RimHeight])
             union () {
-                translate([0,0,BearingLength+MiddleThickness])
-                    cylinder(r=HexFlatDiameter/2 + Gap, h = HexThickness + 2);
+                translate([0,0,BearingHeight+MiddleThickness - ConeHeight*2 ])
+                    cylinder(r=0, r2=RodDiameter/2, h = ConeHeight * 2);
 
-                translate([0,0,BearingLength+MiddleThickness+HexOffsetLength])
-                    cylinder(r = HexRadius + Gap, h = HexThickness + 2, $fn = 6);
+                translate([0,0,BearingHeight+MiddleThickness])
+                    cylinder(r=RodDiameter/2, h = RodHeight);
 
+                translate([0,0,BearingHeight+MiddleThickness+RodHeight])
+                    cylinder(r=RodDiameter/2, r2=RimDiameter/2, h = RimHeight);
             }
-
         }
     }
 }
