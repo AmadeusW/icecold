@@ -3,6 +3,16 @@
 #include "pins.h"
 //<include "future.h"
 
+enum States {
+   uninitialized = 0,
+   idle,
+   moveUp,
+   moveDown,
+   errorInvalidInput,
+   scored, // TODO: add multiple stages for scored
+   MAXState
+};
+
 Servo ballServo;
 bool joyAUp = false;
 bool joyADown = false;
@@ -11,11 +21,16 @@ int state = 0;
 int turn = 0;
 bool freezeState = false;
 int unfreezeTurn = 0;
+int (*debugHandlers[MAXState]) ();
 
 void setup()
 {
    setupPins();
    startMotor();
+   debugHandlers[moveUp] = debugMovement;
+   debugHandlers[moveDown] = debugMovement;
+   debugHandlers[scored] = debugScored;
+   debugHandlers[errorInvalidInput] = debugInvalidInput;
    ballServo.attach(BallServo);
    Serial.begin(9600); // set up debugging
    state = 1; // running
@@ -54,25 +69,23 @@ void updateState()
    }
    if (isScoring)
    {
-      state = 40; // Scoring
+      state = scored;
    }
    else if (joyAUp && joyADown)
    {
-      state = 11; // stop, error: invalid input
-      brake();
+      state = errorInvalidInput; // stop, error: invalid input
    }
    else if (joyAUp)
    {
-      state = 20; // Up
+      state = moveUp;
    }
    else if (joyADown) // TODO: add another angle limiter
    {
-      state = 30; // Down
+      state = moveDown;
    }
    else
    {
-      state = 10; // stop
-      brake();
+      state = idle;
    }
 }
 
@@ -80,16 +93,16 @@ void writePins()
 {
    switch (state)
    {
-      case 20: // Up
+      case moveUp: // Up
          move(true, 255);
          return;
-      case 30: // Down
+      case moveDown: // Down
          move(false, 255);
          return;
-      case 40: // Scored
+      case scored: // Scored
          ballServo.write((unfreezeTurn - turn) * 8);
-      case 10: // No input
-      case 11: // Invalid input
+      case idle: // No input
+      case errorInvalidInput: // Invalid input
       default:
          brake();
          return;
@@ -98,19 +111,37 @@ void writePins()
 
 void writeDebug()
 {
-   switch (state)
+   int (*handler)();
+   handler = (*debugHandlers[state]);
+   if (handler == 0)
    {
-      case 20: // Up
-      case 30: // Down
-         digitalWrite(LED, HIGH);
-         return;
-      case 40:
-         digitalWrite(LED, turn % 3 == 0 ? HIGH : LOW);
-         return;
-      case 11: // Invalid input
-         digitalWrite(LED, turn % 2 == 0 ? HIGH : LOW);
-         return;
+      Serial.print("No handler for ");
+      Serial.println(state);
    }
+   else
+   {
+      Serial.print("Calling handler for ");
+      Serial.println(state);
+      handler();
+   }
+}
+
+int debugMovement()
+{
+   digitalWrite(LED, HIGH);
+   return 0;
+}
+
+int debugScored()
+{
+   digitalWrite(LED, turn % 2 == 0 && turn % 6 != 0 ? HIGH : LOW);
+   return 0;
+}
+
+int debugInvalidInput()
+{
+   digitalWrite(LED, turn % 2 == 0 ? HIGH : LOW);
+   return 0;
 }
 
 void finishTurn()
