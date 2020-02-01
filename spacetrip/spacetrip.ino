@@ -21,7 +21,7 @@ int state = 0;
 int turn = 0;
 bool freezeState = false;
 int unfreezeTurn = 0;
-int (*debugHandlers[MAXState]) ();
+int (*debugHandlers[MAXState]) (bool);
 
 void setup()
 {
@@ -111,7 +111,7 @@ void writePins()
 
 void writeDebug()
 {
-   int (*handler)();
+   int (*handler)(bool);
    handler = (*debugHandlers[state]);
    if (handler == 0)
    {
@@ -122,25 +122,28 @@ void writeDebug()
    {
       Serial.print("Calling handler for ");
       Serial.println(state);
-      handler();
+      handler(false);
    }
 }
 
-int debugMovement()
+int debugMovement(bool action)
 {
-   digitalWrite(LED, HIGH);
+   if (!action)
+      digitalWrite(LED, HIGH);
    return 0;
 }
 
-int debugScored()
+int debugScored(bool action)
 {
-   digitalWrite(LED, turn % 2 == 0 && turn % 6 != 0 ? HIGH : LOW);
+   if (!action)
+      digitalWrite(LED, turn % 2 == 0 && turn % 6 != 0 ? HIGH : LOW);
    return 0;
 }
 
-int debugInvalidInput()
+int debugInvalidInput(bool action)
 {
-   digitalWrite(LED, turn % 2 == 0 ? HIGH : LOW);
+   if (!action)
+      digitalWrite(LED, turn % 2 == 0 ? HIGH : LOW);
    return 0;
 }
 
