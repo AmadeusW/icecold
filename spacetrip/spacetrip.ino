@@ -1,11 +1,16 @@
+#include <Servo.h>
+
 #include "pins.h"
 //<include "future.h"
-#include <Servo.h>
 
 Servo ballServo;
 bool joyAUp = false;
 bool joyADown = false;
 bool isScoring = false;
+int state = 0;
+int turn = 0;
+bool freezeState = false;
+int unfreezeTurn = 0;
 
 void setup()
 {
@@ -13,61 +18,106 @@ void setup()
    startMotor();
    ballServo.attach(BallServo);
    Serial.begin(9600); // set up debugging
+   state = 1; // running
 }
 
 void loop()
 {
-   readSensors();
-   act();
+   readPins();
+   updateState();
+   writePins();
+   writeDebug();
+   finishTurn();
 }
 
-void readSensors()
+void readPins()
 {
-   joyAUp = digitalRead(SensorJoyAUp) == HIGH;
-   joyADown = digitalRead(SensorJoyADown) == HIGH;
-   isScoring = digitalRead(SensorScored) == HIGH;
+  joyAUp = digitalRead(SensorJoyAUp) == HIGH;
+  joyADown = digitalRead(SensorJoyADown) == HIGH;
+  isScoring = digitalRead(SensorScored) == HIGH;
 
-   //Serial.print("Up: ");
-   //Serial.print(joyAUpAnalog);
-   //Serial.print(" = ");
-   Serial.print(joyAUp);
-   //Serial.print(", ");
-   //Serial.print("Down: ");
-   //Serial.print(joyADownAnalog);
-   //Serial.print(" = ");
-   Serial.print(joyADown);
-   Serial.println(isScoring);
-   //Serial.println("---");
+  Serial.print("T");
+  Serial.print(turn);
+  Serial.print(". S");
+  Serial.print(state);
+  Serial.print(". pins ");
+  Serial.print(joyAUp);
+  Serial.print(joyADown);
+  Serial.println(isScoring);
 }
 
-void act()
+void updateState()
 {
+   if (freezeState && turn < unfreezeTurn)
+   {
+      return;
+   }
    if (isScoring)
    {
-      score();
+      state = 40; // Scoring
    }
-   if (joyAUp && joyADown)
+   else if (joyAUp && joyADown)
    {
-      // Error condition
+      state = 11; // stop, error: invalid input
       brake();
-      debugMessage(1);
    }
    else if (joyAUp)
    {
-      digitalWrite(LED, HIGH);
-      move(true, 255);
+      state = 20; // Up
    }
    else if (joyADown) // TODO: add another angle limiter
    {
-      digitalWrite(LED, HIGH);
-      move(false, 255);
+      state = 30; // Down
    }
    else
    {
+      state = 10; // stop
       brake();
    }
+}
+
+void writePins()
+{
+   switch (state)
+   {
+      case 20: // Up
+         move(true, 255);
+         return;
+      case 30: // Down
+         move(false, 255);
+         return;
+      case 40: // Scored
+         ballServo.write((unfreezeTurn - turn) * 8);
+      case 10: // No input
+      case 11: // Invalid input
+      default:
+         brake();
+         return;
+   }
+}
+
+void writeDebug()
+{
+   switch (state)
+   {
+      case 20: // Up
+      case 30: // Down
+         digitalWrite(LED, HIGH);
+         return;
+      case 40:
+         digitalWrite(LED, turn % 3 == 0 ? HIGH : LOW);
+         return;
+      case 11: // Invalid input
+         digitalWrite(LED, turn % 2 == 0 ? HIGH : LOW);
+         return;
+   }
+}
+
+void finishTurn()
+{
    delay(50);
    digitalWrite(LED, LOW);
+   turn++;
 }
 
 void startMotor()
@@ -79,29 +129,6 @@ void brake()
 {
    digitalWrite(AIN1, HIGH);
    digitalWrite(AIN2, HIGH);
-}
-
-void score()
-{
-   analogWrite(BallServo, 10);
-   for (int i = 0; i < 5; i++)
-   {
-      digitalWrite(LED, LOW);
-      move(false, 50);
-      delay(100);
-      digitalWrite(LED, HIGH);
-      move(false, 50);
-      delay(100);
-   }
-   brake();
-   ballServo.write(160);
-   delay(1000);
-   Serial.print("B");
-   digitalWrite(LED, HIGH);
-   ballServo.write(20);
-   delay(1000);
-   Serial.println("C");
-   digitalWrite(LED, LOW);
 }
 
 void move(bool up, int speed)
@@ -117,16 +144,4 @@ void move(bool up, int speed)
       digitalWrite(AIN2, HIGH);
    }
    analogWrite(PWMA, speed);
-}
-
-void debugMessage(int code)
-{
-  for (int i = 0; i < code; i++)
-  {
-    digitalWrite(LED, HIGH);
-    delay(100);
-    digitalWrite(LED, LOW);
-    delay(100);
-  }
-  delay(300);  
 }
