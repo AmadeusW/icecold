@@ -6,11 +6,13 @@
 
 #define SensorAngle 0
 #define SensorLost 0
-#define SensorScored 0
+#define SensorScored 7
 #define SensorJoyAUp 4
 #define SensorJoyADown 5
 #define SensorJoyBUp 0
 #define SensorJoyBDown 0
+
+#define BallServo 6
 
 void setupPins()
 {
@@ -21,4 +23,6 @@ void setupPins()
     pinMode(STBY, OUTPUT);
     pinMode(SensorJoyAUp, INPUT);
     pinMode(SensorJoyADown, INPUT);
+    pinMode(SensorScored, INPUT);
+    pinMode(BallServo, OUTPUT);
 }
