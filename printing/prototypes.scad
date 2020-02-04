@@ -2,19 +2,34 @@ Gap = 0.2;
 $fn = 72;
 
 translate([10,40,0])
-    RodToBearingCoupling();
+    Helper(false)
+        RodToBearingCoupling();
 
 translate([-10,40,0])
-    RodToMotorCoupling();
+    Helper(false)
+        RodToMotorCoupling();
     
 intersection() {
-    Guide();
-    //translate([-100,0,-100])
-        //cube([200,200,200]);
+    Helper(false)
+        Guide();
 }
 
 translate([0,-40,0])
-    RodConnect();
+    Helper(false)
+        RodConnect();
+
+// If debug is set, renders a cross section of the object
+module Helper(debug) {
+    if (debug) {
+        intersection() {
+            children();
+            translate([-100,0,-100])
+                cube([200,200,200]);
+        }
+    } else {
+        children();
+    }
+}
 
 module RodConnect() {
     RodThickness = 2.0;
@@ -172,7 +187,7 @@ module RodToBearingCoupling() {
     MiddleThickness = CouplingDiameter - BearingDiameter; // Keep slope at 45 degrees
     RodHeight = 5;
     ConeHeight = 2;
-    RodDiameter = 4;
+    RodDiameter = 6.5;
     RimHeight = 1;
     RimDiameter = 5;
 
