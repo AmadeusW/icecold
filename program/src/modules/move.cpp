@@ -1,29 +1,13 @@
 #include "Arduino.h"
-#include "../state.h"
+#include "move.h"
 #include "../pins.h"
-#include "../composition.h"
 
-int moveDispatcher(Method method)
-{
-    switch (method) {
-        case METHOD_SETUP:
-            moveSetup();
-        case METHOD_WORK:
-            moveWork();
-        case METHOD_DEBUG:
-            moveDebug();
-        default:
-            return -1;
-    }
-    return 0;
-}
-
-void moveSetup()
+void MoveModule::setup()
 {
     startMotor();
 }
 
-void moveWork()
+void MoveModule::work(State state)
 {
     switch (state) {
         case moveUp:
@@ -36,10 +20,12 @@ void moveWork()
         case errorInvalidInput:
             brake();
             return;
+        default:
+            return;
     }
 }
 
-void moveDebug()
+void MoveModule::debug(State state)
 {
     switch (state) {
         case moveUp:
@@ -53,30 +39,3 @@ void moveDebug()
             return;
     }
 }
-
-void startMotor()
-{
-   digitalWrite(STBY, HIGH);
-}
-
-void brake()
-{
-   digitalWrite(AIN1, HIGH);
-   digitalWrite(AIN2, HIGH);
-}
-
-void move(bool up, int speed)
-{
-   if (up)
-   {
-      digitalWrite(AIN1, HIGH);
-      digitalWrite(AIN2, LOW);  
-   }
-   else
-   {
-      digitalWrite(AIN1, LOW);
-      digitalWrite(AIN2, HIGH);
-   }
-   analogWrite(PWMA, speed);
-}
-

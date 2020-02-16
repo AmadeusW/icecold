@@ -6,7 +6,7 @@
 // This file declares all possible states
 // and variables which store the state
 
-enum States {
+enum State {
    uninitialized = 0,
    idle,
    moveUp,

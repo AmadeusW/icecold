@@ -1,32 +1,18 @@
 #include "Arduino.h"
 #include "../lib/Servo/Servo.h"
+#include "score.h"
+#include "../composition.h"
 #include "../state.h"
 #include "../pins.h"
 
 Servo ballServo;
 
-int scoreDispatcher(int method)
-{
-    switch (method)
-    {
-        case METHOD_SETUP:
-            scoreSetup();
-        case METHOD_WORK:
-            scoreWork();
-        case METHOD_DEBUG:
-            scoreDebug();
-        default:
-            return -1;
-    }
-    return 0;
-}
-
-void scoreSetup()
+void ScoreModule::setup()
 {
     ballServo.attach(PinServo);
 }
 
-void scoreWork()
+void ScoreModule::work(State state)
 {
     switch (state) {
         case scored:
@@ -40,7 +26,7 @@ void scoreWork()
     }
 }
 
-void scoreDebug()
+void ScoreModule::debug(State state)
 {
     switch (state) {
         case scored:
@@ -50,5 +36,3 @@ void scoreDebug()
             return;
     }
 }
-
-#endif

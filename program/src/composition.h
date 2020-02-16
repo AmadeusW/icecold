@@ -7,14 +7,14 @@
 
 #include "state.h"
 
-int (*modules[MAX_State]) (bool);
-int compose();
-
-enum Methods {
-   METHOD_SETUP,
-   METHOD_WORK,
-   METHOD_DEBUG,
-   MAX_Methods
+class GameModule {
+   public:
+      virtual void setup() = 0;
+      virtual void work(State state) = 0;
+      virtual void debug(State state) = 0;
 };
+
+GameModule** modules = new GameModule*[MAX_State];
+void compose();
 
 #endif
