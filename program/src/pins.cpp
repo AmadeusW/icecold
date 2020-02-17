@@ -2,6 +2,11 @@
 #include "state.h"
 #include "pins.h"
 
+// Define externs declared in pins.h
+bool joyAUp;
+bool joyADown;
+bool isScoring;
+
 void setupPins()
 {
   pinMode(LED, OUTPUT);

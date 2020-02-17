@@ -4,21 +4,21 @@
 #include "state.h"
 #include "composition.h"
 
-// extern variables declared in state.h
-// define them here and initialize in setup()
-State state;
-int turn;
-bool freezeState;
-int unfreezeTurn;
+// Define externs declared in state.h
+State state = uninitialized;
+int turn = 0;
+bool freezeState = false;
+int unfreezeTurn = 0;
 
 void setup()
 {
-  state = uninitialized;
-  turn = 0;
-  freezeState = false;
-  unfreezeTurn = 0;
+  Serial.begin(9600); // set up debugging
+  Serial.print("Hello World");
 
+  Serial.println("Setting up pins...");
   setupPins(); // Pins are set up and read separately
+  digitalWrite(LED, HIGH);
+  Serial.println("Composing modules...");
   compose(); // Compose all modules
 
   // Setup all modules
@@ -27,18 +27,22 @@ void setup()
     Module* module = getModule((State)stateId);
     if (module == 0)
     {
-        Serial.print("No setup for ");
-        Serial.println(stateId);
+      Serial.print("No setup for ");
+      Serial.print(stateId);
+      Serial.println(".");
     }
     else
     {
-        Serial.print("Setup ");
-        Serial.println(stateId);
-        module->setup();
+      Serial.print("Setting up module ");
+      Serial.print(stateId);
+      Serial.println("...");
+      module->setup();
     }
   }
 
-  Serial.begin(9600); // set up debugging
+  Serial.println("Setup complete.");
+  delay(50);
+  digitalWrite(LED, LOW);
   state = idle; // running
 }
 

@@ -9,6 +9,7 @@ void compose()
     MoveModule* moveModule = new MoveModule();
     ScoreModule* scoreModule = new ScoreModule();
 
+    modules[idle] = moveModule;
     modules[moveUp] = moveModule;
     modules[moveDown] = moveModule;
     modules[scored] = scoreModule;

@@ -19,9 +19,9 @@
 
 #define PinServo 6
 
-static bool joyAUp = false;
-static bool joyADown = false;
-static bool isScoring = false;
+extern bool joyAUp;
+extern bool joyADown;
+extern bool isScoring;
 
 void setupPins();
 void readPins();
