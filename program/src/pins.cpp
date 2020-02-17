@@ -1,6 +1,3 @@
-#ifndef pins_c
-#define pins_c
-
 #include "Arduino.h"
 #include "state.h"
 #include "pins.h"
@@ -33,31 +30,3 @@ void readPins()
   Serial.print(joyADown);
   Serial.println(isScoring);
 }
-
-void startMotor()
-{
-   digitalWrite(STBY, HIGH);
-}
-
-void brake()
-{
-   digitalWrite(AIN1, HIGH);
-   digitalWrite(AIN2, HIGH);
-}
-
-void move(bool up, int speed)
-{
-   if (up)
-   {
-      digitalWrite(AIN1, HIGH);
-      digitalWrite(AIN2, LOW);  
-   }
-   else
-   {
-      digitalWrite(AIN1, LOW);
-      digitalWrite(AIN2, HIGH);
-   }
-   analogWrite(PWMA, speed);
-}
-
-#endif

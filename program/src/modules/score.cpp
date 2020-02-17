@@ -2,6 +2,7 @@
 #include "../lib/Servo/Servo.h"
 #include "score.h"
 #include "../composition.h"
+#include "../motor.h"
 #include "../state.h"
 #include "../pins.h"
 
@@ -19,10 +20,10 @@ void ScoreModule::work(State state)
             ballServo.write((unfreezeTurn - turn) * 8);
             return;
         case moveDown:
-            move(false, 255);
+            motorMove(false, 255);
             return;
         default:
-            brake();
+            motorBrake();
     }
 }
 

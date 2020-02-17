@@ -25,8 +25,5 @@ static bool isScoring = false;
 
 void setupPins();
 void readPins();
-void startMotor();
-void brake();
-void move(bool up, int speed);
 
 #endif

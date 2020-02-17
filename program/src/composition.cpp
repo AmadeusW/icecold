@@ -2,6 +2,8 @@
 #include "modules/move.h"
 #include "modules/score.h"
 
+Module* modules[MAX_State];
+
 void compose()
 {
     MoveModule* moveModule = new MoveModule();
@@ -11,4 +13,9 @@ void compose()
     modules[moveDown] = moveModule;
     modules[scored] = scoreModule;
     modules[errorInvalidInput] = moveModule;
+}
+
+Module* getModule(State state)
+{
+    return modules[state];
 }

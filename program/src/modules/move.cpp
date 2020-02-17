@@ -1,24 +1,25 @@
 #include "Arduino.h"
 #include "move.h"
 #include "../pins.h"
+#include "../motor.h"
 
 void MoveModule::setup()
 {
-    startMotor();
+    motorSetup();
 }
 
 void MoveModule::work(State state)
 {
     switch (state) {
         case moveUp:
-            move(true, 255);
+            motorMove(true, 255);
             return;
         case moveDown:
-            move(false, 255);
+            motorMove(false, 255);
             return;
         case idle:
         case errorInvalidInput:
-            brake();
+            ::motorBrake();
             return;
         default:
             return;

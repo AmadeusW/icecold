@@ -2,13 +2,16 @@
 // Each module must provide a method with
 // bool parameter. True indicates execution of action, false indicates debug message
 // int return.
-#ifndef composition_h
-#define composition_h
+#ifndef module_h
+#define module_h
 
 #include "state.h"
-#include "module.h"
 
-Module* getModule(State state);
-void compose();
+class Module {
+   public:
+      virtual void setup() = 0;
+      virtual void work(State state) = 0;
+      virtual void debug(State state) = 0;
+};
 
 #endif

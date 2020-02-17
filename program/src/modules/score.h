@@ -2,9 +2,9 @@
 #define scoremodule_h
 
 #include "../state.h"
-#include "../composition.h"
+#include "../module.h"
 
-class ScoreModule: public GameModule {
+class ScoreModule: public Module {
     public:
         virtual void setup();
         virtual void work(State state);

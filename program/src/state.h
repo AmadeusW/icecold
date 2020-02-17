@@ -16,10 +16,10 @@ enum State {
    MAX_State
 };
 
-static int state = 0;
-static int turn = 0;
+extern State state;
+extern int turn;
 
-static bool freezeState = false;
-static int unfreezeTurn = 0;
+extern bool freezeState;
+extern int unfreezeTurn;
 
 #endif

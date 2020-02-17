@@ -2,9 +2,9 @@
 #define movemodule_h
 
 #include "../state.h"
-#include "../composition.h"
+#include "../module.h"
 
-class MoveModule: public GameModule {
+class MoveModule: public Module {
     public:
         virtual void setup();
         virtual void work(State state);
