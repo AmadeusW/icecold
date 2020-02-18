@@ -1,8 +1,15 @@
 # Ice Cold Beer
 
-A virtual rendition of the *Ice Cold Beer* arcade
+**Ice Cold Beer** is an 1983 arcade by Taito. Read more at [arcade-museum.com](https://www.arcade-museum.com/game_detail.php?game_id=10592)
 
-[Play now](https://amadeusw.github.io/icecold/prototype)
+# Arcade rendition
+
+I'm building a DIY rendition of the arcade.
+See the `program` directory for microcontroller code and `printing` directory for 3D printed parts
+
+# Virtual rendition
+
+[Play now](https://amadeusw.github.io/icecold/web-prototype)
 
 ## Objective
 
