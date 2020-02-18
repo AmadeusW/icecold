@@ -2,19 +2,34 @@ Gap = 0.2;
 $fn = 72;
 
 translate([10,40,0])
-    RodToBearingCoupling();
+    Helper(false)
+        RodToBearingCoupling();
 
 translate([-10,40,0])
-    RodToMotorCoupling();
+    Helper(false)
+        RodToMotorCoupling();
     
 intersection() {
-    Guide();
-    //translate([-100,0,-100])
-        //cube([200,200,200]);
+    Helper(false)
+        Guide();
 }
 
 translate([0,-40,0])
-    RodConnect();
+    Helper(false)
+        RodConnect();
+
+// If debug is set, renders a cross section of the object
+module Helper(debug) {
+    if (debug) {
+        intersection() {
+            children();
+            translate([0,-100,-100])
+                cube([200,200,200]);
+        }
+    } else {
+        children();
+    }
+}
 
 module RodConnect() {
     RodThickness = 2.0;
@@ -168,38 +183,45 @@ module RodToMotorCoupling() {
 module RodToBearingCoupling() {
     CouplingDiameter = 10;
     BearingDiameter = 7.5;
-    BearingHeight = 10;
-    MiddleThickness = CouplingDiameter - BearingDiameter; // Keep slope at 45 degrees
+    BearingHeight = 12;
+    MiddleThickness = (CouplingDiameter - BearingDiameter) / 2; // Keep slope at 45 degrees
     RodHeight = 5;
-    ConeHeight = 2;
-    RodDiameter = 4;
+    RodDiameter = 6.5;
+    ConeHeight = RodDiameter / 2; // Keep slope at 45 degrees
     RimHeight = 1;
-    RimDiameter = 5;
+    RimDiameter = 7;
+    TighteningRadius = 1.5;
+    TighteningHeight = 2.5;
+    TighteningDepth = 1;
 
     rotate([180,0,0])
     {
         difference() {
+            // Body
             union () {
                 cylinder(r=BearingDiameter / 2, h = BearingHeight);
+                
+                translate([0,0,BearingHeight - ConeHeight])
+                    cylinder(r1=BearingDiameter / 2, r2=CouplingDiameter / 2, h = ConeHeight);
+
                 translate([0,0,BearingHeight])
-
-                cylinder(r1=BearingDiameter / 2, r2=CouplingDiameter / 2, h = MiddleThickness);
-
-                translate([0,0,BearingHeight+MiddleThickness])
-
-                cylinder(r=CouplingDiameter / 2, h = RodHeight);
+                    cylinder(r=CouplingDiameter / 2, h = RodHeight + RimHeight);
             }
-            translate([0, 0, -RimHeight])
+            // Space for threaded rod
             union () {
-                translate([0,0,BearingHeight+MiddleThickness - ConeHeight*2 ])
-                    cylinder(r=0, r2=RodDiameter/2, h = ConeHeight * 2);
+                translate([0,0,BearingHeight - ConeHeight])
+                    cylinder(r=0, r2=RodDiameter/2, h = ConeHeight);
 
-                translate([0,0,BearingHeight+MiddleThickness])
+                translate([0,0,BearingHeight])
                     cylinder(r=RodDiameter/2, h = RodHeight);
 
-                translate([0,0,BearingHeight+MiddleThickness+RodHeight])
+                translate([0,0,BearingHeight+RodHeight])
                     cylinder(r=RodDiameter/2, r2=RimDiameter/2, h = RimHeight);
             }
+            // Dimple for the tightening screw
+            translate([0,BearingDiameter/2, TighteningHeight])
+                rotate([90,0,0])
+                    cylinder(r=TighteningRadius + Gap, r2=0, h = TighteningDepth);
         }
     }
 }
