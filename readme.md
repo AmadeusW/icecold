@@ -2,7 +2,7 @@
 
 **Ice Cold Beer** is an 1983 arcade by Taito.
 Read more at [arcade-museum.com](https://www.arcade-museum.com/game_detail.php?game_id=10592)
-See [picture](https://raw.githubusercontent.com/AmadeusW/icecold/master/web-prototype/orignal%20photo.JPG)
+See [picture](https://raw.githubusercontent.com/AmadeusW/icecold/master/misc/orignal%20photo.JPG)
 
 # DIY Arcade
 
