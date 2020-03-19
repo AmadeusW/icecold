@@ -2,11 +2,11 @@ Gap = 0.2;
 $fn = 72;
 
 translate([10,40,0])
-    Helper(false)
+    Helper(false, hide=true)
         RodToBearingCoupling();
 
 translate([-10,40,0])
-    Helper(false)
+    Helper(false, hide=true)
         RodToMotorCoupling();
     
 intersection() {
@@ -15,19 +15,22 @@ intersection() {
 }
 
 translate([0,-40,0])
-    Helper(false)
+    Helper(false, hide=true)
         RodConnect();
 
 // If debug is set, renders a cross section of the object
-module Helper(debug) {
-    if (debug) {
-        intersection() {
+module Helper(debug, hide = false) {
+    if (!hide)
+    {
+        if (debug) {
+            intersection() {
+                children();
+                translate([0,-100,-100])
+                    cube([200,200,200]);
+            }
+        } else {
             children();
-            translate([0,-100,-100])
-                cube([200,200,200]);
         }
-    } else {
-        children();
     }
 }
 
