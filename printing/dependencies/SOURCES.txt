@@ -1,0 +1,5 @@
+Sources for Parametric pulley - lots of tooth profiles
+
+T5 & XL Parametric Pulley (http://www.thingiverse.com/thing:11256)
+Mendel Pulley with 3 captive M3 nuts (http://www.thingiverse.com/thing:3104)
+Mendel Pulleys (http://www.thingiverse.com/thing:2079)
