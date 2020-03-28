@@ -1,20 +1,17 @@
 Gap = 0.2;
 $fn = 72;
 
-Helper(false, hide=true)
-    FrameToBearing();
-
 translate([-10,40,0])
     Helper(false, hide=true)
         RodToMotorCoupling();
     
 intersection() {
-    Helper(false, hide=true)
+    Helper(false, hide=false)
         Guide();
 }
 
 translate([0,-40,0])
-    Helper(false, hide=false)
+    Helper(false, hide=true)
         RodConnect();
 
 // If debug is set, renders a cross section of the object
@@ -33,136 +30,22 @@ module Helper(debug, hide = false) {
     }
 }
 
-module FrameToBearing() {
-    BearingRadius = 11.0;
-    BearingHeight = 7.0;
-    Thickness = 3.0;
-    MountingRadius = BearingRadius + Thickness;
-
-    HeadDiameter = 11.0;
-    HeadHeight = 4.5 + Gap;
-
-    ThreadDiameter = 6.6 + Gap; // I measured 6.2, but RodToBearingCoupling uses 6.5 for a snug fit
-    ThreadHeight = 2.0;
-
-    FrameAdapterWidth = HeadDiameter + 2*Thickness;
-    FrameAdapterLength = MountingRadius*2;
-    FrameAdapterHeight = ThreadHeight + HeadHeight;
-
-    ToTheSky = 50;
-
-    intersection()
-    {
-        // Enclose everything in the radius of bearing adapter
-        translate([FrameAdapterLength/2, FrameAdapterWidth/2, 0])
-            cylinder(r = MountingRadius, h=ToTheSky, center=false);
-        union()
-        {
-            difference() {
-                union() {
-                    // Frame adapter
-                    cube([FrameAdapterLength, FrameAdapterWidth, FrameAdapterHeight]);
-                    // Bearing adapter
-                    translate([FrameAdapterLength/2, FrameAdapterWidth/2, FrameAdapterHeight])
-                        cylinder(r = MountingRadius, h=BearingHeight, center=false);
-                    // Their connection
-                    translate([FrameAdapterLength/2, FrameAdapterWidth/2, 0])
-                        cylinder(r2 = MountingRadius, r1=FrameAdapterWidth/2, h=FrameAdapterHeight, center=false);
-                }
-                union() {
-                    // Volume of bearing
-                    translate([FrameAdapterLength/2, FrameAdapterWidth/2, FrameAdapterHeight])
-                        cylinder(r = BearingRadius + Gap, h=BearingHeight);
-                    
-                    // Volume of the nut head
-                    translate([0, Thickness, ThreadHeight])
-                        cube([FrameAdapterLength, HeadDiameter, HeadHeight]);
-
-                    // Volume of the nut thread
-                    translate([0, Thickness + (HeadDiameter - ThreadDiameter)/2, 0])
-                        cube([FrameAdapterLength, ThreadDiameter, ThreadHeight]);
-
-                    // Don't fully enclose the bearing at x=Length
-                    translate([FrameAdapterLength/2, Thickness, ThreadHeight])
-                        cube([FrameAdapterLength, HeadDiameter, HeadHeight + ToTheSky]);
-                }
-            }
-            // Additional support wall at x=0
-            intersection()
-            {
-                // Cylindrical wall
-                difference()
-                {
-                    translate([FrameAdapterLength/2, FrameAdapterWidth/2, 0])
-                        cylinder(r = MountingRadius, h=FrameAdapterHeight, center=false);
-                    translate([FrameAdapterLength/2, FrameAdapterWidth/2, 0])
-                        cylinder(r = BearingRadius + Gap, h=BearingHeight);
-                }
-                translate([0, Thickness, 0])
-                    cube([FrameAdapterLength/2, HeadDiameter, HeadHeight + ToTheSky]);                
-            }
-        }
-    }
-}
-
-module RodConnect() {
-    RodThickness = 1.65; // 1/16 inch + 0.7mm gap
-    RodDepth = 13.75; // 1/2 inch + 0.5mm gap
-    
-    BearingDiameter = 8.0;
-    BearingLength = 15;
-    
-    ConnectorShift = 0.3;
-    
-    ConnectorWidth = RodThickness+6;
-    ConnectorDepth = RodDepth+6;
-    
-    CornerRadius = 1;
-    
-    intersection() {
-        translate([0,0,ConnectorShift])
-            cube([200,200,BearingDiameter - 2 * ConnectorShift], center=true);
-        difference() {
-            union () {
-                rotate([0,-90,0])
-                    cylinder(r = BearingDiameter/2, h = BearingLength);
-                
-                rotate([0,-90,0])
-                    cylinder(r = BearingDiameter/2,
-                             h = 5);
-                
-                linear_extrude(height=BearingDiameter, center=true)
-                    offset(r=CornerRadius)
-                        polygon([[CornerRadius, -ConnectorWidth/2 + CornerRadius],
-                                 [ConnectorDepth - CornerRadius,
-                                  -ConnectorWidth/2 + CornerRadius],
-                                 [ConnectorDepth - CornerRadius,
-                                  ConnectorWidth/2 - CornerRadius],
-                                 [CornerRadius,
-                                  ConnectorWidth/2 - CornerRadius]]);
-            }
-            
-            union () {
-                rotate([0,0,2])
-                    translate([ConnectorDepth/2,0,0])
-                        cube([RodDepth, RodThickness, 100], center = true);
-            }
-        }
-    }    
-}
 
 module Guide() {
-    Thickness = 28.425;
+    Thickness = 30;
     Depth = 20;
 
     HexFlatDiameter = 11.0;
     HexRadius = HexFlatDiameter/(2 * cos(30));
     HexThickness = 5.4;
 
-    MountOffset = 20;
-    GuideRodDiameter = 5.5;
-    GuideRodOffet = 13;
+    MountOffset = 22;
     ThreadRodDiameter = 6.7;
+
+    GuideRodRadius = 2.75;
+    MotorInnerRadius = 12.5;
+    // Offset from the thread center
+    GuideRodOffset = MotorInnerRadius + 1.5 + GuideRodRadius;
     
     BoltDiameter = 4.6;
     BoltSeparation = 35.0;
@@ -174,7 +57,6 @@ module Guide() {
         translate([0,0,-MountOffset])
             scale([Width/2, Depth/2, 1])
                 cylinder(r = 1, h = Thickness);
-        
         union () {
             translate([0,0,50])
                 cube([HexFlatDiameter+Gap, HexThickness+Gap, 100], center=true);
@@ -184,10 +66,10 @@ module Guide() {
             
             rotate([90,0,0])
                 cylinder(r=ThreadRodDiameter/2, h = 100, center=true);
-            
-            translate([0,0,-GuideRodOffet])
-                rotate([90,0,0])
-                    cylinder(r=GuideRodDiameter/2, h = 100, center = true);
+
+            translate([0,0,-GuideRodOffset])
+                rotate([90,0,0])            
+                    cylinder(r=GuideRodRadius, h = 100, center = true);
             
             translate([BoltSeparation/2,0,0])
                 cylinder(r=BoltDiameter/2, h=100, center=true);
@@ -195,7 +77,6 @@ module Guide() {
                 cylinder(r=BoltDiameter/2, h=100, center=true);
         }
     }
-       
 }
 
 module RodToMotorCoupling() {
