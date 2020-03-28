@@ -20,27 +20,26 @@
 
 // tuneable constants
 
-teeth = 8;			// Number of teeth, standard Mendel T5 belt = 8, gives Outside Diameter of 11.88mm
-profile = 6;		// 1=MXL 2=40DP 3=XL 4=H 5=T2.5 6=T5 7=T10 8=AT5 9=HTD_3mm 10=HTD_5mm 11=HTD_8mm 12=GT2_2mm 13=GT2_3mm 14=GT2_5mm
+teeth = 16;			// Number of teeth, standard Mendel T5 belt = 8, gives Outside Diameter of 11.88mm
+profile = 10;		// 1=MXL 2=40DP 3=XL 4=H 5=T2.5 6=T5 7=T10 8=AT5 9=HTD_3mm 10=HTD_5mm 11=HTD_8mm 12=GT2_2mm 13=GT2_3mm 14=GT2_5mm
 
-motor_shaft = 5.2;	// NEMA17 motor shaft exact diameter = 5
+motor_shaft = 4;	// NEMA17 motor shaft exact diameter = 5
 m3_dia = 3.2;		// 3mm hole diameter
 m3_nut_hex = 1;		// 1 for hex, 0 for square nut
 m3_nut_flats = 5.7;	// normal M3 hex nut exact width = 5.5
 m3_nut_depth = 2.7;	// normal M3 hex nut exact depth = 2.4, nyloc = 4
 
-retainer = 0;		// Belt retainer above teeth, 0 = No, 1 = Yes
+retainer = 1;		// Belt retainer above teeth, 0 = No, 1 = Yes
 retainer_ht = 1.5;	// height of retainer flange over pulley, standard = 1.5
-idler = 0;			// Belt retainer below teeth, 0 = No, 1 = Yes
+idler = 1;			// Belt retainer below teeth, 0 = No, 1 = Yes
 idler_ht = 1.5;		// height of idler flange over pulley, standard = 1.5
 
-pulley_t_ht = 12;	// length of toothed part of pulley, standard = 12
-pulley_b_ht = 8;		// pulley base height, standard = 8. Set to same as idler_ht if you want an idler but no pulley.
-pulley_b_dia = 20;	// pulley base diameter, standard = 20
+pulley_t_ht = 13.5;	// length of toothed part of pulley, standard = 12
+pulley_b_ht = 7.0;		// pulley base height, standard = 8. Set to same as idler_ht if you want an idler but no pulley.
+pulley_b_dia = 8.0;	// pulley base diameter, standard = 20
 no_of_nuts = 1;		// number of captive nuts required, standard = 1
 nut_angle = 90;		// angle between nuts, standard = 90
 nut_shaft_distance = 1.2;	// distance between inner face of nut and shaft, can be negative.
-
 
 //	********************************
 //	** Scaling tooth for good fit **
@@ -114,7 +113,7 @@ module pulley( belt_type , pulley_OD , tooth_depth , tooth_width )
 //	*** uncomment the following line if pulley is wider than puller base ***
 //	************************************************************************
 
-//	translate ([0,0, pulley_b_ht + pulley_t_ht + retainer_ht ]) rotate ([0,180,0])
+translate ([0,0, pulley_b_ht + pulley_t_ht + retainer_ht ]) rotate ([0,180,0])
 
 	difference()
 	 {	 
@@ -171,7 +170,7 @@ module pulley( belt_type , pulley_OD , tooth_depth , tooth_width )
 		
 		if ( idler > 0 ) {translate ([0,0, pulley_b_ht - idler_ht ]) 
 		rotate_extrude($fn=teeth*4)  
-		polygon([[0,0],[pulley_OD/2 + idler_ht,0],[pulley_OD/2 , idler_ht],[0 , idler_ht],[0,0]]);}
+		polygon([ [0,0],[pulley_OD/2 + idler_ht,0],[pulley_OD/2 , idler_ht],[0 , idler_ht],[0,0]]);}
 	
 		}
 	   
