@@ -25,8 +25,8 @@ module FrameToMotorAdapter() {
     BearingAdapterOffset = MotorRadius + FrameAdapterHeight; // Center of the rod
     BearingAdapterShift = 0;
 
-    GuideRodRadius = 2.75;
-    GuideRodOffset = MotorInnerRadius + Thickness/2 + GuideRodRadius;
+    GuideRodSnugRadius = 2.5;
+    GuideRodOffset = MotorInnerRadius + Thickness/2 + GuideRodSnugRadius;
 
     MountingNutOffset = 19;
     MountingNutRadius = 2.0;
@@ -138,7 +138,7 @@ module FrameToMotorAdapter() {
 
                 // Guide rod
                 translate([-GuideRodOffset, 0, -(SupportHeight + Thickness)/2])
-                    cylinder(r = GuideRodRadius, h = SupportHeight + Thickness);
+                    cylinder(r = GuideRodSnugRadius, h = SupportHeight + Thickness);
             }
         }
     }

@@ -27,9 +27,9 @@ module FrameToSensor() {
     BearingAdapterOffset = MotorRadius + FrameAdapterHeight;
     BearingAdapterShift = 0;
 
-    GuideRodRadius = 2.75;
+    GuideRodSnugRadius = 2.5;
     MotorInnerRadius = 12.5;
-    GuideRodOffset = MotorInnerRadius + Thickness/2 + GuideRodRadius;
+    GuideRodOffset = MotorInnerRadius + Thickness/2 + GuideRodSnugRadius;
 
     ToTheSky = 50;
 
@@ -84,7 +84,7 @@ module FrameToSensor() {
 
                 // Guide rod
                 translate([-GuideRodOffset, 0, -(SensorHeight + Thickness)/2])
-                    cylinder(r = GuideRodRadius, h = SensorHeight + Thickness);
+                    cylinder(r = GuideRodSnugRadius, h = SensorHeight + Thickness);
 
                 // Threaded rod!!!
                 /// We need to make sure that the sensor does not overlap with the threaded rod.

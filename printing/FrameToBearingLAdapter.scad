@@ -26,9 +26,9 @@ module FrameToBearingL() {
     BearingAdapterOffset = MotorRadius + FrameAdapterHeight;
     BearingAdapterShift = 0;
 
-    GuideRodRadius = 2.75;
+    GuideRodSnugRadius = 2.5;
     MotorInnerRadius = 12.5;
-    GuideRodOffset = MotorInnerRadius + Thickness/2 + GuideRodRadius;
+    GuideRodOffset = MotorInnerRadius + Thickness/2 + GuideRodSnugRadius;
 
     ToTheSky = 50;
 
@@ -79,7 +79,7 @@ module FrameToBearingL() {
 
                 // Guide rod
                 translate([-GuideRodOffset, 0, -(BearingHeight + Thickness)/2])
-                    cylinder(r = GuideRodRadius, h = BearingHeight + Thickness);
+                    cylinder(r = GuideRodSnugRadius, h = BearingHeight + Thickness);
             }
         }
     }
