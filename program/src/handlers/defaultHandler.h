@@ -3,11 +3,12 @@
 
 #include "../state.h"
 #include "../Handler.h"
+#include "../modules/motor.h"
 
 class DefaultHandler: public Handler {
     public:
         virtual void setup();
-        virtual void work(State state);
+        virtual void move(State state, Motor motor);
         virtual void debug(State state);
 };
 

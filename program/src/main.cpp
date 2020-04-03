@@ -1,8 +1,9 @@
 #include "Arduino.h"
 #include "pins.h"
-#include "Handler.h"
+#include "handler.h"
 #include "state.h"
 #include "composition.h"
+#include "modules/motor.h"
 
 // Define externs declared in state.h
 State state = uninitialized;
@@ -10,6 +11,7 @@ int turn = 0;
 bool freezeState = false;
 int unfreezeTurn = 0;
 Composition composition;
+Motor motor;
 
 void setup()
 {
@@ -22,6 +24,8 @@ void setup()
   Serial.println("Composing handlers...");
   composition.compose(); // Compose all modules
 
+  // Setup all modules
+  motor.setup();
   // Setup all handlers
   for (int stateId = 0; stateId < (int)MAX_State; stateId++)
   {
@@ -80,14 +84,14 @@ void writePins()
   Handler* handler = composition.getHandler(state);
   if (handler == 0)
   {
-    Serial.print("Write: no handler for ");
+    Serial.print("Move: no handler for ");
     Serial.println(state);
   }
   else
   {
-    Serial.print("Write: ");
+    Serial.print("Move: ");
     Serial.println(state);
-    handler->work(state);
+    handler->move(state, motor);
   }
 }
 

@@ -1,19 +1,19 @@
 #include "Arduino.h"
 #include "motor.h"
-#include "pins.h"
+#include "../pins.h"
 
-void motorSetup()
+void Motor::setup()
 {
    digitalWrite(STBY, HIGH);
 }
 
-void motorBrake()
+void Motor::brake()
 {
    digitalWrite(AIN1, HIGH);
    digitalWrite(AIN2, HIGH);
 }
 
-void motorMove(bool up, int speed)
+void Motor::move(bool up, int speed)
 {
    if (up)
    {

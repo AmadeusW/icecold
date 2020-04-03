@@ -1,8 +1,8 @@
 #include "Arduino.h"
 #include "../lib/Servo/Servo.h"
 #include "scoreHandler.h"
+#include "../modules/motor.h"
 #include "../composition.h"
-#include "../motor.h"
 #include "../Handler.h"
 #include "../pins.h"
 
@@ -13,17 +13,17 @@ void ScoreHandler::setup()
     ballServo.attach(PinServo);
 }
 
-void ScoreHandler::work(State state)
+void ScoreHandler::move(State state, Motor motor)
 {
     switch (state) {
         case scored:
             ballServo.write((unfreezeTurn - turn) * 8);
             return;
         case moveDown:
-            motorMove(false, 255);
+            motor.move(false, 255);
             return;
         default:
-            motorBrake();
+            motor.brake();
     }
 }
 

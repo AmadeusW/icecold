@@ -1,25 +1,24 @@
 #include "Arduino.h"
 #include "defaultHandler.h"
 #include "../pins.h"
-#include "../motor.h"
+#include "../modules/motor.h"
 
 void DefaultHandler::setup()
 {
-    motorSetup();
 }
 
-void DefaultHandler::work(State state)
+void DefaultHandler::move(State state, Motor motor)
 {
     switch (state) {
         case moveUp:
-            motorMove(true, 255);
+            motor.move(true, 255);
             return;
         case moveDown:
-            motorMove(false, 255);
+            motor.move(false, 255);
             return;
         case idle:
         case errorInvalidInput:
-            ::motorBrake();
+            motor.brake();
             return;
         default:
             return;
