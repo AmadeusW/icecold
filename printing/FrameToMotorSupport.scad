@@ -53,8 +53,6 @@ module FrameToMotorSupport() {
         difference() {
             union()
             {
-
-                
                 // Connection to frame adapter
                 translate([-BearingAdapterOffset/2, 0, 0])
                 linear_extrude(height = SupportHeight, center = true)
