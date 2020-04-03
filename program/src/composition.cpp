@@ -1,22 +1,25 @@
 #include "composition.h"
-#include "modules/move.h"
-#include "modules/score.h"
+#include "handlers/defaultHandler.h"
+#include "handlers/scoreHandler.h"
 
-Module* modules[MAX_State];
+Handler* handlers[MAX_State];
 
-void compose()
+void Composition::compose()
 {
-    MoveModule* moveModule = new MoveModule();
-    ScoreModule* scoreModule = new ScoreModule();
+    // why can't I use "new" x?
+    //DefaultHandler DefaultHandler;
+    //ScoreHandler ScoreHandler;
+    DefaultHandler* defaultH = new DefaultHandler();
+    ScoreHandler* scopeH = new ScoreHandler();
 
-    modules[idle] = moveModule;
-    modules[moveUp] = moveModule;
-    modules[moveDown] = moveModule;
-    modules[scored] = scoreModule;
-    modules[errorInvalidInput] = moveModule;
+    handlers[idle] = defaultH;
+    handlers[moveUp] = defaultH;
+    handlers[moveDown] = scopeH;
+    handlers[scored] = scopeH;
+    handlers[errorInvalidInput] = defaultH;
 }
 
-Module* getModule(State state)
+Handler* Composition::getHandler(State state)
 {
-    return modules[state];
+    return handlers[state];
 }

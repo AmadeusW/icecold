@@ -6,9 +6,12 @@
 #define composition_h
 
 #include "state.h"
-#include "module.h"
+#include "Handler.h"
 
-Module* getModule(State state);
-void compose();
+class Composition {
+    public:
+        Handler* getHandler(State state);
+        void compose();
+};
 
 #endif

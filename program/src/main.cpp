@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include "pins.h"
-#include "module.h"
+#include "Handler.h"
 #include "state.h"
 #include "composition.h"
 
@@ -9,6 +9,7 @@ State state = uninitialized;
 int turn = 0;
 bool freezeState = false;
 int unfreezeTurn = 0;
+Composition composition;
 
 void setup()
 {
@@ -18,14 +19,14 @@ void setup()
   Serial.println("Setting up pins...");
   setupPins(); // Pins are set up and read separately
   digitalWrite(LED, HIGH);
-  Serial.println("Composing modules...");
-  compose(); // Compose all modules
+  Serial.println("Composing handlers...");
+  composition.compose(); // Compose all modules
 
-  // Setup all modules
+  // Setup all handlers
   for (int stateId = 0; stateId < (int)MAX_State; stateId++)
   {
-    Module* module = getModule((State)stateId);
-    if (module == 0)
+    Handler* handler = composition.getHandler((State)stateId);
+    if (handler == 0)
     {
       Serial.print("No setup for ");
       Serial.print(stateId);
@@ -33,10 +34,10 @@ void setup()
     }
     else
     {
-      Serial.print("Setting up module ");
+      Serial.print("Setting up handler ");
       Serial.print(stateId);
       Serial.println("...");
-      module->setup();
+      handler->setup();
     }
   }
 
@@ -76,8 +77,8 @@ void updateState()
 
 void writePins()
 {
-  Module* module = getModule(state);
-  if (module == 0)
+  Handler* handler = composition.getHandler(state);
+  if (handler == 0)
   {
     Serial.print("Write: no handler for ");
     Serial.println(state);
@@ -86,14 +87,14 @@ void writePins()
   {
     Serial.print("Write: ");
     Serial.println(state);
-    module->work(state);
+    handler->work(state);
   }
 }
 
 void displayState()
 {
-  Module* module = getModule(state);
-  if (module == 0)
+  Handler* handler = composition.getHandler(state);
+  if (handler == 0)
   {
     Serial.print("Display: no handler for ");
     Serial.println(state);
@@ -102,7 +103,7 @@ void displayState()
   {
     Serial.print("Display: ");
     Serial.println(state);
-    module->debug(state);
+    handler->debug(state);
   }
 }
 

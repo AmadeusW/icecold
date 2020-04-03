@@ -1,19 +1,19 @@
 #include "Arduino.h"
 #include "../lib/Servo/Servo.h"
-#include "score.h"
+#include "scoreHandler.h"
 #include "../composition.h"
 #include "../motor.h"
-#include "../state.h"
+#include "../Handler.h"
 #include "../pins.h"
 
 Servo ballServo;
 
-void ScoreModule::setup()
+void ScoreHandler::setup()
 {
     ballServo.attach(PinServo);
 }
 
-void ScoreModule::work(State state)
+void ScoreHandler::work(State state)
 {
     switch (state) {
         case scored:
@@ -27,7 +27,7 @@ void ScoreModule::work(State state)
     }
 }
 
-void ScoreModule::debug(State state)
+void ScoreHandler::debug(State state)
 {
     switch (state) {
         case scored:

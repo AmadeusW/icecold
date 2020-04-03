@@ -1,10 +1,10 @@
-#ifndef movemodule_h
-#define movemodule_h
+#ifndef scoreHandler_h
+#define scoreHandler_h
 
 #include "../state.h"
-#include "../module.h"
+#include "../Handler.h"
 
-class MoveModule: public Module {
+class ScoreHandler: public Handler {
     public:
         virtual void setup();
         virtual void work(State state);

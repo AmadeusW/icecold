@@ -1,10 +1,10 @@
-#ifndef scoremodule_h
-#define scoremodule_h
+#ifndef defaultHandler_h
+#define defaultHandler_h
 
 #include "../state.h"
-#include "../module.h"
+#include "../Handler.h"
 
-class ScoreModule: public Module {
+class DefaultHandler: public Handler {
     public:
         virtual void setup();
         virtual void work(State state);

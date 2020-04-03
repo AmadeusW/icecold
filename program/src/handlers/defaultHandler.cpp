@@ -1,14 +1,14 @@
 #include "Arduino.h"
-#include "move.h"
+#include "defaultHandler.h"
 #include "../pins.h"
 #include "../motor.h"
 
-void MoveModule::setup()
+void DefaultHandler::setup()
 {
     motorSetup();
 }
 
-void MoveModule::work(State state)
+void DefaultHandler::work(State state)
 {
     switch (state) {
         case moveUp:
@@ -26,7 +26,7 @@ void MoveModule::work(State state)
     }
 }
 
-void MoveModule::debug(State state)
+void DefaultHandler::debug(State state)
 {
     switch (state) {
         case moveUp:
