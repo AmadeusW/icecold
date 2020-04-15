@@ -14,7 +14,7 @@ void Composition::Compose()
 
     this->handlers[idle] = _defaultHandler;
     this->handlers[moveUp] = _defaultHandler;
-    this->handlers[moveDown] = _scoreHandler;
+    this->handlers[moveDown] = _defaultHandler;
     this->handlers[scored] = _scoreHandler;
     this->handlers[errorInvalidInput] = _defaultHandler;
 }

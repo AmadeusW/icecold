@@ -34,16 +34,19 @@ State ScoreHandler::SetState(State state, int turn)
 {
     if (this->_enteredState == -1)
     {
+        //Serial.printf("ScoreHandler initializes SCORED state at turn %d \n", turn);
         this->_enteredState = turn;
     }
 
-    if (this->_enteredState + 100 >= turn)
+    if (this->_enteredState + 50 < turn)
     {
+        //Serial.printf("ScoreHandler enters IDLE state at turn %d \n", turn);
         this->_enteredState = -1;
         return idle;
     }
     else
     {
+        //Serial.printf("ScoreHandler sets SCORED state at turn %d \n", turn);
         return scored;
     }
 }

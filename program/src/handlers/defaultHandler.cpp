@@ -23,6 +23,9 @@ void DefaultHandler::Act(State state, int turn)
             this->debugger->ShowCode(0x0d, turn);
             return;
         case idle:
+            this->motor->brake();
+            this->debugger->ShowCode(0x00, turn);
+            return;
         case errorInvalidInput:
             this->motor->brake();
             this->debugger->ShowCode(0x33, turn);
@@ -36,22 +39,27 @@ State DefaultHandler::SetState(State state, int turn)
 {
     if (isScoring)
     {
+        //Serial.printf("DefaultHandler sets SCORED state at turn %d \n", turn);
         return scored;
     }
     else if (joyAUp && joyADown)
     {
+        //Serial.printf("DefaultHandler sets INVALID state at turn %d \n", turn);
         return errorInvalidInput;
     }
     else if (joyAUp)
     {
+        //Serial.printf("DefaultHandler sets UP state at turn %d \n", turn);
         return moveUp;
     }
     else if (joyADown) // TODO: add another angle limiter
     {
+        //Serial.printf("DefaultHandler sets DOWN state at turn %d \n", turn);
         return moveDown;
     }
     else
     {
+        //Serial.printf("DefaultHandler sets IDLE state at turn %d \n", turn);
         return idle;
     }
 }
