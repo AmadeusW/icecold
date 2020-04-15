@@ -16,16 +16,16 @@ void DefaultHandler::Act(State state, int turn)
     switch (state) {
         case moveUp:
             this->motor->move(true, 255);
-            this->debugger->ShowCode(0xff, turn);
+            this->debugger->ShowCode(0x0b, turn);
             return;
         case moveDown:
             this->motor->move(false, 255);
-            this->debugger->ShowCode(0xff, turn);
+            this->debugger->ShowCode(0x0d, turn);
             return;
         case idle:
         case errorInvalidInput:
             this->motor->brake();
-            this->debugger->ShowCode(0xaa, turn);
+            this->debugger->ShowCode(0x33, turn);
             return;
         default:
             return;

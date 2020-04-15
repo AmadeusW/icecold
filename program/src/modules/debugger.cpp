@@ -14,8 +14,8 @@ void Debugger::ShowCode(int code, int turn)
     // Index of turn in the sequence of length codeLength
     int i = turn % codeLength;
     
-    // Whether LED should be lit during the sequence i 
-    int lit = (codeLength >> i) & 1;
+    // Whether LED should be lit during the ith element of the sequence
+    int lit = (code >> i) & 1;
     
     digitalWrite(LED, lit);
 }

@@ -22,7 +22,7 @@ void ScoreHandler::Act(State state, int turn)
             //this->ballServo.write((unfreezeTurn - turn) * 8);
             return;
         case moveDown: // just for testing
-            this->_debugger->ShowCode(0xa8, turn);
+            this->_debugger->ShowCode(0xab, turn);
             this->_motor->move(false, 255);
             return;
         default:
@@ -37,7 +37,7 @@ State ScoreHandler::SetState(State state, int turn)
         this->_enteredState = turn;
     }
 
-    if (this->_enteredState >= turn + 100)
+    if (this->_enteredState + 100 >= turn)
     {
         this->_enteredState = -1;
         return idle;
