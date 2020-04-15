@@ -1,8 +1,6 @@
 #ifndef state_h
 #define state_h
 
-#include "Arduino.h"
-
 // This file declares all possible states
 // and variables which store the state
 
@@ -18,8 +16,5 @@ enum State {
 
 extern State state;
 extern int turn;
-
-extern bool freezeState;
-extern int unfreezeTurn;
 
 #endif

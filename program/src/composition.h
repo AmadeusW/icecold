@@ -6,12 +6,24 @@
 #define composition_h
 
 #include "state.h"
-#include "Handler.h"
+#include "handler.h"
+class DefaultHandler;
+class ScoreHandler;
+class Debugger;
+class Motor;
 
 class Composition {
+        Handler* handlers[MAX_State];
+        Debugger* _debugger;
+        Motor* _motor;
+        DefaultHandler* _defaultHandler;
+        ScoreHandler* _scoreHandler;
     public:
-        Handler* getHandler(State state);
-        void compose();
+        void Compose();
+        void Setup();
+        Handler* GetHandler(State state);
+        Debugger* GetDebugger();
+        Motor* GetMotor();
 };
 
 #endif

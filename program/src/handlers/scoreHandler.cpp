@@ -2,38 +2,48 @@
 #include "../lib/Servo/Servo.h"
 #include "scoreHandler.h"
 #include "../modules/motor.h"
+#include "../modules/debugger.h"
 #include "../composition.h"
 #include "../Handler.h"
 #include "../pins.h"
 
-Servo ballServo;
-
-void ScoreHandler::setup()
+void ScoreHandler::Setup(Composition* composition)
 {
-    ballServo.attach(PinServo);
+    this->ballServo.attach(PinServo);
+    this->_motor = composition->GetMotor();
+    this->_debugger = composition->GetDebugger();
 }
 
-void ScoreHandler::move(State state, Motor motor)
+void ScoreHandler::Act(State state, int turn)
 {
     switch (state) {
         case scored:
-            ballServo.write((unfreezeTurn - turn) * 8);
+            this->_debugger->ShowCode(0xa8, turn);
+            //this->ballServo.write((unfreezeTurn - turn) * 8);
             return;
-        case moveDown:
-            motor.move(false, 255);
+        case moveDown: // just for testing
+            this->_debugger->ShowCode(0xa8, turn);
+            this->_motor->move(false, 255);
             return;
         default:
-            motor.brake();
+            this->_motor->brake();
     }
 }
 
-void ScoreHandler::debug(State state)
+State ScoreHandler::SetState(State state, int turn)
 {
-    switch (state) {
-        case scored:
-            digitalWrite(LED, turn % 2 == 0 && turn % 6 != 0 ? HIGH : LOW);
-            return;
-        default:
-            return;
+    if (this->_enteredState == -1)
+    {
+        this->_enteredState = turn;
+    }
+
+    if (this->_enteredState >= turn + 100)
+    {
+        this->_enteredState = -1;
+        return idle;
+    }
+    else
+    {
+        return scored;
     }
 }

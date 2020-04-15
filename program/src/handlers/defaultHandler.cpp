@@ -1,41 +1,57 @@
 #include "Arduino.h"
 #include "defaultHandler.h"
 #include "../pins.h"
+#include "../composition.h"
+#include "../modules/debugger.h"
 #include "../modules/motor.h"
 
-void DefaultHandler::setup()
+void DefaultHandler::Setup(Composition* composition)
 {
+    this->motor = composition->GetMotor();
+    this->debugger = composition->GetDebugger();
 }
 
-void DefaultHandler::move(State state, Motor motor)
+void DefaultHandler::Act(State state, int turn)
 {
     switch (state) {
         case moveUp:
-            motor.move(true, 255);
+            this->motor->move(true, 255);
+            this->debugger->ShowCode(0xff, turn);
             return;
         case moveDown:
-            motor.move(false, 255);
+            this->motor->move(false, 255);
+            this->debugger->ShowCode(0xff, turn);
             return;
         case idle:
         case errorInvalidInput:
-            motor.brake();
+            this->motor->brake();
+            this->debugger->ShowCode(0xaa, turn);
             return;
         default:
             return;
     }
 }
 
-void DefaultHandler::debug(State state)
+State DefaultHandler::SetState(State state, int turn)
 {
-    switch (state) {
-        case moveUp:
-        case moveDown:
-            digitalWrite(LED, HIGH);
-            return;
-        case errorInvalidInput:
-            digitalWrite(LED, turn % 2 == 0 ? HIGH : LOW);
-            return;
-        default:
-            return;
+    if (isScoring)
+    {
+        return scored;
+    }
+    else if (joyAUp && joyADown)
+    {
+        return errorInvalidInput;
+    }
+    else if (joyAUp)
+    {
+        return moveUp;
+    }
+    else if (joyADown) // TODO: add another angle limiter
+    {
+        return moveDown;
+    }
+    else
+    {
+        return idle;
     }
 }

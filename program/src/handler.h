@@ -3,15 +3,13 @@
 #define handler_h
 
 #include "state.h"
-#include "modules/motor.h"
+class Composition;
 
 class Handler {
    public:
-      virtual void setup() = 0;
-      virtual void move(State state, Motor motor) = 0;
-      virtual void debug(State state) = 0;
-      // virtual void display(State state, Display display) = 0;
-      // virtual void debug(State state, DebugLed led) = 0;
+      virtual void Setup(Composition* composition) = 0;
+      virtual State SetState(State state, int turn) = 0;
+      virtual void Act(State state, int turn) = 0;
 };
 
 #endif
