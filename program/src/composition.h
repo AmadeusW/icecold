@@ -14,15 +14,19 @@ class Motor;
 class ScoreSensor;
 
 class Composition {
+        // Access handler by state
         Handler* handlers[MAX_State];
+        // Access handler directly
+        DefaultHandler* _defaultHandler;
+        ScoreHandler* _scoreHandler;
+        // Access module directly
         Debugger* _debugger;
         Motor* _motor;
         ScoreSensor* _scoreSensor;
-        DefaultHandler* _defaultHandler;
-        ScoreHandler* _scoreHandler;
     public:
         void Compose();
         void Setup();
+        void ReadPins();
         Handler* GetHandler(State state);
         Debugger* GetDebugger();
         Motor* GetMotor();

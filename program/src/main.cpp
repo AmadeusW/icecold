@@ -17,15 +17,19 @@ void setup()
 
   Serial.println("Setting up pins...");
   setupPins(); // Pins are set up and read separately
-  digitalWrite(LED, HIGH);
   Serial.println("Composing modules...");
   composition.Compose(); // Compose modules and handlers
   Serial.println("Setting up modules...");
   composition.Setup(); // Setup all modules and handlers
   Serial.println("Setup complete.");
   delay(50);
-  digitalWrite(LED, LOW);
   state = idle; // running
+}
+
+void mreadPins()
+{
+    readPins(); // Legacy readPins from pins.h
+    composition.ReadPins();
 }
 
 void updateState()
@@ -58,14 +62,13 @@ void act()
 
 void finishTurn()
 {
-    delay(50);
-    digitalWrite(LED, LOW);
+    delay(50); // TODO: delay as many ms as necessary to achieve 50ms per turn
     turn++;
 }
 
 void loop()
 {
-    readPins();
+    mreadPins();
     updateState();
     act();
     finishTurn();

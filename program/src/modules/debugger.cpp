@@ -1,9 +1,16 @@
 #include "Arduino.h"
 #include "debugger.h"
-#include "../pins.h"
+#include "../module.h"
 
-void Debugger::setup() {
-    digitalWrite(LED, LOW);
+#define LED 13
+
+void Debugger::Setup() {
+    pinMode(LED, OUTPUT);
+    digitalWrite(LED, HIGH);
+}
+
+void Debugger::Read() {
+    // This module does not read any pins
 }
 
 void Debugger::ShowCode(int code, int turn)

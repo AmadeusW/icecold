@@ -17,21 +17,21 @@ void DefaultHandler::Act(State state, int turn)
 {
     switch (state) {
         case moveUp:
-            this->motor->move(true, 255);
+            this->motor->Move(true, 255);
             this->debugger->ShowCode(0x0b, turn);
-            this->scoreSensor->setTarget(false); // just for tests
+            this->scoreSensor->SetTarget(false); // just for tests
             return;
         case moveDown:
-            this->motor->move(false, 255);
+            this->motor->Move(false, 255);
             this->debugger->ShowCode(0x0d, turn);
-            this->scoreSensor->setTarget(true); // just for tests
+            this->scoreSensor->SetTarget(true); // just for tests
             return;
         case idle:
-            this->motor->brake();
+            this->motor->Brake();
             this->debugger->ShowCode(0x00, turn);
             return;
         case errorInvalidInput:
-            this->motor->brake();
+            this->motor->Brake();
             this->debugger->ShowCode(0x33, turn);
             return;
         default:
@@ -41,13 +41,12 @@ void DefaultHandler::Act(State state, int turn)
 
 State DefaultHandler::SetState(State state, int turn)
 {
-    if (isBallDown)
+    if (this->scoreSensor->IsLosing())
     {
         return lost;
     }
-    if (isBallOnTarget)
+    if (this->scoreSensor->IsScoring())
     {
-        //Serial.printf("DefaultHandler sets SCORED state at turn %d \n", turn);
         return scored;
     }
     else if (joyAUp && joyADown)

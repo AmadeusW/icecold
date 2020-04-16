@@ -8,12 +8,16 @@
 
 void Composition::Compose()
 {
-    this->_defaultHandler = new DefaultHandler();
-    this->_scoreHandler = new ScoreHandler();
+    // Create modules
     this->_debugger = new Debugger();
     this->_motor = new Motor();
     this->_scoreSensor = new ScoreSensor();
 
+    // Create handlers
+    this->_defaultHandler = new DefaultHandler();
+    this->_scoreHandler = new ScoreHandler();
+
+    // Associate handlers with states
     this->handlers[idle] = _defaultHandler;
     this->handlers[moveUp] = _defaultHandler;
     this->handlers[moveDown] = _defaultHandler;
@@ -24,27 +28,21 @@ void Composition::Compose()
 
 void Composition::Setup()
 {
-    this->_motor->setup();
-    this->_debugger->setup();
-    this->_scoreSensor->setup();
+    // Setup modules
+    this->_motor->Setup();
+    this->_debugger->Setup();
+    this->_scoreSensor->Setup();
 
-    for (int stateId = 0; stateId < (int)MAX_State; stateId++)
-    {
-        Handler* handler = GetHandler((State)stateId);
-        if (handler == 0)
-        {
-            Serial.print("No setup for ");
-            Serial.print(stateId);
-            Serial.println(".");
-        }
-        else
-        {
-            Serial.print("Setting up handler ");
-            Serial.print(stateId);
-            Serial.println("...");
-            handler->Setup(this);
-        }
-    }
+    // Setup handlers
+    this->_defaultHandler->Setup(this);
+    this->_scoreHandler->Setup(this);
+}
+
+void Composition::ReadPins()
+{
+    this->_motor->Read();
+    this->_debugger->Read();
+    this->_scoreSensor->Read();
 }
 
 Handler* Composition::GetHandler(State state)

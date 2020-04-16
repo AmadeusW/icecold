@@ -1,11 +1,14 @@
 #ifndef motor_h
 #define motor_h
 
-class Motor /* add base class public Module */ {
+#include "../module.h"
+
+class Motor : public Module {
     public:
-        virtual void setup();
-        virtual void brake();
-        virtual void move(bool up, int speed);
+        virtual void Setup();
+        virtual void Read();
+        void Brake();
+        void Move(bool up, int speed);
 };
 
 #endif

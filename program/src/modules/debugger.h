@@ -1,10 +1,13 @@
 #ifndef debugger_h
 #define debugger_h
 
-class Debugger /* add base class public Module */ {
+#include "../module.h"
+
+class Debugger : public Module {
     public:
-        virtual void setup();
-        virtual void ShowCode(int code, int turn);
+        virtual void Setup();
+        virtual void Read();
+        void ShowCode(int code, int turn);
 };
 
 #endif

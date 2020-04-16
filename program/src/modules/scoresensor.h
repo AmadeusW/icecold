@@ -1,11 +1,17 @@
 #ifndef scoresensor_h
 #define scoresensor_h
 
-class ScoreSensor /* add base class public InputModule (reads pins) */ {
+#include "../module.h"
+
+class ScoreSensor : public Module {
+    bool isBallOnTarget;
+    bool isBallDown;
     public:
-        virtual void setup();
-        virtual void setTarget(bool enabled);
-        virtual bool isScoring();
+        virtual void Setup();
+        virtual void Read();
+        void SetTarget(bool enabled);
+        bool IsScoring();
+        bool IsLosing();
 };
 
 #endif
