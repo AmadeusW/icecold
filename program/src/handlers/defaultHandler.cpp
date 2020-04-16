@@ -4,11 +4,13 @@
 #include "../composition.h"
 #include "../modules/debugger.h"
 #include "../modules/motor.h"
+#include "../modules/scoresensor.h"
 
 void DefaultHandler::Setup(Composition* composition)
 {
     this->motor = composition->GetMotor();
     this->debugger = composition->GetDebugger();
+    this->scoreSensor = composition->GetScoreSensor();
 }
 
 void DefaultHandler::Act(State state, int turn)
@@ -17,10 +19,12 @@ void DefaultHandler::Act(State state, int turn)
         case moveUp:
             this->motor->move(true, 255);
             this->debugger->ShowCode(0x0b, turn);
+            this->scoreSensor->setTarget(false); // just for tests
             return;
         case moveDown:
             this->motor->move(false, 255);
             this->debugger->ShowCode(0x0d, turn);
+            this->scoreSensor->setTarget(true); // just for tests
             return;
         case idle:
             this->motor->brake();
@@ -37,7 +41,11 @@ void DefaultHandler::Act(State state, int turn)
 
 State DefaultHandler::SetState(State state, int turn)
 {
-    if (isScoring)
+    if (isBallDown)
+    {
+        return lost;
+    }
+    if (isBallOnTarget)
     {
         //Serial.printf("DefaultHandler sets SCORED state at turn %d \n", turn);
         return scored;

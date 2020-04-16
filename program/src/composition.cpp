@@ -4,6 +4,7 @@
 #include "handlers/scoreHandler.h"
 #include "modules/debugger.h"
 #include "modules/motor.h"
+#include "modules/scoresensor.h"
 
 void Composition::Compose()
 {
@@ -11,11 +12,13 @@ void Composition::Compose()
     this->_scoreHandler = new ScoreHandler();
     this->_debugger = new Debugger();
     this->_motor = new Motor();
+    this->_scoreSensor = new ScoreSensor();
 
     this->handlers[idle] = _defaultHandler;
     this->handlers[moveUp] = _defaultHandler;
     this->handlers[moveDown] = _defaultHandler;
     this->handlers[scored] = _scoreHandler;
+    this->handlers[lost] = _scoreHandler;
     this->handlers[errorInvalidInput] = _defaultHandler;
 }
 
@@ -23,6 +26,8 @@ void Composition::Setup()
 {
     this->_motor->setup();
     this->_debugger->setup();
+    this->_scoreSensor->setup();
+
     for (int stateId = 0; stateId < (int)MAX_State; stateId++)
     {
         Handler* handler = GetHandler((State)stateId);
@@ -55,4 +60,9 @@ Motor* Composition::GetMotor()
 Debugger* Composition::GetDebugger()
 {
     return this->_debugger;
+}
+
+ScoreSensor* Composition::GetScoreSensor()
+{
+    return this->_scoreSensor;
 }

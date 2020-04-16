@@ -18,35 +18,35 @@ void ScoreHandler::Act(State state, int turn)
 {
     switch (state) {
         case scored:
-            this->_debugger->ShowCode(0xa8, turn);
+            this->_debugger->ShowCode(0xf4, turn);
             //this->ballServo.write((unfreezeTurn - turn) * 8);
             return;
-        case moveDown: // just for testing
-            this->_debugger->ShowCode(0xab, turn);
-            this->_motor->move(false, 255);
+        case lost: // just for testing
+            this->_debugger->ShowCode(0xfe, turn);
             return;
         default:
-            this->_motor->brake();
+            return;
     }
 }
 
 State ScoreHandler::SetState(State state, int turn)
 {
-    if (this->_enteredState == -1)
+    if (this->_enteredTurn == -1)
     {
         //Serial.printf("ScoreHandler initializes SCORED state at turn %d \n", turn);
-        this->_enteredState = turn;
+        this->_enteredTurn = turn;
+        this->_enteredState = state;
     }
 
-    if (this->_enteredState + 50 < turn)
+    if (this->_enteredTurn + 50 < turn)
     {
         //Serial.printf("ScoreHandler enters IDLE state at turn %d \n", turn);
-        this->_enteredState = -1;
+        this->_enteredTurn = -1;
         return idle;
     }
     else
     {
         //Serial.printf("ScoreHandler sets SCORED state at turn %d \n", turn);
-        return scored;
+        return this->_enteredState;
     }
 }

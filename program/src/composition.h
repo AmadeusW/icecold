@@ -11,11 +11,13 @@ class DefaultHandler;
 class ScoreHandler;
 class Debugger;
 class Motor;
+class ScoreSensor;
 
 class Composition {
         Handler* handlers[MAX_State];
         Debugger* _debugger;
         Motor* _motor;
+        ScoreSensor* _scoreSensor;
         DefaultHandler* _defaultHandler;
         ScoreHandler* _scoreHandler;
     public:
@@ -24,6 +26,7 @@ class Composition {
         Handler* GetHandler(State state);
         Debugger* GetDebugger();
         Motor* GetMotor();
+        ScoreSensor* GetScoreSensor();
 };
 
 #endif

@@ -13,7 +13,8 @@ class ScoreHandler: public Handler {
     Servo ballServo; // TODO: get it from the composition
     Motor* _motor;
     Debugger* _debugger;
-int _enteredState = -1;
+    int _enteredTurn = -1;
+    State _enteredState = idle;
     public:
         virtual void Setup(Composition* composition);
         virtual State SetState(State state, int turn);

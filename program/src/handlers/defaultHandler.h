@@ -6,10 +6,12 @@
 class Composition;
 class Debugger;
 class Motor;
+class ScoreSensor;
 
 class DefaultHandler: public Handler {
     Motor* motor;
     Debugger* debugger;
+    ScoreSensor* scoreSensor;
     public:
         virtual void Setup(Composition* composition);
         virtual State SetState(State state, int turn);

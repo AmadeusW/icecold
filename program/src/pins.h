@@ -11,7 +11,7 @@
 
 #define SensorAngle 0
 #define SensorLost 0
-#define SensorScored 7
+#define SensorBallDown 7
 #define SensorJoyAUp 4
 #define SensorJoyADown 5
 #define SensorJoyBUp 0
@@ -19,9 +19,13 @@
 
 #define PinServo 6
 
+#define PinTarget 10
+#define SensorScore 11
+
 extern bool joyAUp;
 extern bool joyADown;
-extern bool isScoring;
+extern bool isBallDown;
+extern bool isBallOnTarget;
 
 void setupPins();
 void readPins();

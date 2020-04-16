@@ -10,7 +10,8 @@ enum State {
    moveUp,
    moveDown,
    errorInvalidInput,
-   scored, // TODO: add multiple stages for scored
+   scored,
+   lost,
    MAX_State
 };
 

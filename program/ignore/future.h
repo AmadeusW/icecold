@@ -35,7 +35,7 @@ void readSensors()
 {
    isAngleCritical = digitalRead(SensorAngle);
    isBallLost = digitalRead(SensorLost);
-   isPointScored = digitalRead(SensorScored);
+   isPointScored = digitalRead(SensorBallDown);
    joyAUp = digitalRead(SensorJoyAUp);
    joyADown = digitalRead(SensorJoyADown);
    joyBUp = digitalRead(SensorJoyBUp);
