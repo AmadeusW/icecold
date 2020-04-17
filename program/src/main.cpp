@@ -3,7 +3,6 @@
 #include "handler.h"
 #include "state.h"
 #include "composition.h"
-#include "modules/motor.h"
 
 // Define externs declared in state.h
 State state = uninitialized;
