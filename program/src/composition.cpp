@@ -3,6 +3,7 @@
 #include "handlers/defaultHandler.h"
 #include "handlers/scoreHandler.h"
 #include "modules/debugger.h"
+#include "modules/display.h"
 #include "modules/motor.h"
 #include "modules/scoresensor.h"
 
@@ -12,6 +13,7 @@ void Composition::Compose()
     this->_debugger = new Debugger();
     this->_motor = new Motor();
     this->_scoreSensor = new ScoreSensor();
+    this->_display = new Display();
 
     // Create handlers
     this->_defaultHandler = new DefaultHandler();
@@ -29,8 +31,9 @@ void Composition::Compose()
 void Composition::Setup()
 {
     // Setup modules
-    this->_motor->Setup();
     this->_debugger->Setup();
+    this->_display->Setup();
+    this->_motor->Setup();
     this->_scoreSensor->Setup();
 
     // Setup handlers
@@ -40,8 +43,9 @@ void Composition::Setup()
 
 void Composition::ReadPins()
 {
-    this->_motor->Read();
     this->_debugger->Read();
+    this->_display->Read();
+    this->_motor->Read();
     this->_scoreSensor->Read();
 }
 
@@ -50,14 +54,19 @@ Handler* Composition::GetHandler(State state)
     return this->handlers[state];
 }
 
-Motor* Composition::GetMotor()
-{
-    return this->_motor;
-}
-
 Debugger* Composition::GetDebugger()
 {
     return this->_debugger;
+}
+
+Display* Composition::GetDisplay()
+{
+    return this->_display;
+}
+
+Motor* Composition::GetMotor()
+{
+    return this->_motor;
 }
 
 ScoreSensor* Composition::GetScoreSensor()
