@@ -3,13 +3,14 @@
 #include "../pins.h"
 
 #define PinSerialClock 8
-#define PinSerialClearNot 9
-#define PinSerialInput 12
+#define PinSerialLatch 9
+#define PinSerialData 12
 
 void Display::Setup()
 {
     pinMode(PinSerialClock, OUTPUT);
-    pinMode(PinSerialClearNot, PinSerialClearNot);
+    pinMode(PinSerialLatch, OUTPUT);
+    pinMode(PinSerialData, OUTPUT);
     this->SetScore(0);
 }
 
@@ -25,26 +26,15 @@ void Display::SetScore(int score)
 
 void Display::Write()
 {
-    digitalWrite(PinSerialClearNot, 0); // Clear
-    delay(1);
-    digitalWrite(PinSerialClock, 0);
-    digitalWrite(PinSerialClearNot, 1);
-    digitalWrite(PinSerialInput, this->score > 0);
-    digitalWrite(PinSerialClock, 1);
-    delay(1);
-    digitalWrite(PinSerialClock, 0);
-    digitalWrite(PinSerialInput, this->score > 1);
-    digitalWrite(PinSerialClock, 1);
-    delay(1);
-    digitalWrite(PinSerialClock, 0);
-    digitalWrite(PinSerialInput, this->score > 2);
-    digitalWrite(PinSerialClock, 1);
-    delay(1);
-    digitalWrite(PinSerialClock, 0);
-    digitalWrite(PinSerialInput, this->score > 3);
-    digitalWrite(PinSerialClock, 1);
-    delay(1);
-    digitalWrite(PinSerialClock, 0);
-    digitalWrite(PinSerialInput, this->score > 4);
-    digitalWrite(PinSerialClock, 1);
+    byte dataArray[6];
+    dataArray[0] = 0x80; // 1000'0000
+    dataArray[1] = 0xC0; // 1100'0000
+    dataArray[2] = 0xE0; // 1110'0000
+    dataArray[3] = 0xF0; // 1111'0000
+    dataArray[4] = 0xF8; // 1111'1000
+    dataArray[5] = 0xFC; // 1111'1100
+
+    digitalWrite(PinSerialLatch, 0); // Clear
+    shiftOut(PinSerialData, PinSerialClock, LSBFIRST, dataArray[this->score]);
+    digitalWrite(PinSerialLatch, 1); // Latch
 }
