@@ -42,11 +42,11 @@ State ScoreHandler::SetState(State state, int turn)
         this->_enteredState = state;
         if (state == scored)
         {
-            IncreaseScore();
+            IncreaseLevel();
         }
         else if (state == lost)
         {
-            DecreaseLife();
+            DecreaseHealth();
         }
     }
 
@@ -63,22 +63,22 @@ State ScoreHandler::SetState(State state, int turn)
     }
 }
 
-void ScoreHandler::IncreaseScore()
+void ScoreHandler::IncreaseLevel()
 {
-    this->_score++;
-    if (this->_score > 5)
+    this->level++;
+    if (this->level > 10)
     {
-        this->_score = 0;
+        this->level = 0;
     }
-    this->_display->SetScore(this->_score);
+    this->_display->SetLevel(this->level);
 }
 
-void ScoreHandler::DecreaseLife()
+void ScoreHandler::DecreaseHealth()
 {
-    this->_score--;
-    if (this->_score < 0)
+    this->health--;
+    if (this->health < 0)
     {
-        this->_score = 5;
+        this->health = 10;
     }
-    this->_display->SetScore(this->_score);
+    this->_display->SetHealth(this->health);
 }

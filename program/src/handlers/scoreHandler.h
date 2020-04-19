@@ -17,9 +17,10 @@ class ScoreHandler: public Handler {
     Display* _display;
     int _enteredTurn = -1;
     State _enteredState = idle;
-    int _score = 0;
-    void IncreaseScore();
-    void DecreaseLife();
+    int health = 10;
+    int level = 1;
+    void IncreaseLevel();
+    void DecreaseHealth();
     public:
         virtual void Setup(Composition* composition);
         virtual State SetState(State state, int turn);

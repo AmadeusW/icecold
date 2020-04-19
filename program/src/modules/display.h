@@ -4,11 +4,13 @@
 #include "../module.h"
 
 class Display : public Module {
-    int score;
+    int level;
+    int health;
     public:
         virtual void Setup();
         virtual void Read();
-        void SetScore(int score);
+        void SetLevel(int level);
+        void SetHealth(int health);
         void Write();
 };
 
