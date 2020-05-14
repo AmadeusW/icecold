@@ -11,8 +11,10 @@ void Display::Setup()
     pinMode(PinSerialClock, OUTPUT);
     pinMode(PinSerialLatch, OUTPUT);
     pinMode(PinSerialData, OUTPUT);
+    this->TestSequence();
     this->SetLevel(0);
     this->SetHealth(0);
+    this->Write();
 }
 
 void Display::Read()
@@ -28,6 +30,20 @@ void Display::SetLevel(int level)
 void Display::SetHealth(int health)
 {
     this->health = health;
+}
+
+void Display::TestSequence()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        byte code = 1 << i;
+        digitalWrite(PinSerialLatch, 0); // Clear
+        shiftOut(PinSerialData, PinSerialClock, LSBFIRST, code);
+        shiftOut(PinSerialData, PinSerialClock, LSBFIRST, code);
+        shiftOut(PinSerialData, PinSerialClock, LSBFIRST, code);
+        digitalWrite(PinSerialLatch, 1); // Latch
+        delay(50);
+    }
 }
 
 void Display::Write()
@@ -61,9 +77,9 @@ void Display::Write()
     long levelCode = levelArray[this->level];
     long healthCode = healthArray[this->health];
     // long targetCode = targetArray[this->level];
-    byte transmission1 = levelCode & 0xFF;
-    byte transmission2 = (levelCode >> 8 & 0x03) | (healthCode << 2 & 0xFC);
-    byte transmission3 = healthCode >> 8 & 0x03;
+    byte transmission1 = healthCode >> 8 & 0x03;
+    byte transmission2 = (healthCode >> 8 & 0x03) | (levelCode << 2 & 0xFC);
+    byte transmission3 = levelCode & 0xFF;
 
     digitalWrite(PinSerialLatch, 0); // Clear
     shiftOut(PinSerialData, PinSerialClock, LSBFIRST, transmission3);

@@ -6,6 +6,7 @@
 class Display : public Module {
     int level;
     int health;
+    void TestSequence();
     public:
         virtual void Setup();
         virtual void Read();
