@@ -6,7 +6,7 @@ FrameToMotorAdapter();
 module FrameToMotorAdapter() {
     Padding = 3.0;
 
-    MotorInnerRadius = 12.5;
+    MotorInnerRadius = 13.0;
     MotorBraceRadius = MotorInnerRadius + Padding;
 
     SupportHeight = 6.0;
@@ -25,11 +25,8 @@ module FrameToMotorAdapter() {
     BearingAdapterOffset = MotorRadius + FrameAdapterHeight; // Center of the rod
     BearingAdapterShift = 0;
 
-    GuideRodSnugRadius = 2.5;
-    GuideRodOffset = MotorInnerRadius + Padding/2 + GuideRodSnugRadius;
-
-    MountingNutOffset = 19;
-    MountingNutRadius = 2.0;
+    MountingNutOffset = 20.4;
+    MountingNutRadius = 2.1; // actually 1.925, so 2.1 includes a gap
 
     ToTheSky = 50;
 
@@ -80,7 +77,7 @@ module FrameToMotorAdapter() {
                 {
                     cylinder(r = MotorBraceRadius, h=SupportHeight, center=true);
                     // Remove top half (-Padding)
-                    translate([Padding, -ToTheSky/2, -ToTheSky/2])
+                    translate([-Padding, -ToTheSky/2, -ToTheSky/2])
                         cube([ToTheSky, ToTheSky, ToTheSky]);
                 }
                 
@@ -135,10 +132,6 @@ module FrameToMotorAdapter() {
                     translate([0, MountingNutRadius/2, 0])
                         cylinder(r = MountingNutRadius, h=SupportHeight, center=true);
                 }
-
-                // Guide rod
-                translate([-GuideRodOffset, 0, -(SupportHeight + Padding)/2])
-                    cylinder(r = GuideRodSnugRadius, h = SupportHeight + Padding);
             }
         }
     }
