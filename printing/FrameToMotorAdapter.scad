@@ -112,7 +112,7 @@ module FrameToMotorAdapter() {
             union() {
                 // Volume of motor
                 translate([0, 0, 0])
-                    cylinder(r = MotorInnerRadius, h=SupportHeight, center=true);
+                    cylinder(r = MotorInnerRadius + Gap, h=SupportHeight, center=true);
 
                 // Mounting nuts
                 translate([0, MountingNutOffset, 0])
