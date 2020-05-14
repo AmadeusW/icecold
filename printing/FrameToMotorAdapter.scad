@@ -4,10 +4,10 @@ $fn = 72;
 FrameToMotorAdapter();
 
 module FrameToMotorAdapter() {
-    Thickness = 3.0;
+    Padding = 3.0;
 
     MotorInnerRadius = 12.5;
-    MotorBraceRadius = MotorInnerRadius + Thickness;
+    MotorBraceRadius = MotorInnerRadius + Padding;
 
     SupportHeight = 6.0;
     MotorRadius = 26.0;
@@ -18,7 +18,7 @@ module FrameToMotorAdapter() {
     ThreadDiameter = 6.6 + Gap; // I measured 6.2, but RodToBearingCoupling uses 6.5 for a snug fit
     ThreadHeight = 2.0;
 
-    FrameAdapterWidth = HeadDiameter + 2*Thickness;
+    FrameAdapterWidth = HeadDiameter + 2*Padding;
     FrameAdapterLength = 32;
     FrameAdapterHeight = ThreadHeight + HeadHeight;
 
@@ -26,7 +26,7 @@ module FrameToMotorAdapter() {
     BearingAdapterShift = 0;
 
     GuideRodSnugRadius = 2.5;
-    GuideRodOffset = MotorInnerRadius + Thickness/2 + GuideRodSnugRadius;
+    GuideRodOffset = MotorInnerRadius + Padding/2 + GuideRodSnugRadius;
 
     MountingNutOffset = 19;
     MountingNutRadius = 2.0;
@@ -39,11 +39,11 @@ module FrameToMotorAdapter() {
             cube([FrameAdapterLength, FrameAdapterWidth, FrameAdapterHeight]);
 
             // Volume of the nut head
-            translate([0, Thickness, ThreadHeight])
+            translate([0, Padding, ThreadHeight])
                 cube([FrameAdapterLength, HeadDiameter, HeadHeight]);
 
             // Volume of the nut thread
-            translate([0, Thickness + (HeadDiameter - ThreadDiameter)/2, 0])
+            translate([0, Padding + (HeadDiameter - ThreadDiameter)/2, 0])
                 cube([FrameAdapterLength, ThreadDiameter, ThreadHeight]);
         }
 
@@ -79,8 +79,8 @@ module FrameToMotorAdapter() {
                 difference()
                 {
                     cylinder(r = MotorBraceRadius, h=SupportHeight, center=true);
-                    // Remove top half (-Thickness)
-                    translate([Thickness, -ToTheSky/2, -ToTheSky/2])
+                    // Remove top half (-Padding)
+                    translate([Padding, -ToTheSky/2, -ToTheSky/2])
                         cube([ToTheSky, ToTheSky, ToTheSky]);
                 }
                 
@@ -89,8 +89,8 @@ module FrameToMotorAdapter() {
                 linear_extrude(height = SupportHeight, center = true)
                     polygon(points = [
                     [-BearingAdapterOffset/2, -FrameAdapterWidth/2],
-                    [BearingAdapterOffset/2, -(MountingNutOffset+MountingNutRadius*1.5+Thickness)],
-                    [BearingAdapterOffset/2, (MountingNutOffset+MountingNutRadius*1.5+Thickness)],
+                    [BearingAdapterOffset/2, -(MountingNutOffset+MountingNutRadius*1.5+Padding)],
+                    [BearingAdapterOffset/2, (MountingNutOffset+MountingNutRadius*1.5+Padding)],
                     [-BearingAdapterOffset/2, FrameAdapterWidth/2],
                     ]);
 
@@ -99,17 +99,17 @@ module FrameToMotorAdapter() {
                 hull()
                 {
                     translate([0, -MountingNutRadius/2, 0])
-                        cylinder(r = MountingNutRadius + Thickness, h=SupportHeight, center=true);
+                        cylinder(r = MountingNutRadius + Padding, h=SupportHeight, center=true);
                     translate([0, MountingNutRadius/2, 0])
-                        cylinder(r = MountingNutRadius + Thickness, h=SupportHeight, center=true);
+                        cylinder(r = MountingNutRadius + Padding, h=SupportHeight, center=true);
                 }
                 translate([0, -MountingNutOffset, 0])
                 hull()
                 {
                     translate([0, -MountingNutRadius/2, 0])
-                        cylinder(r = MountingNutRadius + Thickness, h=SupportHeight, center=true);
+                        cylinder(r = MountingNutRadius + Padding, h=SupportHeight, center=true);
                     translate([0, MountingNutRadius/2, 0])
-                        cylinder(r = MountingNutRadius + Thickness, h=SupportHeight, center=true);
+                        cylinder(r = MountingNutRadius + Padding, h=SupportHeight, center=true);
                 }
             }
             union() {
@@ -137,8 +137,8 @@ module FrameToMotorAdapter() {
                 }
 
                 // Guide rod
-                translate([-GuideRodOffset, 0, -(SupportHeight + Thickness)/2])
-                    cylinder(r = GuideRodSnugRadius, h = SupportHeight + Thickness);
+                translate([-GuideRodOffset, 0, -(SupportHeight + Padding)/2])
+                    cylinder(r = GuideRodSnugRadius, h = SupportHeight + Padding);
             }
         }
     }
