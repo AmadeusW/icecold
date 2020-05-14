@@ -1,13 +1,20 @@
 Gap = 0.2;
 $fn = 72;
 
-RodToMotorCoupling();
+RodToMotorCoupling(true);
 
-module RodToMotorCoupling() {
+// TODO: rename to RodCoupling. Parameter indicates whether we couple to motor or bearing
+module RodToMotorCoupling(motorConnection) {
     Padding = 3.0;
     
+    // Determine what kind of "bearing" this is
+    // This is related to the motor. Probably the outside of the total shaft
     BearingDiameter = 20.0;
     BearingHeight = 14.0;
+
+    // And that's for the actual bearing
+    // BearingDiameter = 8;
+    // BearingHeight = 12;
         
     HexFlatDiameter = 12.60;
     HexRadius = HexFlatDiameter/(2 * cos(30));
@@ -33,34 +40,43 @@ module RodToMotorCoupling() {
     GuideRadius = GuideDiameter / 2;
     MiddleInnerHeight = ShaftRadius + Gap; // ensure angle of 45 degrees on the inner wall
 
+    TotalShaftHeight = motorConnection ? ShaftHeight + MiddleInnerHeight : BearingHeight;
+    TotalShaftRadius = motorConnection ? SocketRadius : BearingRadius;
+
     union () {
         // Part which wraps around the motor
         difference() {
-            cylinder(r=SocketRadius, h = ShaftHeight + MiddleInnerHeight);
+            cylinder(r=TotalShaftRadius, h = TotalShaftHeight);
 
-            translate([0,SocketRadius,GuideHeight])
-                rotate([90,0,0])
-                    cylinder(r=GuideRadius + Gap, h = SocketDiameter);
+            // When connecting to the motor, hollow out the shaft and a guide screw
+            if (motorConnection)
+            {
+                translate([0,TotalShaftRadius,GuideHeight])
+                    rotate([90,0,0])
+                        cylinder(r=GuideRadius + Gap, h = SocketDiameter);
 
-            translate([0,0,-1]) // -1 to Ensure the difference
-                union()
-                {
-                    cylinder(r=ShaftRadius + Gap, h = ShaftHeight+1);
-                    translate([0,0,ShaftHeight + 1])
-                        cylinder(r1=ShaftRadius + Gap, r2= 0, h = MiddleInnerHeight);
-                }
+                translate([0,0,-1]) // -1 to Ensure the difference
+                    union()
+                    {
+                        cylinder(r=ShaftRadius + Gap, h = ShaftHeight+1);
+                        translate([0,0,ShaftHeight + 1])
+                            cylinder(r1=ShaftRadius + Gap, r2= 0, h = MiddleInnerHeight);
+                    }
+            }
         }
 
-        // Connect to the other part
-        translate([0,0,ShaftHeight + MiddleInnerHeight])
+        // Connection between the two parts
+        translate([0,0,TotalShaftHeight])
             difference() {
-                cylinder(r1=SocketRadius, r2= TopRadius, h = MiddleHeight);
+                // Outside connection
+                cylinder(r1=TotalShaftRadius, r2= TopRadius, h = MiddleHeight);
+                // hollow dome with 45 degree roof
                 translate([0,0,Gap])
                     cylinder(r=StopperDiameter / 2, h = StopperHeight);
             }
         
-        // Fit in the bearing
-        translate([0,0, ShaftHeight + MiddleInnerHeight + MiddleHeight])
+        // Part which hosts the hex stopper
+        translate([0,0, TotalShaftHeight + MiddleHeight])
             difference() {
                 cylinder(r=TopRadius, h = TopHeight);
 
