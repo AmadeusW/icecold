@@ -53,6 +53,7 @@ module RodCoupling(motorConnection) {
                     union()
                     {
                         cylinder(r=ShaftRadius + Gap, h = ShaftHeight+1);
+                        cylinder(r=ShaftRadius + 2*Gap, h = 1 + Gap);
                         translate([0,0,ShaftHeight + 1])
                             cylinder(r1=ShaftRadius + Gap, r2= 0, h = MiddleInnerHeight);
                     }
