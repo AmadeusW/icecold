@@ -1,10 +1,11 @@
 Gap = 0.2;
 $fn = 72;
 
-RodToMotorCoupling(true);
+RodCoupling(false);
 
-// TODO: rename to RodCoupling. Parameter indicates whether we couple to motor or bearing
-module RodToMotorCoupling(motorConnection) {
+// When parameter is true, we couple the rod to the motor
+// When parameter is false, we couple the rod to a bearing
+module RodCoupling(motorConnection) {
     Padding = 3.0;
 
     // Motor coupling properties
