@@ -1,9 +1,9 @@
 Gap = 0.2;
 $fn = 72;
 
-RodConnect();
+BarMount();
 
-module RodConnect() {
+module BarMount() {
     RodThickness = 1.65; // 1/16 inch + 0.7mm gap
     RodDepth = 13.75; // 1/2 inch + 0.5mm gap
     
@@ -40,8 +40,8 @@ module RodConnect() {
                                   ConnectorWidth/2 - CornerRadius]]);
             }
             
-            union () {
-                rotate([0,0,2])
+            rotate([0,0,2])
+                union () {
                     translate([ConnectorDepth/2,0,0])
                         cube([RodDepth, RodThickness, 100], center = true);
             }
