@@ -2,6 +2,8 @@ Gap = 0.2;
 $fn = 72;
 
 RodCoupling(false);
+translate([30, 0, 0])
+    RodCoupling(true);
 
 // When parameter is true, we couple the rod to the motor
 // When parameter is false, we couple the rod to a bearing
