@@ -4,8 +4,8 @@ $fn = 72;
 BarMount();
 
 module BarMount() {
-    RodThickness = 1.65; // 1/16 inch + 0.7mm gap
-    RodDepth = 13.75; // 1/2 inch + 0.5mm gap
+    RodThickness = 1.75 + Gap;
+    RodDepth = 13.85; // Measured 13.10, but let's keep it a bit wider
     
     BearingDiameter = 8.0;
     BearingLength = 15;
