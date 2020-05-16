@@ -1,9 +1,9 @@
 Gap = 0.2;
 $fn = 72;
 
-Guide();
+Guide(false);
 
-module Guide() {
+module Guide(extraClearance) {
     Padding = 3.0;
     SupportThickness = 8.0;
 
@@ -21,18 +21,18 @@ module Guide() {
     Width = BoltSeparation + 2*BoltDiameter + 2*Padding;
     WidthWithoutBolts = BoltSeparation - 2*BoltHeadDiameter;
     Depth = HexThickness + 2*SupportThickness;
-    RodOffset = 20;
-    ToTheSky = 50;
+    RodOffset = 15; // This is arbitrary, distance from rod to where we mount the bar
+    ToTheSky = 100;
 
     // Measurement of the outside of the channel is 16.5 and 12.37 inside
     // that's 3.2mm for two walls. Add it to smaller value or subtract from larger to get the width
     ChannelWidth = 13.3; // need to thicken up the tower!
     // Height from the frame to the top of the channel
-    ChannelHeight = 11.30; // Note: this measurement excludes distance from frame to top of channel floor
-    // How much into channel we're going
-    DepthIntoChannel = 8.0;
+    ChannelHeight = 12.90; // From the frame to the top of the channel
+    // How much into channel we're going. It doesn't have to be deep
+    DepthIntoChannel = extraClearance ? 5.0 : 7.0;
     // How thick is the channel wall
-    ChannelThickness = 1.7;
+    ChannelThickness = extraClearance ? 2.2 : 1.7;
 
     // Calculate the center of the rod
     // Use the same values as FrameToMotorAdapter
@@ -46,7 +46,12 @@ module Guide() {
     // this is where the channel starts
     ZMax = RodOffset + CenterOfTheRod;
     ChannelOffset = ZMax - ChannelHeight;
+    // Allow clearance of 8mm, which is the distance from frame to a hex head holding the channel is 8mm
     Height = ChannelOffset + DepthIntoChannel;
+
+    echo(str("Rod center:", RodOffset));
+    echo(str("Furthest reach:", Height));
+    echo(str("Distance between rod center and furthest reach:", Height - RodOffset));
 
     difference() {
         // Main body
