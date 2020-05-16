@@ -18,8 +18,6 @@ module Guide(extraClearance) {
     BoltSeparation = 36.5;
     BoltHeadDiameter = 9.0; // The standard indicates 8mm for 5mm screws
     
-    Width = BoltSeparation + 2*BoltDiameter + 2*Padding;
-    WidthWithoutBolts = BoltSeparation - 2*BoltHeadDiameter;
     Depth = HexThickness + 2*SupportThickness;
     RodOffset = 15; // This is arbitrary, distance from rod to where we mount the bar
     ToTheSky = 100;
@@ -33,6 +31,13 @@ module Guide(extraClearance) {
     DepthIntoChannel = extraClearance ? 5.0 : 7.0;
     // How thick is the channel wall
     ChannelThickness = extraClearance ? 2.2 : 1.7;
+
+    Width = BoltSeparation + 2*BoltDiameter + 2*Padding;
+    WidthWithoutBolts = BoltSeparation - 2*BoltHeadDiameter;
+
+    // Additional support for 45 degree angle
+    WidthAroundChannel = ChannelWidth + 3*Padding;
+    HeightOfSupport = WidthAroundChannel-WidthWithoutBolts;
 
     // Calculate the center of the rod
     // Use the same values as FrameToMotorAdapter
@@ -63,9 +68,19 @@ module Guide(extraClearance) {
             translate([0, 0, Height/2])
                 cube([WidthWithoutBolts, Depth, Height], center = true);
 
-            // TODO: Make the incline at at least 45 degrees
             translate([0, 0, ZMax - ChannelHeight + (DepthIntoChannel - Padding)/2])
-                cube([WidthWithoutBolts + Padding, Depth, DepthIntoChannel + Padding], center = true);
+                cube([WidthAroundChannel, Depth, DepthIntoChannel + Padding], center = true);
+
+            // 45 degree angle connector
+            rotate([90, 0, 0])
+            translate([0, Height - DepthIntoChannel - Padding - HeightOfSupport, 0])
+                linear_extrude(height = Depth, center = true)
+                    polygon(points = [
+                    [-WidthAroundChannel/2, HeightOfSupport],
+                    [WidthAroundChannel/2, HeightOfSupport],
+                    [WidthWithoutBolts/2, 0],
+                    [-WidthWithoutBolts/2, 0],
+                    ]);
         }
 
         // Bolts for mounting the bearing
@@ -90,6 +105,16 @@ module Guide(extraClearance) {
             translate([0, 0, RodOffset])
                 rotate([90,0,0])
                     cylinder(r=ThreadRodDiameter/2, h = 100, center=true);
+
+            // >45 degree roof
+            rotate([90, 0, 0])
+            translate([0, RodOffset, 0])
+                linear_extrude(height = Depth + Gap, center = true)
+                    polygon(points = [
+                    [-ThreadRodDiameter/2, 0],
+                    [ThreadRodDiameter/2, 0],
+                    [0, ThreadRodDiameter],
+                    ]);
         }
 
         // Channel
