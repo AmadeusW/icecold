@@ -4,22 +4,15 @@ $fn = 72;
 FrameToSensor();
 
 module FrameToSensor() {
-    Thickness = 3.0;
-
-    SensorRadius = 5.0;
-    SensorInnerRadius = 3.5;
-    SensorHeight = 5.0;
-
-    MountingRadius = SensorRadius + Thickness;
+    Padding = 3.0;
 
     HeadDiameter = 11.0;
     HeadHeight = 4.5 + Gap;
 
     ThreadDiameter = 6.6 + Gap; // I measured 6.2, but RodToBearingCoupling uses 6.5 for a snug fit
-    ThreadSafeRadius = (ThreadDiameter + Thickness) / 2;
     ThreadHeight = 2.0;
 
-    FrameAdapterWidth = HeadDiameter + 2*Thickness;
+    FrameAdapterWidth = HeadDiameter + 2*Padding;
     FrameAdapterLength = 32;
     FrameAdapterHeight = ThreadHeight + HeadHeight;
 
@@ -27,10 +20,14 @@ module FrameToSensor() {
     BearingAdapterOffset = MotorRadius + FrameAdapterHeight;
     BearingAdapterShift = 0;
 
-    GuideRodSnugRadius = 2.5;
-    MotorInnerRadius = 12.5;
-    GuideRodOffset = MotorInnerRadius + Thickness/2 + GuideRodSnugRadius;
+    MountRadius = 1.0; // it's a 2mm screw
+    MountDistance = 14.7;
+    MountOffsetFromCenter = MountDistance / 2;
+    MountHeight = FrameAdapterHeight + MountRadius + Padding; // As low as possible
 
+    Width = MountDistance + (MountRadius + Padding)*2;
+    Depth = 4; // arbitrary
+    Height = Width + FrameAdapterHeight;
     ToTheSky = 50;
 
     union() {
@@ -39,61 +36,49 @@ module FrameToSensor() {
             cube([FrameAdapterLength, FrameAdapterWidth, FrameAdapterHeight]);
 
             // Volume of the nut head
-            translate([0, Thickness, ThreadHeight])
-                cube([FrameAdapterLength, HeadDiameter, HeadHeight]);
+            translate([0, Padding, ThreadHeight])
+                cube([FrameAdapterLength + Gap, HeadDiameter, HeadHeight]);
 
             // Volume of the nut thread
-            translate([0, Thickness + (HeadDiameter - ThreadDiameter)/2, 0])
-                cube([FrameAdapterLength, ThreadDiameter, ThreadHeight]);
+            translate([0, Padding + (HeadDiameter - ThreadDiameter)/2, 0])
+                cube([FrameAdapterLength + Gap, ThreadDiameter, ThreadHeight]);
         }
 
         // Sensor adapter
         rotate([0, -90, 0])
-        translate([BearingAdapterOffset, FrameAdapterWidth/2, -FrameAdapterLength -(SensorHeight+Thickness)/2])
+        translate([0, FrameAdapterWidth/2, Depth/2])
         difference() {
             union()
             {
-                // Sensor adapter
-                cylinder(r = MountingRadius, h=SensorHeight + Thickness, center=true);
-
                 // Connection to frame adapter
-                translate([-BearingAdapterOffset/2, 0, 0])
-                linear_extrude(height = SensorHeight + Thickness, center = true)
+                linear_extrude(height = Depth, center = true)
                     polygon(points = [
-                    [-BearingAdapterOffset/2, -FrameAdapterWidth/2],
-                    [BearingAdapterOffset/2, -MountingRadius - SensorRadius * 2],
-                    [BearingAdapterOffset/2, MountingRadius + SensorRadius * 2],
-                    [-BearingAdapterOffset/2, FrameAdapterWidth/2],
+                    [0, -FrameAdapterWidth/2],
+                    [Height/2, -Width/2],
+                    [Height/2, Width/2],
+                    [0, FrameAdapterWidth/2],
                     ]);
             }
             union() {
-                // Volume of sensor 1. Move it away from the threaded rod
-                translate([-ThreadSafeRadius - SensorRadius, ThreadSafeRadius + Thickness, -Thickness/2])
-                    cylinder(r = SensorRadius, h=SensorHeight, center=true);
+                // Volume of mount 1
+                translate([MountHeight, -MountOffsetFromCenter, 0])
+                hull()
+                {
+                    translate([0, -MountRadius/4, 0])
+                        cylinder(r = MountRadius + Gap, h=ToTheSky, center=true);
+                    translate([0, MountRadius/4, 0])
+                        cylinder(r = MountRadius + Gap, h=ToTheSky, center=true);
+                }
 
-                translate([-ThreadSafeRadius - SensorRadius, ThreadSafeRadius + Thickness, Thickness/2])
-                    cylinder(r = SensorInnerRadius, h=SensorHeight, center=true);
-
-                // Allow the other sensor to face away
-                // Volume of sensor 2. Move it away from the threaded rod
-                translate([-ThreadSafeRadius - SensorRadius, - ThreadSafeRadius - Thickness, Thickness/2])
-                    cylinder(r = SensorRadius, h=SensorHeight, center=true);
-
-                translate([-ThreadSafeRadius - SensorRadius, - ThreadSafeRadius - Thickness, -Thickness/2])
-                    cylinder(r = SensorInnerRadius, h=SensorHeight, center=true);
-
-                // Guide rod
-                translate([-GuideRodOffset, 0, -(SensorHeight + Thickness)/2])
-                    cylinder(r = GuideRodSnugRadius, h = SensorHeight + Thickness);
-
-                // Threaded rod!!!
-                /// We need to make sure that the sensor does not overlap with the threaded rod.
-                translate([0, 0, -Thickness/2])
-                    cylinder(r = ThreadSafeRadius, h=ToTheSky, center=true);
-
-                // Don't fully enclose the thread at x=Length
-                translate([0, -Thickness/2, -ToTheSky/2])
-                    cube([ToTheSky, Thickness, ToTheSky]);
+                // Volume of mount 2
+                translate([MountHeight, MountOffsetFromCenter, 0])
+                hull()
+                {
+                    translate([0, -MountRadius/4, 0])
+                        cylinder(r = MountRadius + Gap, h=ToTheSky, center=true);
+                    translate([0, MountRadius/4, 0])
+                        cylinder(r = MountRadius + Gap, h=ToTheSky, center=true);
+                }
             }
         }
     }
