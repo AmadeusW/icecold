@@ -138,35 +138,4 @@ module Guide(extraClearance) {
                 cube([ChannelThickness + Gap, ToTheSky, DepthIntoChannel + Gap], center=true);
         }
     }
-    /*
-    difference() {
-        translate([0,0,-MountOffset]) {
-            intersection () {
-                scale([Width/2, Depth/2, 1]) {
-                    cylinder(r = 1, h = Thickness);
-                }
-                square([Width, Depth]);
-            }
-        }
-        union () {
-            translate([0,0,50])
-                cube([HexFlatDiameter+Gap, HexThickness+Gap, 100], center=true);
-            
-            rotate([90,30,0])
-            cylinder(r = HexRadius+Gap, h=HexThickness+Gap, center=true, $fn = 6);
-            
-            rotate([90,0,0])
-                cylinder(r=ThreadRodDiameter/2, h = 100, center=true);
-
-            translate([0,0,-ChannelOffset])
-                rotate([90,0,0])            
-                    cylinder(r=GuideRodRadius, h = 100, center = true);
-            
-            translate([BoltSeparation/2,0,0])
-                cylinder(r=BoltDiameter/2, h=100, center=true);
-            translate([-BoltSeparation/2,0,0])
-                cylinder(r=BoltDiameter/2, h=100, center=true);
-        }
-    }
-    */
 }
