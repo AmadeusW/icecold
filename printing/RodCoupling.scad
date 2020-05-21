@@ -23,7 +23,7 @@ module RodCoupling(motorConnection) {
     
     // Rod coupling properties
     HexFlatDiameter = 12.60;
-    HexHeight = 4.50;
+    HexHeight = 3.50;
     StopperDiameter = 12.50;
     StopperHeight = 2.75;
 
