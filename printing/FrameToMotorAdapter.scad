@@ -82,12 +82,24 @@ module FrameToMotorAdapter() {
                 }
                 
                 // Connection to frame adapter
+                p1 = RRTangent([BearingAdapterOffset/2,
+                                -(MountingNutOffset+MountingNutRadius*.5)],
+                               [-BearingAdapterOffset/2, -FrameAdapterWidth/2],
+                               MountingNutRadius + Padding, 0, 1);
+
+                p2 = RRTangent([BearingAdapterOffset/2,
+                                (MountingNutOffset+MountingNutRadius*0.5)],
+                               [-BearingAdapterOffset/2, FrameAdapterWidth/2],
+                               MountingNutRadius + Padding, 0, -1);
+
                 translate([-BearingAdapterOffset/2, 0, 0])
                 linear_extrude(height = SupportHeight, center = true)
                     polygon(points = [
                     [-BearingAdapterOffset/2, -FrameAdapterWidth/2],
-                    [BearingAdapterOffset/2, -(MountingNutOffset+MountingNutRadius*1.5+Padding)],
-                    [BearingAdapterOffset/2, (MountingNutOffset+MountingNutRadius*1.5+Padding)],
+                    p1,
+                    [BearingAdapterOffset/2,-(MountingNutOffset+MountingNutRadius*.5)],
+                    [BearingAdapterOffset/2,(MountingNutOffset+MountingNutRadius*.5)],
+                    p2,
                     [-BearingAdapterOffset/2, FrameAdapterWidth/2],
                     ]);
 
@@ -136,3 +148,17 @@ module FrameToMotorAdapter() {
         }
     }
 }
+
+// find p that is r1 from p1 and on a line that
+// passes r1 from p1 and p2 from p2.
+function RRTangent(p1, p2, r1, r2, s) =
+     let(dx = (p2[0] - p1[0]))
+     let(dy = (p2[1] - p1[1]))
+     let(distance2 = dx*dx + dy*dy)
+     let(distance = sqrt(distance2))
+     let(nx = dx / distance)
+     let(ny = dy / distance)
+     let(cosA = (r1-r2)/distance)
+     let(sinA = sqrt(1-cosA*cosA))
+        [p1[0] + (cosA * r1) * nx - s * (sinA * r1) * ny,
+         p1[1] + (cosA * r1) * ny + s * (sinA * r1) * nx];
