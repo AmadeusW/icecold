@@ -21,11 +21,11 @@ module FrameToSensor() {
     BearingAdapterShift = 0;
 
     MountRadius = 1.0; // it's a 2mm screw
-    MountDistance = 14.7;
+    MountDistance = 12.65;
     MountOffsetFromCenter = MountDistance / 2;
     MountHeight = FrameAdapterHeight + MountRadius + Padding; // As low as possible
 
-    Width = MountDistance + (MountRadius + Padding)*2;
+    Width = MountDistance + (MountRadius*2 + Padding)*2;
     Depth = 4; // arbitrary
     Height = Width + FrameAdapterHeight;
     ToTheSky = 50;
@@ -64,9 +64,9 @@ module FrameToSensor() {
                 translate([MountHeight, -MountOffsetFromCenter, 0])
                 hull()
                 {
-                    translate([0, -MountRadius/4, 0])
+                    translate([0, -MountRadius/2, 0])
                         cylinder(r = MountRadius + Gap, h=ToTheSky, center=true);
-                    translate([0, MountRadius/4, 0])
+                    translate([0, MountRadius/2, 0])
                         cylinder(r = MountRadius + Gap, h=ToTheSky, center=true);
                 }
 
@@ -74,9 +74,9 @@ module FrameToSensor() {
                 translate([MountHeight, MountOffsetFromCenter, 0])
                 hull()
                 {
-                    translate([0, -MountRadius/4, 0])
+                    translate([0, -MountRadius/2, 0])
                         cylinder(r = MountRadius + Gap, h=ToTheSky, center=true);
-                    translate([0, MountRadius/4, 0])
+                    translate([0, MountRadius/2, 0])
                         cylinder(r = MountRadius + Gap, h=ToTheSky, center=true);
                 }
             }
