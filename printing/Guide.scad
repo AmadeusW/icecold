@@ -24,15 +24,16 @@ module Guide(extraClearance) {
 
     // Measurement of the outside of the channel is 16.5 and 12.37 inside
     // that's 3.2mm for two walls. Add it to smaller value or subtract from larger to get the width
-    ChannelWidth = 13.3; // need to thicken up the tower!
+    ChannelWidth = 14.45;
     // Height from the frame to the top of the channel
     ChannelHeight = 12.90; // From the frame to the top of the channel
     // How much into channel we're going. It doesn't have to be deep
-    DepthIntoChannel = extraClearance ? 5.0 : 7.0;
+    DepthIntoChannel = 6.0;
     // How thick is the channel wall
-    ChannelThickness = extraClearance ? 2.2 : 1.7;
+    ChannelThickness = 2.2;
 
-    Width = BoltSeparation + 2*BoltDiameter + 2*Padding;
+    BoltRadius = BoltDiameter / 2;
+    Width = BoltSeparation + 2*BoltRadius + 2*Padding;
     WidthWithoutBolts = BoltSeparation - 2*BoltHeadDiameter;
 
     // Additional support for 45 degree angle
@@ -86,9 +87,9 @@ module Guide(extraClearance) {
         // Bolts for mounting the bearing
         union() {
             translate([BoltSeparation / 2, 0, SupportThickness/2])
-                cylinder(r = BoltDiameter, h = SupportThickness + Gap, center = true);
+                cylinder(r = BoltRadius, h = SupportThickness + Gap, center = true);
             translate([-BoltSeparation / 2, 0, SupportThickness/2])
-                cylinder(r = BoltDiameter, h = SupportThickness + Gap, center = true);
+                cylinder(r = BoltRadius, h = SupportThickness + Gap, center = true);
         }
 
         // Nut which attaches to the rod
