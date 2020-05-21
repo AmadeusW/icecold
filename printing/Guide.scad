@@ -38,7 +38,7 @@ module Guide(extraClearance) {
 
     // Additional support for 45 degree angle
     WidthAroundChannel = ChannelWidth + 3*Padding;
-    HeightOfSupport = WidthAroundChannel-WidthWithoutBolts;
+    HeightOfSupport = (WidthAroundChannel - WidthWithoutBolts) * 2;
 
     // Calculate the center of the rod
     // Use the same values as FrameToMotorAdapter
@@ -87,9 +87,21 @@ module Guide(extraClearance) {
         // Bolts for mounting the bearing
         union() {
             translate([BoltSeparation / 2, 0, SupportThickness/2])
-                cylinder(r = BoltRadius, h = SupportThickness + Gap, center = true);
+                hull()
+                {
+                    translate([-BoltRadius/2, 0, 0])
+                        cylinder(r = BoltRadius + Gap, h=ToTheSky, center=true);
+                    translate([BoltRadius/2, 0, 0])
+                        cylinder(r = BoltRadius + Gap, h=ToTheSky, center=true);
+                }
             translate([-BoltSeparation / 2, 0, SupportThickness/2])
-                cylinder(r = BoltRadius, h = SupportThickness + Gap, center = true);
+                hull()
+                {
+                    translate([-BoltRadius/2, 0, 0])
+                        cylinder(r = BoltRadius + Gap, h=ToTheSky, center=true);
+                    translate([BoltRadius/2, 0, 0])
+                        cylinder(r = BoltRadius + Gap, h=ToTheSky, center=true);
+                }
         }
 
         // Nut which attaches to the rod
