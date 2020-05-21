@@ -15,7 +15,7 @@ module Guide(extraClearance) {
     ThreadRodDiameter = 8.1;
 
     BoltDiameter = 4.85;
-    BoltSeparation = 36.5;
+    BoltSeparation = 36.4;
     BoltHeadDiameter = 9.0; // The standard indicates 8mm for 5mm screws
     
     Depth = HexThickness + 2*SupportThickness;
@@ -30,7 +30,7 @@ module Guide(extraClearance) {
     // How much into channel we're going. It doesn't have to be deep
     DepthIntoChannel = 6.0;
     // How thick is the channel wall
-    ChannelThickness = 2.2;
+    ChannelThickness = 2.3;
 
     BoltRadius = BoltDiameter / 2;
     Width = BoltSeparation + 2*BoltRadius + 2*Padding;
