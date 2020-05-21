@@ -9,7 +9,7 @@ module NutToMotorSupport() {
     MotorInnerRadius = 13.0;
     MotorBraceRadius = MotorInnerRadius + Padding;
 
-    SupportHeight = 6.0;
+    SupportHeight = Padding * 3;
     MotorRadius = 26.0;
 
     HeadDiameter = 11.0;
@@ -55,8 +55,8 @@ module NutToMotorSupport() {
             }
             union() {
                 // Volume of motor
-                translate([0, 0, -Padding])
-                    cylinder(r = MotorInnerRadius + Gap, h=Padding*2, center=true);
+                translate([0, 0, SupportHeight/3])
+                    cylinder(r = MotorInnerRadius + Gap, h=Padding*3, center=true);
             }
         }
     }
