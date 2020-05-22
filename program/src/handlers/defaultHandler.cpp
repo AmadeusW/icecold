@@ -3,6 +3,7 @@
 #include "../pins.h"
 #include "../composition.h"
 #include "../modules/debugger.h"
+#include "../modules/display.h"
 #include "../modules/motor.h"
 #include "../modules/scoresensor.h"
 
@@ -11,6 +12,7 @@ void DefaultHandler::Setup(Composition* composition)
     this->motor = composition->GetMotor();
     this->debugger = composition->GetDebugger();
     this->scoreSensor = composition->GetScoreSensor();
+    this->display = composition->GetDisplay();
 }
 
 void DefaultHandler::Act(State state, int turn)
@@ -20,19 +22,23 @@ void DefaultHandler::Act(State state, int turn)
             this->motor->Move(true, 255);
             this->debugger->ShowCode(0x0b, turn);
             this->scoreSensor->SetTarget(false); // just for tests
+            this->display->Write();
             return;
         case moveDown:
             this->motor->Move(false, 255);
             this->debugger->ShowCode(0x0d, turn);
             this->scoreSensor->SetTarget(true); // just for tests
+            this->display->Write();
             return;
         case idle:
             this->motor->Brake();
             this->debugger->ShowCode(0x00, turn);
+            this->display->Write();
             return;
         case errorInvalidInput:
             this->motor->Brake();
             this->debugger->ShowCode(0x33, turn);
+            this->display->Write();
             return;
         default:
             return;
