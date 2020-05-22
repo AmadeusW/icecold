@@ -22,12 +22,21 @@ void readPins()
   joyAUp = digitalRead(SensorJoyAUp) == HIGH;
   joyADown = digitalRead(SensorJoyADown) == HIGH;
 
-
-  Serial.print("T");
+  Serial.print("[");
   Serial.print(turn);
-  Serial.print(". S");
+  Serial.print("] ");
+  switch (state) {
+    case uninitialized:     Serial.print("LOADIN"); break;
+    case idle:              Serial.print(" idle "); break;
+    case moveUp:            Serial.print(" up   "); break;
+    case moveDown:          Serial.print(" down "); break;
+    case errorInvalidInput: Serial.print("invald"); break;
+    case scored:            Serial.print("scored"); break;
+    case lost:              Serial.print(" lost "); break;
+    default:                Serial.print("ERROR "); break;
+  }
   Serial.print(state);
-  Serial.print(". pins ");
+  Serial.print(" pins:");
   Serial.print(joyAUp);
   Serial.print(joyADown);
   Serial.println(".");
