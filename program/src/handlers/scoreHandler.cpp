@@ -14,6 +14,9 @@ void ScoreHandler::Setup(Composition* composition)
     this->_motor = composition->GetMotor();
     this->_debugger = composition->GetDebugger();
     this->_display = composition->GetDisplay();
+
+    this->health = 6;
+    this->level = 1;
 }
 
 void ScoreHandler::Act(State state, int turn)
@@ -78,7 +81,7 @@ void ScoreHandler::DecreaseHealth()
     this->health--;
     if (this->health < 0)
     {
-        this->health = 10;
+        this->health = 6;
     }
     this->_display->SetHealth(this->health);
 }
