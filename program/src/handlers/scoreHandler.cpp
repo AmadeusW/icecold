@@ -15,8 +15,11 @@ void ScoreHandler::Setup(Composition* composition)
     this->_debugger = composition->GetDebugger();
     this->_display = composition->GetDisplay();
 
-    this->health = 6;
-    this->level = 1;
+    this->health = 10;
+    this->level = 10;
+
+    this->_display->SetHealth(this->health);
+    this->_display->SetLevel(this->level);
 }
 
 void ScoreHandler::Act(State state, int turn)
@@ -81,7 +84,7 @@ void ScoreHandler::DecreaseHealth()
     this->health--;
     if (this->health < 0)
     {
-        this->health = 6;
+        this->health = 10;
     }
     this->_display->SetHealth(this->health);
 }
