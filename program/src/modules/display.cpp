@@ -90,10 +90,12 @@ void Display::Write()
     byte transmission1 = levelCode & 0xFF;
     byte transmission2 = ((levelCode & 0x0300) >> 8) | (healthCode << 2 & 0xFC);
     byte transmission3 = healthCode & 0xFF;
+    byte transmission4 = 0;
 
     digitalWrite(PinSerialLatch, 0); // Clear
-    shiftOut(PinSerialData, PinSerialClock, MSBFIRST, transmission3);
-    shiftOut(PinSerialData, PinSerialClock, MSBFIRST, transmission2);
-    shiftOut(PinSerialData, PinSerialClock, MSBFIRST, transmission1);
+    shiftOut(PinSerialData, PinSerialClock, LSBFIRST, transmission1);
+    shiftOut(PinSerialData, PinSerialClock, LSBFIRST, transmission2);
+    shiftOut(PinSerialData, PinSerialClock, LSBFIRST, transmission3);
+    shiftOut(PinSerialData, PinSerialClock, LSBFIRST, transmission4);
     digitalWrite(PinSerialLatch, 1); // Latch
 }
