@@ -47,6 +47,7 @@ void DefaultHandler::Act(State state, int turn)
 
 State DefaultHandler::SetState(State state, int turn)
 {
+    // TODO: take ownership of joyAUp, etc.
     if (this->scoreSensor->IsLosing())
     {
         return lost;
@@ -65,7 +66,7 @@ State DefaultHandler::SetState(State state, int turn)
         //Serial.printf("DefaultHandler sets UP state at turn %d \n", turn);
         return moveUp;
     }
-    else if (joyADown) // TODO: add another angle limiter
+    else if (joyADown)
     {
         //Serial.printf("DefaultHandler sets DOWN state at turn %d \n", turn);
         return moveDown;

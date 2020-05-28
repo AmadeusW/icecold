@@ -9,18 +9,23 @@ bool joyADown;
 void setupPins()
 {
   // Responsibility of Input module
-  pinMode(SensorJoyAUp, INPUT);
-  pinMode(SensorJoyADown, INPUT);
-  pinMode(SensorBallDown, INPUT);
-  // Responsibility of BallRelease module
-  pinMode(PinServo, OUTPUT);
+  pinMode(PinJoyAUp, INPUT);
+  pinMode(PinJoyADown, INPUT);
+  pinMode(PinJoyBUp, INPUT);
+  pinMode(PinJoyBDown, INPUT);
+  pinMode(PinBallAtTarget, INPUT);
+  pinMode(PinBallAtBottom, INPUT);
 }
 
 void readPins()
 {
   // This should be responsibility of Input module
-  joyAUp = digitalRead(SensorJoyAUp) == HIGH;
-  joyADown = digitalRead(SensorJoyADown) == HIGH;
+  joyAUp = digitalRead(PinJoyAUp) == HIGH;
+  joyADown = digitalRead(PinJoyADown) == HIGH;
+  bool joyBUp = digitalRead(PinJoyBUp) == HIGH;
+  bool joyBDown = digitalRead(PinJoyBDown) == HIGH;
+  bool ballAtTarget = digitalRead(PinBallAtTarget) == HIGH;
+  bool ballAtBottom = digitalRead(PinBallAtBottom) == HIGH;
 
   Serial.print("[");
   Serial.print(turn);
@@ -39,5 +44,9 @@ void readPins()
   Serial.print(" pins:");
   Serial.print(joyAUp);
   Serial.print(joyADown);
+  Serial.print(joyBUp);
+  Serial.print(joyBDown);
+  Serial.print(ballAtTarget);
+  Serial.print(ballAtBottom);
   Serial.println(".");
 }

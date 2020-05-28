@@ -2,19 +2,14 @@
 #include "motor.h"
 #include "../pins.h"
 
-#define AIN1 1
-#define AIN2 2
-#define PWMA 3
-#define STBY 0
-
 void Motor::Setup()
 {
-    pinMode(AIN1, OUTPUT);
-    pinMode(AIN2, OUTPUT);
-    pinMode(PWMA, OUTPUT);
-    pinMode(STBY, OUTPUT);
+    pinMode(PinMotorAIn1, OUTPUT);
+    pinMode(PinMotorAIn2, OUTPUT);
+    pinMode(PinMotorPWMA, OUTPUT);
+    pinMode(PinMotorSTBY, OUTPUT);
 
-    digitalWrite(STBY, HIGH);
+    digitalWrite(PinMotorSTBY, HIGH);
 }
 
 void Motor::Read()
@@ -24,21 +19,21 @@ void Motor::Read()
 
 void Motor::Brake()
 {
-    digitalWrite(AIN1, HIGH);
-    digitalWrite(AIN2, HIGH);
+    digitalWrite(PinMotorAIn1, HIGH);
+    digitalWrite(PinMotorAIn2, HIGH);
 }
 
 void Motor::Move(bool up, int speed)
 {
     if (up)
     {
-        digitalWrite(AIN1, HIGH);
-        digitalWrite(AIN2, LOW);  
+        digitalWrite(PinMotorAIn1, HIGH);
+        digitalWrite(PinMotorAIn2, LOW);  
     }
     else
     {
-        digitalWrite(AIN1, LOW);
-        digitalWrite(AIN2, HIGH);
+        digitalWrite(PinMotorAIn1, LOW);
+        digitalWrite(PinMotorAIn2, HIGH);
     }
-    analogWrite(PWMA, speed);
+    analogWrite(PinMotorPWMA, speed);
 }

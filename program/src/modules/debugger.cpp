@@ -1,12 +1,11 @@
 #include "Arduino.h"
 #include "debugger.h"
 #include "../module.h"
-
-#define LED 13
+#include "../pins.h"
 
 void Debugger::Setup() {
-    pinMode(LED, OUTPUT);
-    digitalWrite(LED, HIGH);
+    pinMode(PinDebugLed, OUTPUT);
+    digitalWrite(PinDebugLed, HIGH);
 }
 
 void Debugger::Read() {
@@ -24,5 +23,5 @@ void Debugger::ShowCode(int code, int turn)
     // Whether LED should be lit during the ith element of the sequence
     int lit = (code >> i) & 1;
     
-    digitalWrite(LED, lit);
+    digitalWrite(PinDebugLed, lit);
 }

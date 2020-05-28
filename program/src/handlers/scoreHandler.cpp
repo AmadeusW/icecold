@@ -10,7 +10,7 @@
 
 void ScoreHandler::Setup(Composition* composition)
 {
-    this->ballServo.attach(PinServo);
+    //this->ballServo.attach(PinServo); TODO: set it up
     this->_motor = composition->GetMotor();
     this->_debugger = composition->GetDebugger();
     this->_display = composition->GetDisplay();

@@ -36,10 +36,10 @@ void readSensors()
    isAngleCritical = digitalRead(SensorAngle);
    isBallLost = digitalRead(SensorLost);
    isPointScored = digitalRead(SensorBallDown);
-   joyAUp = digitalRead(SensorJoyAUp);
-   joyADown = digitalRead(SensorJoyADown);
-   joyBUp = digitalRead(SensorJoyBUp);
-   joyBDown = digitalRead(SensorJoyBDown);
+   joyAUp = digitalRead(PinJoyAUp);
+   joyADown = digitalRead(PinJoyADown);
+   joyBUp = digitalRead(PinJoyBUp);
+   joyBDown = digitalRead(PinJoyBDown);
 }
 
 void updateState()

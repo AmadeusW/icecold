@@ -2,10 +2,6 @@
 #include "display.h"
 #include "../pins.h"
 
-#define PinSerialClock 8
-#define PinSerialLatch 9
-#define PinSerialData 12
-
 void Display::Setup()
 {
     pinMode(PinSerialClock, OUTPUT);

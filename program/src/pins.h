@@ -3,17 +3,24 @@
 
 #include "Arduino.h"
 
-#define SensorJoyAUp 4 // green
-#define SensorJoyADown 5 // yellow
-#define SensorJoyBUp 6 // blue
-#define SensorJoyBDown 7 // yellow
-#define OutputSerialClock 8 // orange
-#define OutputSerialLatch 9 // orange
-#define SensorBallAtTarget 10 // white
-#define SensorBallAtBottom 11 // red
-#define OutputSerialData 12 // green
-
-#define PinServo 6
+#define PinMotorAIn1 1
+#define PinMotorAIn2 1
+#define PinMotorPWMA 1
+#define PinMotorSTBY 0
+#define PinJoyAUp 4 // green
+#define PinJoyADown 5 // yellow
+#define PinJoyBUp 6 // blue
+#define PinJoyBDown 7 // yellow
+#define PinSerialClock 8 // orange
+#define PinSerialLatch 9 // orange
+#define PinBallAtTarget 10 // white
+#define PinBallAtBottom 11 // red
+#define PinSerialData 12 // green
+#define PinDebugLed 13
+// Future:
+// #define PinServo X
+// #define PinI2CData X
+// #define PinI2CClock X
 
 extern bool joyAUp;
 extern bool joyADown;
