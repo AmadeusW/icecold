@@ -85,18 +85,19 @@ void Display::Write()
     healthArray[9] = 0x1FF;
     healthArray[10] = 0x3FF;
 
+    // Note: temporarily I'm using only 4 LEDs
     long targetArray[11];
     targetArray[0] = 0x000; // 0000
     targetArray[1] = 0x001; // 0001
     targetArray[2] = 0x002; // 0010
     targetArray[3] = 0x004; // 0100
     targetArray[4] = 0x008; // 1000
-    targetArray[5] = 0x010;
-    targetArray[6] = 0x020;
-    targetArray[7] = 0x040;
-    targetArray[8] = 0x080;
-    targetArray[9] = 0x100;
-    targetArray[10] = 0x200;
+    targetArray[5] = 0x001;
+    targetArray[6] = 0x002;
+    targetArray[7] = 0x004;
+    targetArray[8] = 0x008;
+    targetArray[9] = 0x001;
+    targetArray[10] = 0x002;
 
     long healthCode = healthArray[this->health];
     long levelCode = levelArray[this->level];
@@ -110,7 +111,7 @@ void Display::Write()
     byte transmission1 = healthCode & 0xFF;
     byte transmission2 = ((healthCode >> 8) & 0x03) | ((levelCode << 2) & 0xFC);
     byte transmission3 = ((levelCode >> 6) & 0x0F) | ((targetCode << 4) & 0xF0);
-    byte transmission4 = 0 | ((targetCode << 6) & 0x3F);
+    byte transmission4 = ((targetCode >> 4) & 0x3F) | ((0xFF << 6) & 0xC0);
 
     digitalWrite(PinSerialLatch, 0); // Clear
     shiftOut(PinSerialData, PinSerialClock, MSBFIRST, transmission1);
@@ -119,7 +120,13 @@ void Display::Write()
     shiftOut(PinSerialData, PinSerialClock, MSBFIRST, transmission4);
     digitalWrite(PinSerialLatch, 1); // Latch
 
-    Serial.print(" serial:");
+    Serial.print(" target raw ");
+    Serial.print(targetCode);
+    Serial.print(" shifted ");
+    Serial.print(targetCode << 4);
+    Serial.print(" masked ");
+    Serial.print((targetCode << 4) & 0xF0);
+    Serial.print(" . serial:");
     Serial.print(transmission1);
     Serial.print(" ");
     Serial.print(transmission2);

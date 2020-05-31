@@ -16,7 +16,7 @@ void ScoreHandler::Setup(Composition* composition)
     this->_display = composition->GetDisplay();
 
     this->health = 10;
-    this->level = 10;
+    this->level = 1;
 
     this->_display->SetHealth(this->health);
     this->_display->SetLevel(this->level);
@@ -72,9 +72,11 @@ State ScoreHandler::SetState(State state, int turn)
 void ScoreHandler::IncreaseLevel()
 {
     this->level++;
+    // Note: temporarily, reset level to 1.
+    // In the future, we will enter a victory stage and then reset game back to level 1
     if (this->level > 10)
     {
-        this->level = 0;
+        this->level = 1;
     }
     this->_display->SetLevel(this->level);
 }
