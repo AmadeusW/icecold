@@ -17,10 +17,10 @@
 #define PinBallAtBottom 11 // red
 #define PinSerialData 12 // green
 #define PinDebugLed 13
+#define PinI2CData 18 // White
+#define PinI2CClock 19 // Orange
 // Future:
 // #define PinServo X
-// #define PinI2CData X
-// #define PinI2CClock X
 
 extern bool joyAUp;
 extern bool joyADown;

@@ -13,6 +13,7 @@ class Debugger;
 class Motor;
 class ScoreSensor;
 class Display;
+class Digits;
 
 class Composition {
         // Access handler by state
@@ -25,6 +26,7 @@ class Composition {
         Motor* _motor;
         ScoreSensor* _scoreSensor;
         Display* _display;
+        Digits* _digits;
     public:
         void Compose();
         void Setup();
@@ -34,6 +36,7 @@ class Composition {
         Motor* GetMotor();
         ScoreSensor* GetScoreSensor();
         Display* GetDisplay();
+        Digits* GetDigits();
 };
 
 #endif

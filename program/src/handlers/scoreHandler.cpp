@@ -4,6 +4,7 @@
 #include "../modules/motor.h"
 #include "../modules/debugger.h"
 #include "../modules/display.h"
+#include "../modules/digits.h"
 #include "../composition.h"
 #include "../Handler.h"
 #include "../pins.h"
@@ -14,12 +15,14 @@ void ScoreHandler::Setup(Composition* composition)
     this->_motor = composition->GetMotor();
     this->_debugger = composition->GetDebugger();
     this->_display = composition->GetDisplay();
+    this->_digits = composition->GetDigits();
 
     this->health = 10;
     this->level = 1;
 
     this->_display->SetHealth(this->health);
     this->_display->SetLevel(this->level);
+    this->_digits->SetValue(0);
 }
 
 void ScoreHandler::Act(State state, int turn)
@@ -28,11 +31,13 @@ void ScoreHandler::Act(State state, int turn)
         case scored:
             this->_debugger->ShowCode(0xf4, turn);
             this->_display->Write();
+            this->_digits->Write();
             //this->ballServo.write((unfreezeTurn - turn) * 8);
             return;
         case lost: // just for testing
             this->_debugger->ShowCode(0xfe, turn);
             this->_display->Write();
+            this->_digits->Write();
             return;
         default:
             return;
@@ -79,6 +84,7 @@ void ScoreHandler::IncreaseLevel()
         this->level = 1;
     }
     this->_display->SetLevel(this->level);
+    this->_digits->SetValue(this->level);
 }
 
 void ScoreHandler::DecreaseHealth()
@@ -89,4 +95,5 @@ void ScoreHandler::DecreaseHealth()
         this->health = 10;
     }
     this->_display->SetHealth(this->health);
+    this->_digits->SetValue(this->health);
 }

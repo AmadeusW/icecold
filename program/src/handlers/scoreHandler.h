@@ -9,12 +9,14 @@ class Motor;
 class Servo;
 class Debugger;
 class Display;
+class Digits;
 
 class ScoreHandler: public Handler {
     Servo ballServo; // TODO: get it from the composition
     Motor* _motor;
     Debugger* _debugger;
     Display* _display;
+    Digits* _digits;
     int _enteredTurn = -1;
     State _enteredState = idle;
     int health = 10;

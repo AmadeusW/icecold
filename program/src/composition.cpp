@@ -6,6 +6,7 @@
 #include "modules/display.h"
 #include "modules/motor.h"
 #include "modules/scoresensor.h"
+#include "modules/digits.h"
 
 void Composition::Compose()
 {
@@ -14,6 +15,7 @@ void Composition::Compose()
     this->_motor = new Motor();
     this->_scoreSensor = new ScoreSensor();
     this->_display = new Display();
+    this->_digits = new Digits();
 
     // Create handlers
     this->_defaultHandler = new DefaultHandler();
@@ -35,6 +37,7 @@ void Composition::Setup()
     this->_display->Setup();
     this->_motor->Setup();
     this->_scoreSensor->Setup();
+    this->_digits->Setup();
 
     // Setup handlers
     this->_defaultHandler->Setup(this);
@@ -72,4 +75,9 @@ Motor* Composition::GetMotor()
 ScoreSensor* Composition::GetScoreSensor()
 {
     return this->_scoreSensor;
+}
+
+Digits* Composition::GetDigits()
+{
+    return this->_digits;
 }

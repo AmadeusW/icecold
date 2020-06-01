@@ -6,6 +6,7 @@
 #include "../modules/display.h"
 #include "../modules/motor.h"
 #include "../modules/scoresensor.h"
+#include "../modules/digits.h"
 
 void DefaultHandler::Setup(Composition* composition)
 {
@@ -13,6 +14,7 @@ void DefaultHandler::Setup(Composition* composition)
     this->debugger = composition->GetDebugger();
     this->scoreSensor = composition->GetScoreSensor();
     this->display = composition->GetDisplay();
+    this->digits = composition->GetDigits();
 }
 
 void DefaultHandler::Act(State state, int turn)
@@ -23,22 +25,26 @@ void DefaultHandler::Act(State state, int turn)
             this->debugger->ShowCode(0x0b, turn);
             this->scoreSensor->SetTarget(false); // just for tests
             this->display->Write();
+            this->digits->Write();
             return;
         case moveDown:
             this->motor->Move(false, 255);
             this->debugger->ShowCode(0x0d, turn);
             this->scoreSensor->SetTarget(true); // just for tests
             this->display->Write();
+            this->digits->Write();
             return;
         case idle:
             this->motor->Brake();
             this->debugger->ShowCode(0x00, turn);
             this->display->Write();
+            this->digits->Write();
             return;
         case errorInvalidInput:
             this->motor->Brake();
             this->debugger->ShowCode(0x33, turn);
             this->display->Write();
+            this->digits->Write();
             return;
         default:
             return;
@@ -47,6 +53,7 @@ void DefaultHandler::Act(State state, int turn)
 
 State DefaultHandler::SetState(State state, int turn)
 {
+    this->digits->SetValue(turn);
     // TODO: take ownership of joyAUp, etc.
     if (this->scoreSensor->IsLosing())
     {
