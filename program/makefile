@@ -7,7 +7,7 @@
 # Optimize           Faster
 # Keyboard Layout    US English
 #
-# 2/16/2020 7:20 PM
+# 6/1/2020 12:14 AM
 #******************************************************************************
 SHELL            := cmd.exe
 export SHELL
@@ -21,7 +21,7 @@ LIBS_SHARED_BASE := C:\Users\ama\Documents\Arduino\libraries
 LIBS_SHARED      := 
 
 LIBS_LOCAL_BASE  := lib
-LIBS_LOCAL       := Servo 
+LIBS_LOCAL       := Servo Adafruit_GFX Adafruit_LED_Backpack_Library Adafruit_BusIO SPI Wire 
 
 CORE_BASE        := C:\PROGRA~2\Arduino\hardware\teensy\avr\cores\teensy3
 GCC_BASE         := C:\PROGRA~2\Arduino\hardware\tools\arm\bin
@@ -39,14 +39,13 @@ FLAGS_CPP   := -fno-exceptions -fpermissive -felide-constructors -std=gnu++14 -W
 FLAGS_C     := 
 FLAGS_S     := -x assembler-with-cpp
 FLAGS_LD    := -Wl,--print-memory-usage,--gc-sections,--relax,--defsym=__rtc_localtime=$(shell powershell [int](Get-Date -UFormat +%s)[0]) -T$(CORE_BASE)/mk20dx128.ld -lstdc++
-FLAGS_DEV   := -Wno-unused-variable
 
 LIBS        := -larm_cortexM4l_math -lm
 
 DEFINES     := -D__MK20DX128__ -DTEENSYDUINO=148 -DARDUINO_TEENSY30 -DARDUINO=10807
 DEFINES     += -DF_CPU=48000000 -DUSB_SERIAL -DLAYOUT_US_ENGLISH
 
-CPP_FLAGS   := $(FLAGS_CPU) $(FLAGS_OPT) $(FLAGS_COM) $(DEFINES) $(FLAGS_CPP) $(FLAGS_DEV)
+CPP_FLAGS   := $(FLAGS_CPU) $(FLAGS_OPT) $(FLAGS_COM) $(DEFINES) $(FLAGS_CPP)
 C_FLAGS     := $(FLAGS_CPU) $(FLAGS_OPT) $(FLAGS_COM) $(DEFINES) $(FLAGS_C)
 S_FLAGS     := $(FLAGS_CPU) $(FLAGS_OPT) $(FLAGS_COM) $(DEFINES) $(FLAGS_S)
 LD_FLAGS    := $(FLAGS_CPU) $(FLAGS_OPT) $(FLAGS_LSP) $(FLAGS_LD)
