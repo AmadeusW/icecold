@@ -14,6 +14,7 @@ class Motor;
 class ScoreSensor;
 class Display;
 class Digits;
+class Range;
 
 class Composition {
         // Access handler by state
@@ -27,6 +28,7 @@ class Composition {
         ScoreSensor* _scoreSensor;
         Display* _display;
         Digits* _digits;
+        Range* _range;
     public:
         void Compose();
         void Setup();
@@ -37,6 +39,7 @@ class Composition {
         ScoreSensor* GetScoreSensor();
         Display* GetDisplay();
         Digits* GetDigits();
+        Range* GetRange();
 };
 
 #endif

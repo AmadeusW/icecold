@@ -17,6 +17,7 @@
 #define PinBallAtBottom 11 // red
 #define PinSerialData 12 // green
 #define PinDebugLed 13
+#define PinRange1Enable 17 // Yellow
 #define PinI2CData 18 // White
 #define PinI2CClock 19 // Orange
 // Future:

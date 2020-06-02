@@ -7,6 +7,7 @@
 #include "modules/motor.h"
 #include "modules/scoresensor.h"
 #include "modules/digits.h"
+#include "modules/range.h"
 
 void Composition::Compose()
 {
@@ -16,6 +17,7 @@ void Composition::Compose()
     this->_scoreSensor = new ScoreSensor();
     this->_display = new Display();
     this->_digits = new Digits();
+    this->_range = new Range();
 
     // Create handlers
     this->_defaultHandler = new DefaultHandler();
@@ -34,6 +36,7 @@ void Composition::Setup()
 {
     // Setup modules
     this->_debugger->Setup();
+    this->_range->Setup();
     this->_display->Setup();
     this->_motor->Setup();
     this->_scoreSensor->Setup();
@@ -50,6 +53,8 @@ void Composition::ReadPins()
     this->_display->Read();
     this->_motor->Read();
     this->_scoreSensor->Read();
+    this->_digits->Read();
+    this->_range->Read();
 }
 
 Handler* Composition::GetHandler(State state)
@@ -80,4 +85,9 @@ ScoreSensor* Composition::GetScoreSensor()
 Digits* Composition::GetDigits()
 {
     return this->_digits;
+}
+
+Range* Composition::GetRange()
+{
+    return this->_range;
 }

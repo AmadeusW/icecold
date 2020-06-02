@@ -7,7 +7,7 @@
 # Optimize           Faster
 # Keyboard Layout    US English
 #
-# 6/1/2020 12:14 AM
+# 6/1/2020 7:45 PM
 #******************************************************************************
 SHELL            := cmd.exe
 export SHELL
@@ -21,7 +21,7 @@ LIBS_SHARED_BASE := C:\Users\ama\Documents\Arduino\libraries
 LIBS_SHARED      := 
 
 LIBS_LOCAL_BASE  := lib
-LIBS_LOCAL       := Servo Adafruit_GFX Adafruit_LED_Backpack_Library Adafruit_BusIO SPI Wire 
+LIBS_LOCAL       := Servo Adafruit_GFX Adafruit_LED_Backpack_Library Adafruit_BusIO SPI Wire VL53L0X 
 
 CORE_BASE        := C:\PROGRA~2\Arduino\hardware\teensy\avr\cores\teensy3
 GCC_BASE         := C:\PROGRA~2\Arduino\hardware\tools\arm\bin
