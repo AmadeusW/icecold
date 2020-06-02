@@ -5,14 +5,15 @@
 #include "digits.h"
 #include "../pins.h"
 
-Adafruit_7segment matrix = Adafruit_7segment();
-
 void Digits::Setup()
 {
     pinMode(PinI2CClock, OUTPUT);
     pinMode(PinI2CData, OUTPUT);
-    matrix.begin(0x70);
+    this->matrix = new Adafruit_7segment();
+    this->matrix->begin(0x70);
     this->Write();
+
+    Serial.println("Setup complete: Digits");
 }
 
 void Digits::Read()
@@ -27,6 +28,6 @@ void Digits::SetValue(int value)
 
 void Digits::Write()
 {
-    matrix.print(this->value);
-    matrix.writeDisplay();
+    this->matrix->print(this->value);
+    this->matrix->writeDisplay();
 }

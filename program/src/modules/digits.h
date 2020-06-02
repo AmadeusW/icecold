@@ -3,7 +3,10 @@
 
 #include "../module.h"
 
+class Adafruit_7segment;
+
 class Digits : public Module {
+    Adafruit_7segment* matrix;
     int value;
     public:
         virtual void Setup();
