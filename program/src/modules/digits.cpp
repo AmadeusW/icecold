@@ -11,6 +11,8 @@ void Digits::Setup()
     pinMode(PinI2CData, OUTPUT);
     this->matrix = new Adafruit_7segment();
     this->matrix->begin(0x70);
+
+    this->SetValue(0);
     this->Write();
 
     Serial.println("Setup complete: Digits");

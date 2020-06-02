@@ -36,11 +36,11 @@ void Composition::Setup()
 {
     // Setup modules
     this->_debugger->Setup();
-    this->_range->Setup();
     this->_display->Setup();
     this->_motor->Setup();
     this->_scoreSensor->Setup();
     this->_digits->Setup();
+    this->_range->Setup();
 
     // Setup handlers
     this->_defaultHandler->Setup(this);
