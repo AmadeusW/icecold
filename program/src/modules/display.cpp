@@ -9,6 +9,8 @@ void Display::Setup()
     pinMode(PinSerialData, OUTPUT);
     this->Test();
     this->Write();
+
+    Serial.println("Setup complete: Display");
 }
 
 void Display::Read()
@@ -119,7 +121,7 @@ void Display::Write()
     shiftOut(PinSerialData, PinSerialClock, MSBFIRST, transmission3);
     shiftOut(PinSerialData, PinSerialClock, MSBFIRST, transmission4);
     digitalWrite(PinSerialLatch, 1); // Latch
-
+/*
     Serial.print(" target raw ");
     Serial.print(targetCode);
     Serial.print(" shifted ");
@@ -135,4 +137,5 @@ void Display::Write()
     Serial.print(" ");
     Serial.print(transmission4);
     Serial.println(".");
+*/
 }

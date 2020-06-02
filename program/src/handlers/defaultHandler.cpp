@@ -7,6 +7,7 @@
 #include "../modules/motor.h"
 #include "../modules/scoresensor.h"
 #include "../modules/digits.h"
+#include "../modules/range.h"
 
 void DefaultHandler::Setup(Composition* composition)
 {
@@ -15,6 +16,9 @@ void DefaultHandler::Setup(Composition* composition)
     this->scoreSensor = composition->GetScoreSensor();
     this->display = composition->GetDisplay();
     this->digits = composition->GetDigits();
+    this->range = composition->GetRange();
+
+    Serial.println("Setup complete: DefaultHandler");
 }
 
 void DefaultHandler::Act(State state, int turn)
@@ -53,7 +57,6 @@ void DefaultHandler::Act(State state, int turn)
 
 State DefaultHandler::SetState(State state, int turn)
 {
-    this->digits->SetValue(turn);
     // TODO: take ownership of joyAUp, etc.
     if (this->scoreSensor->IsLosing())
     {
@@ -65,21 +68,29 @@ State DefaultHandler::SetState(State state, int turn)
     }
     else if (joyAUp && joyADown)
     {
+        this->digits->SetValue(0);
         //Serial.printf("DefaultHandler sets INVALID state at turn %d \n", turn);
         return errorInvalidInput;
     }
     else if (joyAUp)
     {
-        //Serial.printf("DefaultHandler sets UP state at turn %d \n", turn);
+        this->range->Read();
+        int range = this->range->GetValue();
+        this->digits->SetValue(range);
+        Serial.printf("UP %d \n", range);
         return moveUp;
     }
     else if (joyADown)
     {
-        //Serial.printf("DefaultHandler sets DOWN state at turn %d \n", turn);
+        this->range->Read();
+        int range = this->range->GetValue();
+        this->digits->SetValue(range);
+        Serial.printf("DOWN %d \n", range);
         return moveDown;
     }
     else
     {
+        this->digits->SetValue(turn);
         //Serial.printf("DefaultHandler sets IDLE state at turn %d \n", turn);
         return idle;
     }

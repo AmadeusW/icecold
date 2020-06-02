@@ -7,6 +7,8 @@ void ScoreSensor::Setup()
     pinMode(PinBallAtBottom, INPUT);
     pinMode(PinBallAtTarget, INPUT);
     this->SetTarget(false);
+
+    Serial.println("Setup complete: ScoreSensor");
 }
 
 void ScoreSensor::Read()

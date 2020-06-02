@@ -9,6 +9,7 @@ class Motor;
 class ScoreSensor;
 class Display;
 class Digits;
+class Range;
 
 class DefaultHandler: public Handler {
     Motor* motor;
@@ -16,6 +17,7 @@ class DefaultHandler: public Handler {
     ScoreSensor* scoreSensor;
     Display* display;
     Digits* digits;
+    Range* range;
     public:
         virtual void Setup(Composition* composition);
         virtual State SetState(State state, int turn);

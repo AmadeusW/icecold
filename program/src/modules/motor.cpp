@@ -10,6 +10,8 @@ void Motor::Setup()
     pinMode(PinMotorSTBY, OUTPUT);
 
     digitalWrite(PinMotorSTBY, HIGH);
+
+    Serial.println("Setup complete: Motor");
 }
 
 void Motor::Read()

@@ -6,6 +6,8 @@
 void Debugger::Setup() {
     pinMode(PinDebugLed, OUTPUT);
     digitalWrite(PinDebugLed, HIGH);
+
+    Serial.println("Setup complete: Debug LED");
 }
 
 void Debugger::Read() {

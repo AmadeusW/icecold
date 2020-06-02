@@ -23,6 +23,8 @@ void ScoreHandler::Setup(Composition* composition)
     this->_display->SetHealth(this->health);
     this->_display->SetLevel(this->level);
     this->_digits->SetValue(0);
+
+    Serial.println("Setup complete: ScoreHandler");
 }
 
 void ScoreHandler::Act(State state, int turn)
