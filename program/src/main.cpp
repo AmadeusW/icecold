@@ -11,8 +11,9 @@ Composition composition;
 
 void setup()
 {
-  Serial.begin(9600); // set up debugging
-  Serial.print("Hello World");
+  Serial.begin(115200); // set up debugging
+  while (! Serial) { delay(1); }
+  Serial.println("Hello World!");
 
   Serial.println("Setting up pins...");
   setupPins(); // Pins are set up and read separately
