@@ -75,7 +75,7 @@ State DefaultHandler::SetState(State state, int turn)
     else if (joyAUp)
     {
         this->range->Read();
-        int range = this->range->GetValue();
+        int range = this->range->GetValue(0);
         this->digits->SetValue(range);
         Serial.printf("UP %d \n", range);
         return moveUp;
@@ -83,7 +83,7 @@ State DefaultHandler::SetState(State state, int turn)
     else if (joyADown)
     {
         this->range->Read();
-        int range = this->range->GetValue();
+        int range = this->range->GetValue(1);
         this->digits->SetValue(range);
         Serial.printf("DOWN %d \n", range);
         return moveDown;
