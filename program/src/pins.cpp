@@ -27,9 +27,9 @@ void readPins()
   bool ballAtTarget = digitalRead(PinBallAtTarget) == HIGH;
   bool ballAtBottom = digitalRead(PinBallAtBottom) == HIGH;
 
-  Serial.print("[");
-  Serial.print(turn);
-  Serial.print("] ");
+  // End previous message:
+  Serial.println(".");
+  Serial.printf("[%d]", turn);
   switch (state) {
     case uninitialized:     Serial.print("LOADIN"); break;
     case idle:              Serial.print(" idle "); break;
@@ -48,5 +48,4 @@ void readPins()
   Serial.print(joyBDown);
   Serial.print(ballAtTarget);
   Serial.print(ballAtBottom);
-  Serial.println(".");
 }
