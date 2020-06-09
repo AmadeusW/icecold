@@ -38,7 +38,7 @@ void Range::Setup()
     digitalWrite(PinRange0Enable, 0);
     digitalWrite(PinRange1Enable, 0);
     delay(10);
-    pinMode(PinRange1Enable, INPUT);
+    pinMode(PinRange0Enable, INPUT);
     pinMode(PinRange1Enable, INPUT);
     delay(10);
     pinMode(PinRange0Enable, OUTPUT);
@@ -72,7 +72,7 @@ void Range::Setup()
     pinMode(PinRange1Enable, INPUT);
     delay(10);
     // Device 1 should be now enabled. Change its address from default 0x29
-    lox1.setAddress(0x30);
+    lox1.setAddress(0x31);
     if (lox1.init())
     {
         lox1.setTimeout(100);
