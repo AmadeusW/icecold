@@ -29,7 +29,8 @@ void setup()
     delay(1000);
     Wire.begin();
 
-    pinMode(PinRange1Enable, INPUT);
+    // WARNING: This pin is not 5V tolerant. Set pin to input so that the device pulls its pin up to 2.8V
+    pinMode(PinRange0Enable, INPUT);
     pinMode(PinRange1Enable, INPUT);
     delay(10);
     pinMode(PinRange0Enable, OUTPUT);
@@ -39,8 +40,7 @@ void setup()
     delay(10);
 
     // Enable sensor 0 and set it up
-    // WARNING: This pin is not 5V tolerant. 
-    // Set pin to input so that the device pulls its pin up to 2.8V
+    // WARNING: This pin is not 5V tolerant. Set pin to input so that the device pulls its pin up to 2.8V
     pinMode(PinRange0Enable, INPUT);
     delay(10);
     // Device 0 should be now enabled. Change its address from default 0x29
