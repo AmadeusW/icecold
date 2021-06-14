@@ -1,32 +1,29 @@
 #include "Arduino.h"
-#include "scoresensor.h"
+#include "ballsensor.h"
 #include "../pins.h"
 
-void ScoreSensor::Setup()
+void BallSensor::Setup()
 {
     pinMode(PinBallAtBottom, INPUT);
     pinMode(PinBallAtTarget, INPUT);
 
-    Serial.println("Setup complete: ScoreSensor");
+    Serial.println("Setup complete: BallSensor");
 }
 
-void ScoreSensor::Input()
+void BallSensor::Input()
 {
     this->isBallDown = digitalRead(PinBallAtBottom) == HIGH;
     this->isBallOnTarget = digitalRead(PinBallAtTarget) == HIGH;
     // TODO: Record that ball was on target
     // next time the ball is down, we will score (instead of losing) and reset whether ball was on target
-
-    // TODO: Set state
 }
 
-bool ScoreSensor::IsScoring()
+bool BallSensor::IsDown()
+{
+    return this->isBallDown;
+}
+
+bool BallSensor::IsOnTarget()
 {
     return this->isBallOnTarget;
-}
-
-bool ScoreSensor::IsLosing()
-{
-    // TODO: this is more nuanced. We are losing only if ball is down and we have not scored
-    return this->isBallDown;
 }

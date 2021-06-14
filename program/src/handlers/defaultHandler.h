@@ -6,18 +6,20 @@
 class Composition;
 class Debugger;
 class Motor;
-class ScoreSensor;
+class BallSensor;
 class Display;
 class Digits;
 class Range;
+class Joystick;
 
 class DefaultHandler: public Handler {
     Motor* motor;
     Debugger* debugger;
-    ScoreSensor* scoreSensor;
+    BallSensor* ballSensor;
     Display* display;
     Digits* digits;
     Range* range;
+    Joystick* joystick;
     public:
         virtual void Setup(Composition* composition);
         virtual State SetState(State state, int turn);

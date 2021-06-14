@@ -4,8 +4,9 @@
 #include "handlers/scoreHandler.h"
 #include "modules/debugger.h"
 #include "modules/display.h"
+#include "modules/joystick.h"
 #include "modules/motor.h"
-#include "modules/scoresensor.h"
+#include "modules/ballsensor.h"
 #include "modules/digits.h"
 #include "modules/range.h"
 
@@ -14,10 +15,11 @@ void Composition::Compose()
     // Create modules
     this->_debugger = new Debugger();
     this->_motor = new Motor();
-    this->_scoreSensor = new ScoreSensor();
+    this->_ballSensor = new BallSensor();
     this->_display = new Display();
     this->_digits = new Digits();
     this->_range = new Range();
+    this->_joystick = new Joystick();
 
     // Create handlers
     this->_defaultHandler = new DefaultHandler();
@@ -38,9 +40,10 @@ void Composition::Setup()
     this->_debugger->Setup();
     this->_display->Setup();
     this->_motor->Setup();
-    this->_scoreSensor->Setup();
+    this->_ballSensor->Setup();
     this->_digits->Setup();
     this->_range->Setup();
+    this->_joystick->Setup();
 
     // Setup handlers
     this->_defaultHandler->Setup(this);
@@ -49,8 +52,9 @@ void Composition::Setup()
 
 void Composition::Input()
 {
-    this->_scoreSensor->Input();
+    this->_ballSensor->Input();
     this->_range->Input();
+    this->_joystick->Input();
 }
 
 void Composition::Output(int tick)
@@ -81,9 +85,9 @@ Motor* Composition::GetMotor()
     return this->_motor;
 }
 
-ScoreSensor* Composition::GetScoreSensor()
+BallSensor* Composition::GetBallSensor()
 {
-    return this->_scoreSensor;
+    return this->_ballSensor;
 }
 
 Digits* Composition::GetDigits()
@@ -94,4 +98,9 @@ Digits* Composition::GetDigits()
 Range* Composition::GetRange()
 {
     return this->_range;
+}
+
+Joystick* Composition::GetJoystick()
+{
+    return this->_joystick;
 }

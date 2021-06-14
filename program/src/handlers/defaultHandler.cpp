@@ -4,8 +4,9 @@
 #include "../composition.h"
 #include "../modules/debugger.h"
 #include "../modules/display.h"
+#include "modules/joystick.h"
 #include "../modules/motor.h"
-#include "../modules/scoresensor.h"
+#include "../modules/ballsensor.h"
 #include "../modules/digits.h"
 #include "../modules/range.h"
 
@@ -13,10 +14,11 @@ void DefaultHandler::Setup(Composition* composition)
 {
     this->motor = composition->GetMotor();
     this->debugger = composition->GetDebugger();
-    this->scoreSensor = composition->GetScoreSensor();
+    this->ballSensor = composition->GetBallSensor();
     this->display = composition->GetDisplay();
     this->digits = composition->GetDigits();
     this->range = composition->GetRange();
+    this->joystick = composition->GetJoystick();
 
     Serial.println("Setup complete: DefaultHandler");
 }
@@ -57,22 +59,15 @@ void DefaultHandler::Act(State state, int turn)
 
 State DefaultHandler::SetState(State state, int turn)
 {
-    // TODO: take ownership of joyAUp, etc.
-    if (this->scoreSensor->IsLosing())
+    if (this->ballSensor->IsDown())
     {
         return lost;
     }
-    if (this->scoreSensor->IsScoring())
+    if (this->ballSensor->IsOnTarget())
     {
         return scored;
     }
-    else if (joyAUp && joyADown)
-    {
-        this->digits->SetValue(0);
-        //Serial.printf("DefaultHandler sets INVALID state at turn %d \n", turn);
-        return errorInvalidInput;
-    }
-    else if (joyAUp)
+    else if (this->joystick->GetLeftDirection() > 0)
     {
         this->range->Input();
         int range = this->range->GetValue(0);
@@ -80,7 +75,7 @@ State DefaultHandler::SetState(State state, int turn)
         Serial.printf("UP %d \n", range);
         return moveUp;
     }
-    else if (joyADown)
+    else if (this->joystick->GetLeftDirection() < 0)
     {
         this->range->Input();
         int range = this->range->GetValue(1);

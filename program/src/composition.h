@@ -11,10 +11,11 @@ class DefaultHandler;
 class ScoreHandler;
 class Debugger;
 class Motor;
-class ScoreSensor;
+class BallSensor;
 class Display;
 class Digits;
 class Range;
+class Joystick;
 
 class Composition {
         // Access handler by state
@@ -25,10 +26,11 @@ class Composition {
         // Access module directly
         Debugger* _debugger;
         Motor* _motor;
-        ScoreSensor* _scoreSensor;
+        BallSensor* _ballSensor;
         Display* _display;
         Digits* _digits;
         Range* _range;
+        Joystick* _joystick;
     public:
         void Compose();
         void Setup();
@@ -37,10 +39,11 @@ class Composition {
         Handler* GetHandler(State state);
         Debugger* GetDebugger();
         Motor* GetMotor();
-        ScoreSensor* GetScoreSensor();
+        BallSensor* GetBallSensor();
         Display* GetDisplay();
         Digits* GetDigits();
         Range* GetRange();
+        Joystick* GetJoystick();
 };
 
 #endif

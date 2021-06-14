@@ -15,8 +15,6 @@ void setup()
   while (! Serial) { delay(1); }
   Serial.println("Hello World!");
 
-  Serial.println("Setting up pins...");
-  setupPins(); // Pins are set up and read separately
   Serial.println("Composing modules...");
   composition.Compose(); // Compose modules and handlers
   Serial.println("Setting up modules...");
@@ -24,12 +22,6 @@ void setup()
   Serial.println("Setup complete.");
   delay(50);
   state = idle; // running
-}
-
-void mreadPins()
-{
-    readPins(); // Legacy readPins from pins.h
-    composition.Input();
 }
 
 void updateState()
@@ -46,8 +38,26 @@ void updateState()
     }
 }
 
+void printCurrentState()
+{
+    Serial.println(".");
+    Serial.printf("[%d]", turn);
+    switch (state) {
+        case uninitialized:     Serial.print("LOADIN"); break;
+        case idle:              Serial.print(" idle "); break;
+        case moveUp:            Serial.print(" up   "); break;
+        case moveDown:          Serial.print(" down "); break;
+        case errorInvalidInput: Serial.print("invald"); break;
+        case scored:            Serial.print("scored"); break;
+        case lost:              Serial.print(" lost "); break;
+        default:                Serial.print("ERROR "); break;
+    }
+}
+
 void act()
 {
+    printCurrentState();
+
     Handler* handler = composition.GetHandler(state);
     if (handler == 0)
     {
@@ -68,7 +78,7 @@ void finishTurn()
 
 void loop()
 {
-    mreadPins();
+    composition.Input();
     updateState();
     act();
     finishTurn();

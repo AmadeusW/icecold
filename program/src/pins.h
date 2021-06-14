@@ -27,10 +27,4 @@
 // Future:
 // #define PinServo X
 
-extern bool joyAUp;
-extern bool joyADown;
-
-void setupPins();
-void readPins();
-
 #endif
