@@ -32,7 +32,8 @@ class Composition {
     public:
         void Compose();
         void Setup();
-        void ReadPins();
+        void Input();
+        void Output(int tick);
         Handler* GetHandler(State state);
         Debugger* GetDebugger();
         Motor* GetMotor();

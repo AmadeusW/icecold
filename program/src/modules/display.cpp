@@ -8,14 +8,9 @@ void Display::Setup()
     pinMode(PinSerialLatch, OUTPUT);
     pinMode(PinSerialData, OUTPUT);
     this->Test();
-    this->Write();
+    this->Output(0);
 
     Serial.println("Setup complete: Display");
-}
-
-void Display::Read()
-{
-    // This module does not read any pins
 }
 
 void Display::SetLevel(int level)
@@ -59,7 +54,7 @@ void Display::Test()
     }
 }
 
-void Display::Write()
+void Display::Output(int tick)
 {
     long levelArray[11];
     levelArray[0] = 0x000; // 0000

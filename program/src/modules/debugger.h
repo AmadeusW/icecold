@@ -3,11 +3,12 @@
 
 #include "../module.h"
 
-class Debugger : public Module {
+class Debugger : public OutputModule {
+    int code;
     public:
         virtual void Setup();
-        virtual void Read();
-        void ShowCode(int code, int turn);
+        virtual void Output(int tick);
+        void SetCode(int code);
 };
 
 #endif

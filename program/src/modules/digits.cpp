@@ -13,14 +13,9 @@ void Digits::Setup()
     this->matrix->begin(0x70);
 
     this->SetValue(0);
-    this->Write();
+    this->Output(0);
 
     Serial.println("Setup complete: Digits");
-}
-
-void Digits::Read()
-{
-    // This module does not read any pins
 }
 
 void Digits::SetValue(int value)
@@ -28,7 +23,7 @@ void Digits::SetValue(int value)
     this->value = value;
 }
 
-void Digits::Write()
+void Digits::Output(int tick)
 {
     this->matrix->print(this->value);
     this->matrix->writeDisplay();

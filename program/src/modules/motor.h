@@ -3,12 +3,15 @@
 
 #include "../module.h"
 
-class Motor : public Module {
+class Motor : public OutputModule {
+    int speedLeft;
+    int speedRight;
     public:
         virtual void Setup();
-        virtual void Read();
+        virtual void Output(int tick);
         void Brake();
-        void Move(bool up, int speed);
+        void MoveLeft(bool up, int speed);
+        void MoveRight(bool up, int speed);
 };
 
 #endif

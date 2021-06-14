@@ -5,14 +5,13 @@
 
 class Adafruit_7segment;
 
-class Digits : public Module {
+class Digits : public OutputModule {
     Adafruit_7segment* matrix;
     int value;
     public:
         virtual void Setup();
-        virtual void Read();
+        virtual void Output(int tick);
         void SetValue(int value);
-        void Write();
 };
 
 #endif

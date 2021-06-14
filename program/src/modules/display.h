@@ -3,16 +3,15 @@
 
 #include "../module.h"
 
-class Display : public Module {
+class Display : public OutputModule {
     int level;
     int health;
     public:
         virtual void Setup();
-        virtual void Read();
+        virtual void Output(int tick);
         void SetLevel(int level);
         void SetHealth(int health);
         void Test();
-        void Write();
 };
 
 #endif

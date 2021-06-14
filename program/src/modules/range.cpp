@@ -90,7 +90,7 @@ void Range::Setup()
     Serial.printf("Information: Range0 at %x, Range1 at %x \n", a0, a1);
 }
 
-void Range::Read()
+void Range::Input()
 {
     if (this->initialized0)
     {

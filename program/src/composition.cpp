@@ -47,14 +47,18 @@ void Composition::Setup()
     this->_scoreHandler->Setup(this);
 }
 
-void Composition::ReadPins()
+void Composition::Input()
 {
-    this->_debugger->Read();
-    this->_display->Read();
-    this->_motor->Read();
-    this->_scoreSensor->Read();
-    this->_digits->Read();
-    this->_range->Read();
+    this->_scoreSensor->Input();
+    this->_range->Input();
+}
+
+void Composition::Output(int tick)
+{
+    this->_debugger->Output(tick);
+    this->_display->Output(tick);
+    this->_motor->Output(tick);
+    this->_digits->Output(tick);
 }
 
 Handler* Composition::GetHandler(State state)

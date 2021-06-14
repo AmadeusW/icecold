@@ -7,7 +7,16 @@
 class Module {
    public:
       virtual void Setup() = 0;
-      virtual void Read() = 0;
+};
+
+class InputModule : public Module {
+   public:
+      virtual void Input() = 0;
+};
+
+class OutputModule : public Module {
+   public:
+      virtual void Output(int tick) = 0;
 };
 
 #endif

@@ -3,13 +3,12 @@
 
 #include "../module.h"
 
-class ScoreSensor : public Module {
+class ScoreSensor : public InputModule {
     bool isBallOnTarget;
     bool isBallDown;
     public:
         virtual void Setup();
-        virtual void Read();
-        void SetTarget(bool enabled);
+        virtual void Input();
         bool IsScoring();
         bool IsLosing();
 };

@@ -6,6 +6,9 @@
 #define PinMotorAIn1 1
 #define PinMotorAIn2 1
 #define PinMotorPWMA 1
+#define PinMotorBIn1 1
+#define PinMotorBIn2 1
+#define PinMotorPWMB 1
 #define PinMotorSTBY 0
 #define PinJoyAUp 4 // green
 #define PinJoyADown 5 // yellow

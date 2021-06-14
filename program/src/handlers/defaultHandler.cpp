@@ -25,30 +25,30 @@ void DefaultHandler::Act(State state, int turn)
 {
     switch (state) {
         case moveUp:
-            this->motor->Move(true, 255);
-            this->debugger->ShowCode(0x0b, turn);
-            this->scoreSensor->SetTarget(false); // just for tests
-            this->display->Write();
-            this->digits->Write();
+            this->motor->MoveLeft(true, 255);
+            this->motor->MoveRight(true, 255);
+            this->debugger->SetCode(0x0b);
+            this->display->Output(turn);
+            this->digits->Output(turn);
             return;
         case moveDown:
-            this->motor->Move(false, 255);
-            this->debugger->ShowCode(0x0d, turn);
-            this->scoreSensor->SetTarget(true); // just for tests
-            this->display->Write();
-            this->digits->Write();
+            this->motor->MoveLeft(false, 255);
+            this->motor->MoveRight(false, 255);
+            this->debugger->SetCode(0x0d);
+            this->display->Output(turn);
+            this->digits->Output(turn);
             return;
         case idle:
             this->motor->Brake();
-            this->debugger->ShowCode(0x00, turn);
-            this->display->Write();
-            this->digits->Write();
+            this->debugger->SetCode(0x00);
+            this->display->Output(turn);
+            this->digits->Output(turn);
             return;
         case errorInvalidInput:
             this->motor->Brake();
-            this->debugger->ShowCode(0x33, turn);
-            this->display->Write();
-            this->digits->Write();
+            this->debugger->SetCode(0x33);
+            this->display->Output(turn);
+            this->digits->Output(turn);
             return;
         default:
             return;
@@ -74,7 +74,7 @@ State DefaultHandler::SetState(State state, int turn)
     }
     else if (joyAUp)
     {
-        this->range->Read();
+        this->range->Input();
         int range = this->range->GetValue(0);
         this->digits->SetValue(range);
         Serial.printf("UP %d \n", range);
@@ -82,7 +82,7 @@ State DefaultHandler::SetState(State state, int turn)
     }
     else if (joyADown)
     {
-        this->range->Read();
+        this->range->Input();
         int range = this->range->GetValue(1);
         this->digits->SetValue(range);
         Serial.printf("DOWN %d \n", range);

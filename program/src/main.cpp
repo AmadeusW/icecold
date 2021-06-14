@@ -29,7 +29,7 @@ void setup()
 void mreadPins()
 {
     readPins(); // Legacy readPins from pins.h
-    composition.ReadPins();
+    composition.Input();
 }
 
 void updateState()

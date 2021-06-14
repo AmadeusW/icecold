@@ -10,12 +10,7 @@ void Debugger::Setup() {
     Serial.println("Setup complete: Debug LED");
 }
 
-void Debugger::Read() {
-    // This module does not read any pins
-}
-
-void Debugger::ShowCode(int code, int turn)
-{
+void Debugger::Output(int tick) {
     // Length in bits of supported codes
     int codeLength = 8;
 
@@ -26,4 +21,9 @@ void Debugger::ShowCode(int code, int turn)
     int lit = (code >> i) & 1;
     
     digitalWrite(PinDebugLed, lit);
+}
+
+void Debugger::SetCode(int code)
+{
+    this->code = code;
 }

@@ -31,15 +31,15 @@ void ScoreHandler::Act(State state, int turn)
 {
     switch (state) {
         case scored:
-            this->_debugger->ShowCode(0xf4, turn);
-            this->_display->Write();
-            this->_digits->Write();
+            this->_debugger->SetCode(0xf4);
+            this->_display->Output(turn);
+            this->_digits->Output(turn);
             //this->ballServo.write((unfreezeTurn - turn) * 8);
             return;
         case lost: // just for testing
-            this->_debugger->ShowCode(0xfe, turn);
-            this->_display->Write();
-            this->_digits->Write();
+            this->_debugger->SetCode(0xfe);
+            this->_display->Output(turn);
+            this->_digits->Output(turn);
             return;
         default:
             return;
