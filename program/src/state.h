@@ -6,16 +6,13 @@
 
 enum State {
    uninitialized = 0,
-   idle,
-   moveUp,
-   moveDown,
-   errorInvalidInput,
-   scored,
-   lost,
+   newGame, // game is about to start
+   shooter, // ball is in the shooter lane and will be deployed
+   playfield, // ball is in the playfield and is player-controlled
+   outlane, // ball is in the out lane, either through correct or incorrect target
+   gameOverWon, // player scored all targets
+   gameOverLost, // player lost all lifes
    MAX_State
 };
-
-extern State state;
-extern int turn;
 
 #endif

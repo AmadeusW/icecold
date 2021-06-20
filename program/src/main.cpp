@@ -40,17 +40,16 @@ void updateState()
 
 void printCurrentState()
 {
-    Serial.println(".");
     Serial.printf("[%d]", turn);
     switch (state) {
-        case uninitialized:     Serial.print("LOADIN"); break;
-        case idle:              Serial.print(" idle "); break;
-        case moveUp:            Serial.print(" up   "); break;
-        case moveDown:          Serial.print(" down "); break;
-        case errorInvalidInput: Serial.print("invald"); break;
-        case scored:            Serial.print("scored"); break;
-        case lost:              Serial.print(" lost "); break;
-        default:                Serial.print("ERROR "); break;
+        case uninitialized:      Serial.print("uninit"); break;
+        case newGame:            Serial.print(" new "); break;
+        case shooter:            Serial.print("shoot "); break;
+        case playfield:          Serial.print(" play "); break;
+        case outlane:            Serial.print(" out  "); break;
+        case gameOverWon:        Serial.print(" won  "); break;
+        case gameOverLost:       Serial.print(" lost "); break;
+        default:                 Serial.print("ERROR "); break;
     }
 }
 
