@@ -1,3 +1,5 @@
+#include "composition.h"
+#include "GameController.h"
 #include "GameEngine.h"
 #include "GameState.h"
 
@@ -9,13 +11,14 @@ class GameEngine {
 
     public:
         GameEngine(
-            Composition& composition
-            GameController& controller
+            Composition& composition,
+            GameController& controller,
             GameState& state
         ):
             state(state),
-            composition(composition)
+            composition(composition),
             controller(controller)
+        {}
 
         void setup() {
             composition.setupAll(state);
@@ -27,4 +30,4 @@ class GameEngine {
             controller.updateState(state);
             composition.setOutput(state);
         }
-}
+};

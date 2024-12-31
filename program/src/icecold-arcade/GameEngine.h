@@ -4,8 +4,8 @@
 class GameEngine {
     public:
         GameEngine(
-            Composition& composition
-            GameController& controller
+            Composition& composition,
+            GameController& controller,
             GameState& state
         );
         void setup();
