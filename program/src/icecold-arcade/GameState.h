@@ -10,10 +10,11 @@ struct GameState {
         GAME_OVER_WON,
         GAME_OVER_LOST,
         _MAX_STATE
-    }
+    };
     GameMode mode = IDLE;
 
     // Game state
+    int tick;
     int balls;
     int level;
     int score;
@@ -45,7 +46,8 @@ struct GameState {
 
     void reset()
     {
-        lives = 10;
+        tick = 0;
+        balls = 10;
         level = 1;
         score = 0;
         motorLeftUp = false;

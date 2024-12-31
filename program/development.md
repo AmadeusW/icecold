@@ -1,5 +1,16 @@
 # Development Log
 
+## 2024 December 30
+I rewrote the basic infrastructure. There are two entry points:
+1. icecold-arcade.ino, which composes modules that intract with arduino
+2. icecold-simulator.cpp, which composes the module that transmits the state over the serial port
+
+TODO:
+- Implement the module that transmits the state over the serial port
+- Write tests that exercise the controller through simulator
+- Implement the GameController
+- Port arduino modules
+
 ## 2024 December - Resuming work
 I'm reading the existing source code and I'm not convinced that current approach is correct. For example, we have "digits" module whose role is to output score to the 7-segment display. However, it also has role of keeping track of score. As each module has two responsibilities (keeping track of state and interfacing with microcontroller) it's impossible to take them out and replace with simulated module. I propose that the refactored code will have just a few larger classes:
 1. State class that keeps track of the game state, score, etc.
