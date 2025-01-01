@@ -1,8 +1,8 @@
 #ifndef MOCKED_MODULE_H
 #define MOCKED_MODULE_H
 
-#include "../module.h"
-#include "../GameState.h"
+#include "../common/module.h"
+#include "../common/GameState.h"
 
 class SimulatorModule : public Module {
 public:

@@ -1,12 +1,12 @@
 // Entry point for the code running on the microcontroller
 
-#include "../composition.h"
-#include "../GameController.h"
-#include "../GameEngine.h"
-#include "../GameState.h"
+#include "../common/composition.h"
+#include "../common/GameController.h"
+#include "../common/GameEngine.h"
+#include "../common/GameState.h"
 
-#include "../module.h"
-#include "../modules/LedModule.h"
+#include "../common/module.h"
+#include "../common/modules/LedModule.h"
 
 GameEngine* engine;
 

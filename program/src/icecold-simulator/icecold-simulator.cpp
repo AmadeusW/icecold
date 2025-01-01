@@ -1,11 +1,11 @@
 // Entry point for the code running in the simulator
 
-#include "../composition.h"
-#include "../GameController.h"
-#include "../GameEngine.h"
-#include "../GameState.h"
+#include "../common/composition.h"
+#include "../common/GameController.h"
+#include "../common/GameEngine.h"
+#include "../common/GameState.h"
 
-#include "../module.h"
+#include "../common/module.h"
 #include "simulatorModule.h"
 
 GameEngine* engine;
