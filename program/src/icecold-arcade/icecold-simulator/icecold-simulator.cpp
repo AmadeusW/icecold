@@ -1,19 +1,19 @@
 // Entry point for the code running in the simulator
 
-#include "composition.h"
-#include "GameController.h"
-#include "GameEngine.h"
-#include "GameState.h"
+#include "../composition.h"
+#include "../GameController.h"
+#include "../GameEngine.h"
+#include "../GameState.h"
 
-#include "module.h"
-#include "modules/MockedModule.h"
+#include "../module.h"
+#include "simulatorModule.h"
 
 GameEngine* engine;
 
 void setup() {
     // Example usage
-    MockedModule mockedModule{};
-    Module* modules[] = {&mockedModule};
+    SimulatorModule simulatorModule{};
+    Module* modules[] = {&simulatorModule};
     Composition composition(modules, 1);
     GameController controller;
     GameState state;

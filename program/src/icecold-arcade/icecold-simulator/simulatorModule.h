@@ -4,7 +4,7 @@
 #include "../module.h"
 #include "../GameState.h"
 
-class MockedModule : public Module {
+class SimulatorModule : public Module {
 public:
     void setup(GameState& state) override { /* Do nothing */ }
     void getInput(GameState& state) override { /* Do nothing */ }

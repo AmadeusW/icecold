@@ -1,12 +1,12 @@
 // Entry point for the code running on the microcontroller
 
-#include "composition.h"
-#include "GameController.h"
-#include "GameEngine.h"
-#include "GameState.h"
+#include "../composition.h"
+#include "../GameController.h"
+#include "../GameEngine.h"
+#include "../GameState.h"
 
-#include "module.h"
-#include "modules/LedModule.h"
+#include "../module.h"
+#include "../modules/LedModule.h"
 
 GameEngine* engine;
 
@@ -24,4 +24,12 @@ void setup() {
 
 void loop() {
     engine->loop();
+}
+
+int main()
+{
+    setup();
+    while (true) {
+        loop();
+    }
 }
