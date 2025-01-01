@@ -1,15 +1,10 @@
 #include "GameController.h"
 #include "GameState.h"
 
-class GameController {
-    public:
-        GameController() {}
+void GameController::setup(GameState& state) {
+    //
+}
 
-        void setup(GameState& state) {
-            //
-        }
-
-        void updateState(GameState& state) {
-            //
-        }
+void GameController::updateState(GameState& state) {
+    //
 }

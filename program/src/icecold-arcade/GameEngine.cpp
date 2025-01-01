@@ -3,31 +3,23 @@
 #include "GameEngine.h"
 #include "GameState.h"
 
-class GameEngine {
-    private:
-        GameState& state;
-        Composition& composition;
-        GameController& controller;
+GameEngine::GameEngine(
+    Composition& composition,
+    GameController& controller,
+    GameState& state
+):
+    state(state),
+    composition(composition),
+    controller(controller)
+{}
 
-    public:
-        GameEngine(
-            Composition& composition,
-            GameController& controller,
-            GameState& state
-        ):
-            state(state),
-            composition(composition),
-            controller(controller)
-        {}
+void GameEngine::setup() {
+    composition.setupAll(state);
+    controller.setup(state);
+}
 
-        void setup() {
-            composition.setupAll(state);
-            controller.setup(state);
-        }
-
-        void loop() {
-            composition.getInput(state);
-            controller.updateState(state);
-            composition.setOutput(state);
-        }
-};
+void GameEngine::loop() {
+    composition.getInput(state);
+    controller.updateState(state);
+    composition.setOutput(state);
+}

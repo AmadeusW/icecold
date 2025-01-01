@@ -1,6 +1,8 @@
 #ifndef GameController_h
 #define GameController_h
 
+#include "GameState.h"
+
 class GameController {
     public:
         GameController();

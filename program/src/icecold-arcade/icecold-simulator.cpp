@@ -6,21 +6,21 @@
 #include "GameState.h"
 
 #include "module.h"
-#include "modules\MockedModule.h"
+#include "modules/MockedModule.h"
 
-GameEngine engine;
+GameEngine* engine;
 
 void setup() {
     // Example usage
     MockedModule mockedModule{};
-
-    Composition composition{&mockedModule};
+    Module* modules[] = {&mockedModule};
+    Composition composition(modules, 1);
     GameController controller;
     GameState state;
-    GameEngine engine(composition, controller, state);
-    engine.setup();
+    engine = new GameEngine(composition, controller, state);
+    engine->setup();
 }
 
 void loop() {
-    engine.loop();
+    engine->loop();
 }

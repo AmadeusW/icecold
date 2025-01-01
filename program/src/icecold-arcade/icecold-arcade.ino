@@ -5,22 +5,23 @@
 #include "GameEngine.h"
 #include "GameState.h"
 
+#include "module.h"
 #include "modules/LedModule.h"
 
-GameEngine engine;
+GameEngine* engine;
 
 void setup() {
     // Example usage
     LedModule ledModule1(13);
     LedModule ledModule2(14);
-
-    Composition composition{&ledModule1, &ledModule2};
+    Module* modules[] = {&ledModule1, &ledModule2};
+    Composition composition(modules, 2);
     GameController controller;
     GameState state;
-    GameEngine engine(composition, controller, state);
-    engine.setup();
+    engine = new GameEngine(composition, controller, state);
+    engine->setup();
 }
 
 void loop() {
-    engine.loop();
+    engine->loop();
 }

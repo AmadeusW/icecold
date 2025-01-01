@@ -19,7 +19,7 @@ public:
 
     void setOutput(GameState& state) override {
         // Example: use game state to determine LED state
-        bool shouldBeOn = state.isLedActive();  // assumes this method exists
+        bool shouldBeOn = state.ballOnTarget;
         digitalWrite(pin_, shouldBeOn ? HIGH : LOW);
     }
 
