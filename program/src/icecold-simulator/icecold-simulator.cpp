@@ -7,7 +7,7 @@
 #include "../common/GameEngine.h"
 #include "../common/GameState.h"
 
-GameEngine* engine;
+GameEngine* engine = nullptr;
 
 void setup() {
     // Example usage
