@@ -1,5 +1,11 @@
 # Development Log
 
+## 2025 January 1
+Got the code to compile, I'm able to run the icecold-simulator and connect the python dashboard to it over the serial port.
+i'm having trouble getting arduino-cli to compile multiple files. Some research showed I should check out https://platformio.org/
+This should not only allow me to build a complex project for arduino, but it also has capability for testing that I should leverage
+
+
 ## 2024 December 30
 I rewrote the basic infrastructure. There are two entry points:
 1. icecold-arcade.ino, which composes modules that intract with arduino
