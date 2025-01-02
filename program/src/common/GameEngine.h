@@ -1,6 +1,10 @@
 #ifndef GameEngine_h
 #define GameEngine_h
 
+class Composition;
+class GameController;
+class GameState;
+
 class GameEngine {
     private:
         Composition& composition;

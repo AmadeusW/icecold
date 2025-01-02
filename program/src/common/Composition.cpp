@@ -1,4 +1,6 @@
 #include "composition.h"
+#include "module.h"
+#include "GameState.h"
 
 Composition::Composition(Module** moduleArray, int count) : module_count(0) {
     for (int i = 0; i < count && i < MAX_MODULES; i++) {

@@ -7,6 +7,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include "icecold-simulator.h"
+
 class VirtualSerialPort {
 private:
     int masterFd;
@@ -99,13 +101,15 @@ int main() {
         VirtualSerialPort virtualPort;
         
         std::cout << "Virtual Serial Port Created at: " << virtualPort.getPortPath() << std::endl;
-        
+        setup();
+
         // Simulate device communication
         std::thread simulatorThread([&virtualPort]() {
             while (true) {
                 // Example: Send periodic status messages
                 std::string statusMsg = "DEVICE_STATUS:OPERATIONAL\n";
                 virtualPort.write(statusMsg);
+                loop();
                 
                 // Wait for 5 seconds
                 std::this_thread::sleep_for(std::chrono::seconds(5));

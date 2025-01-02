@@ -1,7 +1,8 @@
 #ifndef composition_h
 #define composition_h
 
-#include "module.h"
+class Module;
+class GameState;
 const int MAX_MODULES = 10;
 
 class Composition {

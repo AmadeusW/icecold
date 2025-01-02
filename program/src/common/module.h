@@ -1,7 +1,7 @@
 #ifndef MODULE_H
 #define MODULE_H
 
-#include "GameState.h"
+class GameState;
 
 class Module {
 public:

@@ -1,6 +1,6 @@
 #!/bin/bash
 CPP_FILES=$(find ../common -name "*.cpp" | tr '\n' ';')
-echo "Files to be compiled:"
+echo "Common files to be compiled:"
 echo $CPP_FILES | tr ';' '\n'
 arduino-cli compile -v --fqbn arduino:avr:mega \
     --build-property "-std=gnu++11" \
