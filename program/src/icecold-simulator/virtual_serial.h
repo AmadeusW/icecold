@@ -1,3 +1,6 @@
+#ifndef VIRTUAL_SERIAL_H
+#define VIRTUAL_SERIAL_H
+
 #include <cstring>
 #include <iostream>
 #include <fstream>
@@ -6,8 +9,6 @@
 #include <termios.h>
 #include <fcntl.h>
 #include <unistd.h>
-
-#include "icecold-simulator.h"
 
 class VirtualSerialPort {
 private:
@@ -95,46 +96,4 @@ public:
     }
 };
 
-int main() {
-    try {
-        // Create virtual serial port
-        VirtualSerialPort virtualPort;
-        
-        std::cout << "Virtual Serial Port Created at: " << virtualPort.getPortPath() << std::endl;
-        setup();
-
-        // Simulate device communication
-        std::thread simulatorThread([&virtualPort]() {
-            while (true) {
-                // Example: Send periodic status messages
-                std::string statusMsg = "DEVICE_STATUS:OPERATIONAL\n";
-                virtualPort.write(statusMsg);
-                loop();
-                
-                // Wait for 5 seconds
-                std::this_thread::sleep_for(std::chrono::seconds(5));
-            }
-        });
-
-        // Optional: Read loop to process incoming commands
-        std::thread readerThread([&virtualPort]() {
-            while (true) {
-                std::string receivedData = virtualPort.read();
-                if (!receivedData.empty()) {
-                    std::cout << "Received: " << receivedData;
-                }
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            }
-        });
-
-        // Keep main thread running
-        simulatorThread.join();
-        readerThread.join();
-
-    } catch (const std::exception& e) {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return 1;
-    }
-
-    return 0;
-}
+#endif
