@@ -24,6 +24,18 @@ public:
             throw std::runtime_error("Failed to open pseudo-terminal");
         }
 
+        // Set non-blocking mode for master FD
+        int flags = fcntl(masterFd, F_GETFL, 0);
+        if (flags == -1) {
+            close(masterFd);
+            throw std::runtime_error("Failed to get file descriptor flags");
+        }
+
+        if (fcntl(masterFd, F_SETFL, flags | O_NONBLOCK) == -1) {
+            close(masterFd);
+            throw std::runtime_error("Failed to set non-blocking mode");
+        }
+
         // Grant slave access
         if (grantpt(masterFd) == -1) {
             close(masterFd);
