@@ -12,20 +12,24 @@ VirtualSerialPort* virtualPort;
 
 void SimulatorModule::setup(GameState& state) {
     // Create virtual serial port
-    VirtualSerialPort virtualPort;
-    std::cout << "Virtual Serial Port Created at: " << virtualPort.getPortPath() << std::endl;
+    virtualPort = new VirtualSerialPort();
+    std::cout << "Virtual Serial Port Created at: " << virtualPort->getPortPath() << std::endl;
     std::string statusMsg = "Simulator module: Setup\n";
-    virtualPort.write(statusMsg);
+    virtualPort->write(statusMsg);
 }
 
 void SimulatorModule::getInput(GameState& state) {
     std::string receivedData = virtualPort->read();
     if (!receivedData.empty()) {
-        std::cout << "Received: " << receivedData;
+        std::cout << "Received: " << receivedData << std::endl;
+    } else
+    {
+        std::cout << "No input." << std::endl;
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }
 void SimulatorModule::setOutput(GameState& state) { 
+    std::cout << "setOutput" << std::endl;
     std::string formattedState = serializeGameState(state);
     std::cout << formattedState << "\n" << std::endl;
     virtualPort->write(formattedState);

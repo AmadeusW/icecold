@@ -2,7 +2,6 @@
 
 #include <cstring>
 #include <iostream>
-#include <unistd.h>
 
 #include "simulatorModule.h"
 #include "../common/module.h"
@@ -11,28 +10,18 @@
 #include "../common/GameEngine.h"
 #include "../common/GameState.h"
 
-GameEngine* engine = nullptr;
-
-void setup() {
-    // Example usage
-    SimulatorModule simulatorModule{};
-    Module* modules[] = {&simulatorModule};
-    Composition composition(modules, 1);
-    GameController controller;
-    GameState state;
-    engine = new GameEngine(composition, controller, state);
-    engine->setup();
-}
-
-void loop() {
-    engine->loop();
-}
-
 int main() {
     try {
-        setup();
+        SimulatorModule simulatorModule{};
+        Module* modules[] = {&simulatorModule};
+        Composition composition(modules, 1);
+        GameController controller;
+        GameState state;
+        GameEngine engine(composition, controller, state);
+
+        engine.setup();
         while(true) {
-            loop();
+            engine.loop();
         }
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
